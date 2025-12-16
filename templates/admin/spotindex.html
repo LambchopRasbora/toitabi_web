@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>spotindex</title>
+</head>
+<body>
+	<table border="1">
+		<tr>
+			<th>ID</th>
+			<th>Latitude</th>
+			<th>Longitude</th>
+			<th>Author</th>
+			<th>Images</th>
+			<th>Map</th>
+		</tr>
+		<tr th:each="spot:${spots}">
+			<td th:text="${spot.id}"></td>
+			<td th:text="${spot.latitude}"></td>
+			<td th:text="${spot.longitude}"></td>
+			<td th:text="${spot.author}"></td>
+			
+			<!-- 画像表示（最大4枚想定、横並び） -->
+			<td>
+				<div th:if="${spot.images != null}">
+					<span th:each="img:${spot.images}">
+						<img th:src="${img}" 
+						     style="width:20vw; height:auto; display:inline-block; margin-right:4px;"/>
+					</span>
+				</div>
+			</td>
+			
+			<!-- OpenStreetMap埋め込み -->
+			<td>
+				<iframe 
+					th:src="'https://www.openstreetmap.org/export/embed.html?bbox=' 
+						+ (${spot.longitude}-0.01) + ',' 
+						+ (${spot.latitude}-0.01) + ',' 
+						+ (${spot.longitude}+0.01) + ',' 
+						+ (${spot.latitude}+0.01) 
+						+ '&layer=mapnik&marker=' 
+						+ ${spot.latitude} + ',' + ${spot.longitude}" 
+					style="width:300px; height:300px; border:1px solid black">
+				</iframe>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

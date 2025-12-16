@@ -1,0 +1,119 @@
+
+
+
+/* ========= Area List ========= */
+    .areas{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:28px;
+    }
+
+    .area-card{
+      position: relative; /* ← 子要素のz-index制御を有効にする */
+      display:flex;
+      align-items:center;
+      border:none;
+      background:transparent;
+      padding:0;
+      text-align:left;
+      width:100%;
+      cursor:pointer;
+    }
+
+    .thumb{
+      position: relative;
+      overflow:hidden; 
+      z-index: 2; /* ← thumbを前面に */
+      width:140px; height:140px;
+      border-radius:50%;
+      border:10px solid #000;
+      background-size:cover;
+      background-position:center;
+      flex:0 0 auto;
+      box-shadow:0 1px 0 rgba(0,0,0,.04) inset;
+    }
+
+.thumb .map{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+}
+#totyu{
+  background-image: url("/static/asset/images//totyuicon.png");
+}
+/* ページ下の帰属表記（小さめ） */
+.map-attrib{
+  font-size:12px; text-align:center; color:#666;
+  margin:12px 0 0;
+}
+.map-attrib a{ color:inherit; }
+
+.label{
+  position: relative;
+  z-index: 1; /* ← labelを背面に */
+  background:var(--pill);
+  color:#fff;
+  margin-left:-40px;           /* 円と pill を“合体”させる */
+  padding:24px 28px;
+  border-radius:999px;
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  width:100%;
+  /* ドット感のあるフォントに寄せる: ピクセル風が入っていれば上書き */
+  font-family: "Press Start 2P", "DotGothic16", "M PLUS 1 Code", system-ui, monospace;
+  font-size:22px;
+  letter-spacing:0.1em;
+}
+
+
+.continue-btn{
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* 左の丸枠（虫眼鏡の枠部分） */
+.icon-circle{
+      position: relative;
+      overflow:hidden; 
+      z-index: 2; /* ← thumbを前面に */
+      width:140px; height:140px;
+      border-radius:50%;
+      border:10px solid #000;
+      background-size:cover;
+      background-position:center;
+      flex:0 0 auto;
+      box-shadow:0 1px 0 rgba(0,0,0,.04) inset;
+}
+
+/* 中に入れる画像 */
+.icon-circle img{
+  width: 100%;     /* アイコンの大きさ（調整可） */
+  height: auto;
+  object-fit: contain;
+}
+
+/* 右側の黒いピル状ラベル */
+.continue-btn .label{
+  position: relative;
+  z-index: 1; /* ← labelを背面に */
+  background:var(--pill);
+  color:#fff;
+  margin-left:-40px;           /* 円と pill を“合体”させる */
+  padding:24px 28px;
+  border-radius:999px;
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  width:100%;
+  /* ドット感のあるフォントに寄せる: ピクセル風が入っていれば上書き */
+  font-family: "Press Start 2P", "DotGothic16", "M PLUS 1 Code", system-ui, monospace;
+  font-size:22px;
+  letter-spacing:0.1em;
+}

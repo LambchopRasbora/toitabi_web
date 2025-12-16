@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>トイタビ – ポスト完了</title>
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/capture.css" th:href="@{/css/capture.css}">
+  <link rel="stylesheet" href="../../static/css/postsuccess.css" th:href="@{/css/postsuccess.css}">
+  <script src="../../static/js/navigate/capturenavidev.js" th:src="@{/js/navigate/capturenavipro.js}"></script>
+</head>
+<body>
+  <script th:inline="javascript">
+    const postResponse =/*[[${postResponse}]]*/{};
+  </script>
+  <main class="screen">
+    <!-- Header -->
+    <img class = "header-logo" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
+       <p class="lead">トイスポットが投稿できました！</p>
+
+   <!-- 黒いカード -->
+  <section class="spot-card">
+    <!-- メイン写真 -->
+    <figure class="hero">
+      <img id="heroImg" alt="投稿写真" src="">
+    </figure>
+
+    <!-- サムネ4枚 -->
+    <ul class="thumbs" id="thumbList">
+ 
+    </ul>
+
+    <!-- 説明文 -->
+    <p class="caption" id="captionText"></p>
+
+    <!-- 投稿日時 -->
+    <div class="meta">
+      <span id="postedAtText"></span>
+    </div>
+  </section>
+
+
+    <!-- Bottom actions -->
+    <div class="bottom-actions">
+      <button class="action-btn" type="button" onclick="onclickSetting()">
+        <div class ="caption">メニュー </div>
+        <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
+      </button>
+
+      <button class="action-btn" type="button" onclick="onclickHome()">
+        <div class="caption">ホームに戻る</div>
+        <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
+      </button>
+    </div>
+  </main>
+  <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
+  <script src="../../static/js/capture/postsuccess.js" th:src="@{/js/capture/postsuccess.js}"></script>
+</body>
+</html>

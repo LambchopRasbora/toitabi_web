@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+        <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+    </head>
+    <body>
+        <script th:inline="javascript">
+            const response =/*[[${response}]]*/
+        </script> 
+        <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}" ></script>
+        <script src="../../static/quiz/answerSave.js" th:src="@{/js/quiz/answerSave.js}" ></script>
+    </body>
+</html>

@@ -1,0 +1,56 @@
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#000; color:#fff;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+  }
+
+
+  /* —— 中央だけスクロール —— */
+  main.content{
+    position:fixed; 
+    z-index:10;
+    top:var(--header-h); 
+    bottom:var(--footer-h); 
+    left:0; 
+    right:0;
+    overflow-y:auto; 
+    -webkit-overflow-scrolling:touch;
+    padding:18px 16px 24px;
+  }
+
+  .card{
+    background:#0f0f0f; border-radius:var(--radius);
+    border:1px solid #222;
+    box-shadow: 0 2px 10px rgba(0,0,0,.3);
+  }
+
+  /* —— 写真ギャラリー —— */
+  .gallery{ display:flex; flex-direction:column; gap:12px; }
+  .main-photo{
+    aspect-ratio: 4 / 3; /* 16/9にしたければ 16 / 9 */
+    border-radius:var(--radius); overflow:hidden;
+    border:1px solid #2a2a2a; background:#111;
+  }
+  .main-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .thumbs{
+    display:grid; grid-template-columns: repeat(4, 1fr);
+    gap:10px;
+  }
+  .thumb{
+    padding:0; border:0; background:transparent; border-radius:10px; overflow:hidden;
+    outline: none; position:relative;
+  }
+  .thumb img{ width:100%; height:70px; object-fit:cover; display:block; }
+  .thumb.is-active::after{
+    content:""; position:absolute; inset:0; border:2px solid #fff; border-radius:10px;
+    box-shadow:0 0 0 2px #000 inset;
+  }
+
+  /* —— 現在地マップ —— */
+  .map-wrap{ margin-top:16px; }
+  #map{ height:260px; width:100%; border-radius:var(--radius); overflow:hidden; }
+  .map-caption{
+    font-size:12px; color:#bbb; margin:8px 2px 0;
+    display:flex; align-items:center; gap:.4em;
+  }

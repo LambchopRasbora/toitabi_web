@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>トイタビ – エリア選択</title>
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/capture.css" th:href="@{/css/capture.css}">
+  <link rel="stylesheet" href="../../static/css/loading.css" th:href="@{/css/loading.css}">
+  <script src="../../static/js/navigate/capturenavidev.js" th:src="@{/js/navigate/capturenavipro.js}"></script>
+</head>
+<body>
+  <main class="screen">
+    <!-- Header -->
+    <header class="app-header">
+      <div class = "header-logo" >
+        <img src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
+        <p class="lead">トイスポットを投稿しよう！</p>
+      </div>
+    </header>
+
+<main class ="content">
+     <div class="container">
+    <button class="camera-btn" id="shootBtn" type="button" aria-label="カメラを起動">
+    <img src="../../static/asset/images/cameraicon.png" th:src="@{/asset/images/cameraicon.png}" alt="" class="camera-icon">
+    </button>
+    <p>カメラを起動してトイスポットを投稿しよう！</p>
+    
+  <!-- 実際の入力要素（4枚まで） -->
+  <input id="fileInput" type="file" accept="image/*" capture="environment" multiple hidden />
+
+  <!-- プレビューエリア -->
+  <section id="formArea" class="form-area is-hidden">
+    <div class="preview-grid" id="previewGrid"></div>
+
+    <div class="form-fields">
+      <label class="field">
+        <span class="label">説明文</span>
+        <textarea id="caption" rows="3" placeholder="どんな場所か、ひとこと説明を書いてください（任意）"></textarea>
+      </label>
+
+      <div class="field-row">
+        <button type="button" id="locBtn" class="sec-btn">現在地を添付</button>
+        <span id="locStatus" class="muted">位置情報は未取得</span>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="retakeBtn" class="ghost-btn">撮り直す</button>
+        <button type="button" id="submitBtn" class="primary-btn icon-btn" disabled>
+          <img src="../../static/asset/images/spotpostlogo.png" th:src="@{/asset/images/spotpostlogo.png}" alt="投稿" class="btn-icon">
+          投稿する
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <p class="map-attrib">※ 写真に人物が映らないように注意してください。</p>
+     </div>
+     </main>
+
+
+    <!-- Bottom actions -->
+      <footer class="app-footer">
+    <div class="bottom-actions">
+      <button class="action-btn" type="button" onclick="onclickSetting()">
+        <div class ="caption">メニュー </div>
+        <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
+      </button>
+
+      <button class="action-btn" type="button" onclick="onclickHome()">
+        <div class="caption">ホームに戻る</div>
+        <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
+      </button>
+    </div>
+    </footer>
+    <!-- ローディングオーバーレイ -->
+    <div id="loadingOverlay">
+      <div class="spinner"></div>
+    </div>
+  </main>
+  <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
+  <script src="../../static/js/capture/capture.js" th:src="@{/js/capture/capture.js}"></script>
+</body>
+</html>

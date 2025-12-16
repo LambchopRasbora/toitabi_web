@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Spot Index</title>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #999;
+        padding: 8px;
+        text-align: left;
+    }
+    img {
+        max-height: 200px;
+    }
+</style>
+
+</head>
+<body>
+
+<h2>Zone 一覧</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>KML File</th>
+            <th>Author</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr th:each="zone : ${response.zones}">
+            <td th:text="${zone.id}"></td>
+            <td th:text="${zone.name}"></td>
+            <td th:text="${zone.date}"></td>
+            <td th:text="${zone.kmlFile}"></td>
+            <td th:text="${zone.author}"></td>
+            <td>
+                <img th:src="${zone.imagepath}" alt="zone image">
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

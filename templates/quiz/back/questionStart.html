@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+        <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+    </head>
+    <body>
+         <script th:inline="javascript">
+            const response =/*[[${response}]]*/;
+        </script> 
+        <div>
+            画面遷移中_Question取得中
+        </div>
+        <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}">
+        </script>
+        <script src="../../static/js/quiz/questionStart.js" th:src="@{/js/quiz/questionStart.js}">
+        </script>
+    </body>
+</html>

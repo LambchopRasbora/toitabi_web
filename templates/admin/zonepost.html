@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>spotsearch</title>
+</head>
+<body>
+	<form  action="#"
+					th:action="@{/dev/zonepost}" method="post" enctype="multipart/form-data" th:object="${zonepost}">
+		<h1>
+			Zone投稿フォーム
+		</h1>
+		<div>
+			<h2>
+				投稿者
+			</h2>
+			<input type="text" th:field="*{author}">
+			<h2>
+				名前
+			</h2>
+			<input type="text" th:field="*{name}">
+			<h2>
+				説明(200字以内)
+			</h2>
+			<input type="text" th:field="*{description}">
+		</div>
+		
+		<div>
+			<h2>
+				地図データ
+			</h2>
+			<input type="file"  accept=".kml" th:field="*{kmlFile}" >
+		</div>
+		<div>
+			<h2>
+				写真容量的にjpgデータのみ
+			</h2>
+			<input type="file"  accept=".jpg" th:field="*{image}" >
+		</div>
+		<div class="postingformsubmit">
+			<input type="submit" value="投稿">
+		</div>
+		<input type="hidden" th:csrf />
+	</form>
+</body>
+</html>

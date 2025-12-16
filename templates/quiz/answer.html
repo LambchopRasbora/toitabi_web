@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ゴール画面</title>
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/goal.css" th:href="@{/css/goal.css}">
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <!-- LeafletLocate CSS / JS（CDN）-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
+</head>
+<body>
+  <script th:inline="javascript">
+    let response =/*[[${response}]]*/;
+  </script> 
+  <script src="../../static/js/navigate/questionnavidev.js" th:src="@{/js/navigate/questionnavipro.js}"></script>
+  <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
+  <script src="../../static/js/quiz/score.js" th:src="@{/js/quiz/score.js}"></script>
+  <script src="../../static/js/quiz/answer.js" th:src="@{/js/quiz/answer.js}"></script>
+  <div class="app">
+  <!-- 固定ヘッダー -->
+  <header class="app-header">
+    <div class="header-logo">
+      <img src="../../static/asset/images/logo.png"
+        th:src="@{/asset/images/logo.png}" alt="トイタビ ロゴ" />
+      <p class="lead">ゴールおめでとう！</p>
+    </div>
+  </header>
+  <!-- スクロール可能メイン -->
+  <main class="content" id="scrollArea">
+    <div class = "container">
+      <section class="metrics">
+        <div class="scoreCard" aria-label="スコア">
+          <!-- 上段：スコア -->
+          <div class="score-main">
+            <div class="label">スコア</div>
+            <div class="value">
+              <span id="scoreValue">--</span>
+              <span class="unit">点</span>
+            </div>
+          </div>
+
+          <!-- 下段：時間・距離 -->
+          <div class="score-sub">
+            <div class="score-sub-item">
+              <span class="score-sub-label">時間</span>
+              <span id="timeValue">--</span>
+              <span class="score-sub-unit"></span>
+            </div>
+            <div class="score-sub-item">
+              <span class="score-sub-label">距離</span>
+              <span id="distValue">--</span>
+              <span class="score-sub-unit"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mapCard">
+        <div id="map" role="application" aria-label="結果マップ"></div>
+      </section>
+    </div>
+  </main>
+
+    <!-- 固定フッター -->
+    <!-- Bottom actions -->
+      <footer class="app-footer">
+    <div class="bottom-actions">
+      <button class="action-btn" type="button" onclick="onclickNext()"> <!--←次の問題への導線リンクを記述-->
+        <div class ="caption">次のスポットへ </div>
+        <img class = "icon-img" src = "../../static/asset/images/nextspoticon.png" th:src="@{/asset/images/nextspoticon.png}"/>
+      </button>
+      <button class="action-btn" type="button" onclick="onclickHome()">
+        <div class="caption">ホームに戻る</div>
+        <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
+      </button>
+    </div>
+    </footer>
+  </div>
+
+  <script>
+    /** -----------------------
+     *  設定：アイコン画像
+     *  ----------------------*/
+    const ICONS = {
+      userConfirm: '/asset/images/confirmicon_map.png', // プレイヤー確定位置
+      trueSpot: '/asset/images/spoticon_map.png'       // 実スポット位置
+    };
+
+
+    /** -----------------------
+     *  シェア（X/Instagram/汎用）
+     *  ----------------------*/
+    const shareBtn = document.getElementById("shareBtn");
+    shareBtn?.addEventListener("click", async () => {
+      // 共有テキストを組み立て
+      const score = document.getElementById("scoreValue").textContent;
+      const time  = document.getElementById("timeValue").textContent;
+      const dist  = document.getElementById("distValue").textContent;
+      const text  = `#トイタビ をゴール！ スコア ${score} 点｜時間 ${time}｜距離 ${dist}`;
+
+      const shareUrl = location.origin + "/"; // ランディング等があれば差し替え
+
+      // 1) Web Share API（iOS/Androidのブラウザで動作）
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: "トイタビ", text, url: shareUrl });
+          return;
+        } catch (_) { /* キャンセル等 */ }
+      }
+
+      // 2) X（Twitter）intent
+      const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`;
+      window.open(xUrl, "_blank", "noopener,noreferrer");
+
+      // 3) Instagram はURLテキスト共有の公式エンドポイントがないため、
+      //    画像投稿やストーリーズ共有はアプリ連携が必要。
+      //    ここではXにフォールバックした上で、必要ならトースト表示などで
+      //    「Instagramは画像共有のみ対応」と案内すると良いです。
+    });
+
+    /** -----------------------
+     *  minutes: プレイ時間(分), distanceMeters: 移動距離(m)
+     *  score: スコア(int), userLatLng / spotLatLng: [lat, lng]
+     *  ----------------------*/
+    initGoalPage({
+      minutes: 32,                     
+      distanceMeters: response.answerDto.distance_meter,           
+      score: response.answerDto.point,                       // 例
+      userLatLng: [response.answerDto.answerLat, response.answerDto.answerLng], // 例：プレイヤー確定位置
+      spotLatLng: [response.spotDto.latitude, response.spotDto.longitude]  // 例：実スポット位置
+    });
+  </script>
+</body>
+</html>

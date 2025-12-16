@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>トイタビ – プレイ中</title>
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+   <link rel="stylesheet" href="../../static/css/loading.css" th:href="@{/css/loading.css}">
+
+<link rel="preconnect" href="https://unpkg.com" />
+<link rel="stylesheet" href="../../static/css/question.css" th:href="@{/css/question.css}">
+<!-- Leaflet CSS / JS（CDN）-->
+<link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- LeafletLocate CSS / JS（CDN）-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
+
+<script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
+<script src="../../static/js/encrypt.js" th:src="@{/js/encrypt.js}"/></script>
+<script src="../../static/js/common.js" th:src="@{/js/common.js}"/></script>
+<script src="../../static/js/navigate/questionnavidev.js" th:src="@{/js/navigate/questionnavipro.js}"></script>
+</head>
+
+
+<body style="background-color:var(--ink);">
+  <div class="screen">
+  <script th:inline="javascript">
+    let response =/*[[${response}]]*/
+  </script> 
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-logo">
+      <img src="../../static/asset/images/logo_white.png" th:src="@{/asset/images/logo.png}" alt="トイタビ ロゴ" />
+      <p class="lead">トイスポットを探そう！</p>
+    </div>
+  </header>
+
+      <!-- 中央スクロール領域 -->
+  <main class="content" id="scrollArea">
+    <div class = "container">
+      <!-- 写真4枚 -->
+      <section class="gallery card">
+        <div class="main-photo">
+          <img id="mainPhoto" src="" alt="spot main">
+        </div>
+        <div class="thumbs" id="thumbs">
+          <!-- バックエンドから持ってくる（今は仮） -->
+          <button class="thumb is-active" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+          </button>
+          <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+          </button>
+          <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+          </button>
+          <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+          </button>
+        </div>
+      </section>
+
+      <!-- 現在地マップ -->
+      <section class="map-wrap card" style="padding:12px">
+        <div id="map"></div>
+        <div class="map-caption">現在地を表示中（位置情報の許可が必要です）</div>
+      </section>
+
+      <!-- 必要なら下に説明や距離表示など -->
+      <div style="height:12px">
+        <p id="description"></p>
+      </div>
+      <div style="height:12px">
+        <p id="distance">あと100m</p>
+      </div>
+    </div>
+  </main>
+
+
+  <footer class="app-footer">
+    <!-- Bottom actions -->
+    <div class="bottom-actions">
+      <button class="action-btn" type="button" onclick= "onclickSetting()">
+        <div class ="caption">メニュー</div>
+        <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
+      </button>
+
+      <button class="action-btn" type="button" onclick= "onclickPost()" >
+        <div class="caption">トイスポット確定</div>
+        <img class = "icon-img" src = "../../static/asset/images/confirmicon.png" th:src="@{/asset/images/spotpostlogo.png}"/>
+      </button>
+    </div>
+    </footer>
+    </div>
+    <!-- ローディングオーバーレイ -->
+    <div id="loadingOverlay">
+      <div class="spinner"></div>
+    </div>
+  <!-- Leaflet JSライブラリ -->
+  <script src="../../static/js/quiz/question.js" th:src="@{/js/quiz/question.js}"></script>
+</body>
+</html>

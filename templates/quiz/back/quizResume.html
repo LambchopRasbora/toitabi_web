@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+        <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+
+        <title>トイタビ – クイズ生成中</title>
+        <!-- Leaflet CSS / JS（CDN）-->
+        <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        />
+        <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+        </script>
+        <!--jscookie-->
+        <script src="
+        https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
+        "></script>
+        <script 
+        src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}">
+        </script>
+    </head>
+    <body>
+        <script th:inline="javascript">
+            const response =/*[[${response}]]*/
+        </script> 
+         <div>
+            画面遷移中_Quiz再開中
+        </div>
+        <script src="../../static/js/quiz/quizResume.js" th:src="@{/js/quiz/quizResume.js}"> 
+        </script>
+       
+    </body>
+</html>

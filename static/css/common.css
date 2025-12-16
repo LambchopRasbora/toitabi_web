@@ -1,0 +1,116 @@
+/* ========= CSS Variables ========= */
+    :root{
+      --bg:#F0F0F0;
+      --ink:#28231e;
+      --muted:#666;
+      --pill:#000;
+      --card-radius:26px;
+      --button-radius:24px;
+      --header-h: 120px;  /* ヘッダー高さ */
+      --footer-h: 120px; /* フッター高さ */
+      --radius: 14px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink);
+      background:var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -webkit-text-size-adjust:100%;
+    }
+
+    /* iOS 100vh対策: 画面高をCSS変数に格納 */
+    .screen{
+      min-height:100dvh; /* modern */
+      min-height:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      padding: max(20px, env(safe-area-inset-top)) 18px calc(16px + env(safe-area-inset-bottom));
+      max-width:430px;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    /* ========= Header/footer(固定） ========= */
+    header.app-header, footer.app-footer{
+     position:fixed; 
+     left:0;  
+     right:0; z-index:20; 
+     }
+
+     header.app-header{ top: 5px; height:var(--header-h); display:grid; place-items:center; }
+     footer.app-footer{ bottom: 20px; height:var(--footer-h); display:grid; place-items:center; }
+    .header-logo{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      margin:10px auto 0; /* ← autoで左右中央寄せ */
+    }
+    .header-logo img {
+      width: 60px; 
+    }
+    .lead{
+      text-align:center;
+      margin-top:6px;
+      line-height:1.6;
+      font: size 16px;
+    }
+
+      /* —— main(スクロール) —— */
+  main.content{
+    position:fixed; z-index:10;
+    top:var(--header-h); bottom:var(--footer-h); left:0; right:0;
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:18px 16px 24px;
+  }
+
+  .content .container{
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 0; 
+  }
+
+      /* ========= フッターのボタン ========= */
+    .bottom-actions{
+      margin-top:auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap: 20px;
+    }
+    .action-btn{
+      background:#fff;
+      border:3px solid #000;
+      border-radius:var(--button-radius);
+      padding:16px 14px 22px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      box-shadow:0 2px 0 #00000010;
+      font-weight:600;
+    }
+    .action-btn .caption{
+      font-size:16px;
+      color:#000000;
+    }
+    .icon-img{
+     width:42px;  /* PNGなら実寸の半分～等倍、SVGなら自由 */
+    }
+
+
+
+    /* ========= ボタン押下時アクション ========= */
+    .area-card:active .label,
+    .action-btn:active{ transform:translateY(1px); }
+
+
+    /* ========= 小さい画面対策 ========= */
+    @media (max-width:360px){
+      .thumb{ width:120px; height:120px; }
+      .label{ font-size:18px; padding:18px 22px; min-height:64px; }
+    }

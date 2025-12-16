@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>投稿失敗</title>
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/capture.css" th:href="@{/css/capture.css}">
+  <script src="../../static/js/navigate/capturenavidev.js" th:src="@{/js/navigate/capturenavipro.js}"></script>
+</head>
+<body>
+  <main class="screen">
+    <!-- Header -->
+    <img class = "header-logo" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
+       <p class="lead">投稿に失敗しました</p>
+
+  <div>
+    <p th:text="'timestamp: ' + ${timestamp}"></p>
+    <p th:text="'status: ' + ${status}"></p>
+    <p th:text="'error: ' + ${error}"></p>
+    <p th:text="'exception: ' + ${exception}"></p>
+    <p th:text="'message: ' + ${message}"></p>
+    <p th:text="'errors: ' + ${errors}"></p>
+    <p th:text="'trace: ' + ${trace}"></p>
+    <p th:text="'path: ' + ${path}"></p>
+    <p>ポストのエラーページです</p>
+  </div>
+
+    <!-- Bottom actions -->
+      <button class="action-btn" type="button" onclick="onclickHome()">
+        <div class="caption">ホームに戻る</div>
+        <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
+      </button>
+    </div>
+  </main>
+</body>
+</html>

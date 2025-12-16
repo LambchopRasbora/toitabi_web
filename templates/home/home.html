@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>トイタビ – エリア選択</title>
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/home.css" th:href="@{/css/home.css}">
+  <!-- Leaflet CSS / JS（CDN）-->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+<!--jscookie-->
+<script src="
+https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
+"></script>
+<script 
+ src="../../static/js/navigate/homenavidev.js" th:src="@{/js/navigate/homenavipro.js}">
+</script>
+<script 
+ src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}">
+</script>
+</head>
+
+
+<body>
+  <script th:inline ="javascript">
+    const data =/*[[${data}]]*/{}
+  </script>
+  <div class="screen">
+    <!-- Header -->
+     <header class="app-header">
+     <div class = "header-logo">
+       <img src="..\..\static\asset\images\logo.png" th:src="@{asset/images/logo.png}"/>
+       <p class="lead">トイタビに出かけよう！<br>エリアを選んでね</p>
+     </div>
+     </header>
+
+  <main class ="content">
+     <div class="container">
+ <div class="areas">
+  <!--フロントエンドデバッグ用、いらなくなったら消す-->
+  <button id="continue-btn" class="continue-btn">
+    <div class="icon-circle">
+      <img src="../../static/asset/images/totyuicon.png" th:src="@{/asset/images/totyuicon.png}">
+    </div>
+    <span class="label">途中から</span>
+  </button>
+  <!--springboot対応バージョン,questionができ次第公開する-->
+</div>
+<!-- OSMの帰属表示（小さくページ下にまとめて表記）-->
+<p class="map-attrib">
+  © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors
+</p>
+</div>
+</main>
+
+
+    <!-- Bottom actions -->
+      <footer class="app-footer">
+    <div class="bottom-actions">
+      <button class="action-btn" type="button" onclick= "onclickSetting()">
+        <div class ="caption">メニュー</div>
+        <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{asset/images/menulogo.png}"/>
+      </button>
+
+      <button class="action-btn" type="button" onclick= "onclickPost()" >
+        <div class="caption">トイスポットを投稿</div>
+        <img class = "icon-img" src = "../../static/asset/images/spotpostlogo.png" th:src="@{/asset/images/spotpostlogo.png}"/>
+      </button>
+      
+    </div>
+  </div>
+  
+  </footer>
+  <!-- Leaflet JSライブラリ -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- あなたの地図制御スクリプト -->
+  <script src="../../static/js/pages/home.js" th:src="@{/js/pages/home.js}"></script>
+</body>
+</html>

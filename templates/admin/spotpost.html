@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>spotsearch</title>
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<style>
+  #map {
+    width: 500px;
+    height: 400px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+  }
+  #preview img {
+      width: 20vw;
+      height: auto;
+      display: inline-block;
+      margin-right: 4px;
+      margin-top: 4px;
+    }
+</style>
+</head>
+<body>
+	<form class="postingformarea" action="#"
+					th:action="@{/dev/spotpost}" method="post" enctype="multipart/form-data" th:object="${spotpost}">
+		<h1>投稿フォーム</h1>
+
+		<div>
+			<h2>投稿者</h2>
+			<input type="text" th:field="*{author}">
+		</div>
+
+		<div>
+			<h2>緯度(下の地図で選択することで自動的に埋まります)</h2>
+			<input type="number" step="0.0000001" th:field="*{latitude}" id="latitude">
+
+			<h2>経度(下の地図で選択することで自動的に埋まります)</h2>
+			<input type="number" step="0.0000001" th:field="*{longitude}" id="longitude">
+		</div>
+
+		<!-- 地図 -->
+		<div>
+			<h2>地図から選択</h2>
+			<div id="map"></div>
+		</div>
+
+		<div>
+			<h2>画像</h2>
+			<input type="file" name="image[]" multiple="multiple"  
+			       accept=".png, .jpg, .jpeg, .gif" id="postingfile" th:field="*{images}">
+		</div>
+		<div id="preview">
+		</div>
+
+		<div class="postingformsubmit">
+			<input type="submit" value="投稿">
+		</div>
+		<input type="hidden" th:csrf />
+	</form>
+
+	
+	
+	<!-- Leaflet JS -->
+	<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+	<script>
+		
+	  //地図の処理
+	  
+	  // 初期位置（例：京都駅）
+	  var initialLat = 34.9864338;
+	  var initialLng = 135.7602079;
+
+	  // 地図を生成
+	  var map = L.map('map').setView([initialLat, initialLng], 13);
+
+	  // タイルレイヤー追加 (OSM)
+	  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	    maxZoom: 19,
+	    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+	  }).addTo(map);
+
+	  // マーカー用変数
+	  var marker;
+
+	  // 地図クリックイベント
+	  map.on('click', function(e) {
+	    var lat = e.latlng.lat.toFixed(7);
+	    var lng = e.latlng.lng.toFixed(7);
+
+	    // inputに値をセット
+	    document.getElementById("latitude").value = lat;
+	    document.getElementById("longitude").value = lng;
+
+	    // 既存マーカー削除
+	    if (marker) {
+	      map.removeLayer(marker);
+	    }
+	    // 新しいマーカーを置く
+	    marker = L.marker([lat, lng]).addTo(map);
+	  });
+	  
+	  //プレビュー処理
+	  
+	  // ファイル選択時のプレビュー処理
+	    document.getElementById('postingfile').addEventListener('change', function(e) {
+	      var preview = document.getElementById('preview');
+	      preview.innerHTML = ""; // 以前のプレビューをクリア
+	  
+	      var files = e.target.files;
+	      var maxFiles = 4; // 最大4枚まで
+	  
+	      Array.from(files).slice(0, maxFiles).forEach(file => {
+	        if (!file.type.match('image.*')) return;
+	  
+	        var reader = new FileReader();
+	        reader.onload = function(evt) {
+	          var img = document.createElement("img");
+	          img.src = evt.target.result;
+	          preview.appendChild(img);
+	        };
+	        reader.readAsDataURL(file);
+	      });
+	    });
+	</script>
+</body>
+</html>

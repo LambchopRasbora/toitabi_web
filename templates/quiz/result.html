@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>リザルト画面</title>
+
+  <!-- Leaflet -->
+   
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <!-- LeafletLocate CSS / JS（CDN）-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
+
+  
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/result.css" th:href="@{/css/result.css}">
+
+</head>
+<body>
+  <script th:inline="javascript">
+    let response =/*[[${response}]]*/
+  </script> 
+  <div class="app">
+    <!-- 固定ヘッダー -->
+    <header class="app-header">
+      <div class="header-logo">
+        <img src="../../static/asset/images/logo.png"
+         th:src="@{/asset/images/logo.png}" alt="トイタビ ロゴ" />
+        <p class="lead">～結果発表～</p>
+     </div>
+    </header>
+    <!-- スクロール可能メイン -->
+    <main class="content" id="scrollArea">
+     <div class = "container">
+
+     <section class="metrics">
+  <div class="scoreCard" aria-label="スコア">
+    <!-- 上段：スコア -->
+    <div class="score-main">
+      <div class="label">最終スコア</div>
+      <div class="value">
+        <span id="scoreValue">--</span>
+        <span class="unit">点</span>
+      </div>
+    </div>
+
+    <!-- 下段：時間・距離 -->
+    <div class="score-sub">
+      <div class="score-sub-item">
+        <span class="score-sub-label">合計時間</span>
+        <span id="timeValue">--</span>
+        <span class="score-sub-unit"></span>
+      </div>
+      <div class="score-sub-item">
+        <span class="score-sub-label">合計距離</span>
+        <span id="distValue">--</span>
+        <span class="score-sub-unit"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ② マップ（3スポットのピン & ポップアップ） -->
+    <div class="result-map-wrap">
+      <div id="result-map"></div>
+
+     <!-- ★ 画面全体オーバーレイ（半透明白） -->
+<div id="overlay" class="overlay hidden"></div>
+
+<!-- ★ 画面全体のポップアップ -->
+<div id="spot-popup" class="spot-popup hidden">
+  <div class="spot-popup-inner">
+    <div class="spot-popup-title" id="popup-title">スポット名</div>
+    <div class="spot-popup-photo-wrap">
+      <img id="popup-photo" src="" alt="">
+    </div>
+  </div>
+</div>
+
+
+      </div>
+    </main>
+
+    <!-- 固定フッター -->
+    <!-- Bottom actions -->
+      <footer class="app-footer">
+    <div class="bottom-actions">
+      <button class="action-btn" type="button" id="shareBtn">
+        <div class ="caption">SNSでシェア </div>
+        <img class = "icon-img" src = "../../static/asset/images/shareicon.png" th:src="@{/asset/images/menulogo.png}"/>
+      </button>
+
+      <button class="action-btn" type="button" onclick="onclickHome()">
+        <div class="caption">ホームに戻る</div>
+        <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
+      </button>
+    </div>
+    </footer>
+  </div>
+  <script src="../../static/js/quiz/result.js" th:src="@{/js/quiz/result.js}"></script>
+  <script>
+        initGoalPage({
+      minutes: 32,                     // 例
+      distanceMeters: 0,                  
+      questions:response.questions,
+      answers:response.answers
+    });
+  </script>
+</body>
+</html>

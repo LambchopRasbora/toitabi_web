@@ -1,0 +1,70 @@
+/* カメラの巨大ボタン */
+.camera-btn{
+  margin: 24px auto 0;
+  display: grid;
+  place-items: center;
+  width: min(86vw, 380px);
+  aspect-ratio: 1 / 0.75;          /* 横長のカメラに合う比率（適宜調整） */
+  border-radius: 28px;
+  background: #fff;
+  text-decoration: none;
+  outline: none;
+
+  /* 影とタップ感 */
+  transition: transform .06s ease, box-shadow .06s ease;
+}
+.camera-btn:active{
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 #00000012;
+}
+/* キーボードフォーカス対応 */
+.camera-btn:focus-visible{
+  box-shadow: 0 0 0 4px #000, 0 2px 0 #00000018;
+}
+
+/* アイコン画像を大きく中央に */
+.camera-icon{
+  width: 80%;
+  height: auto;
+  display: block;
+}
+
+/* ===== アイコン付きボタン ===== */
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;           /* アイコンと文字の間隔 */
+  padding: 10px 16px;
+}
+
+.btn-icon {
+  width: 28px;        /* アイコンのサイズ調整 */
+  height: auto;
+  display: block;
+}
+
+    /* ==== 4枚のプレビューグリッド ==== */
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  max-width: 430px;
+  margin: 0 auto 16px;
+}
+.preview-grid img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #000;
+}
+/*プレビューで選択されているImgのスタイル*/
+.preview-grid .focused
+{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 5px solid #000;
+}

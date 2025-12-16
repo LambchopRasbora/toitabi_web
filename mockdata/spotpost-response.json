@@ -1,0 +1,13 @@
+{
+  "isError": false,
+  "author": "test_user",
+  "spotid": 123,
+  "imagePaths": [
+    "../../static/asset/images/default/NoImage.jpg",
+    "../../static/asset/images/default/NoImage.jpg",
+    "../../static/asset/images/default/NoImage.jpg",
+    "../../static/asset/images/default/NoImage.jpg"
+  ],
+  "latitude": 35.681236,
+  "longitude": 139.767125
+}

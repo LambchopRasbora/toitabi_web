@@ -1,0 +1,12 @@
+{
+    "session_id":"session_idが入っています",
+    "answer_id":1,
+    "answerDto":{
+        "isSkip":false,
+        "answerlat": 34.2,
+        "answerLng":135.6,
+        "point":100
+    },
+    "isFinish":false,
+    "isViewOnly":false
+}
