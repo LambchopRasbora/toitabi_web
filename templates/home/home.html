@@ -4,25 +4,27 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>トイタビ – エリア選択</title>
+  <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <link rel="stylesheet" href="../../static/css/home.css" th:href="@{/css/home.css}">
-  <!-- Leaflet CSS / JS（CDN）-->
+<!--Leaflet（地図表示ライブラリ）の CSS をCDNから読み込み-->
 <link
   rel="stylesheet"
   href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
-<!--test-->
+<!--Leafletの JavaScript本体-->
 <script
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
-<!--jscookie-->
+<!--jscookieのライブラリを読み込む-->
 <script src="
 https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
 "></script>
-<!--ホーム画面の画面遷移用関数-->
+<!--ホーム画面のナビゲーション関数-->
 <script 
  src="../../static/js/navigate/homenavidev.js" th:src="@{/js/navigate/homenavipro.js}">
 </script>
+<!--サーバーとの通信（API呼び出しなど）を行うJS-->
 <script 
  src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}">
 </script>
@@ -30,55 +32,78 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
 
 
 <body>
+  <!--Thymeleaf の値を JavaScript内で使えるようにして、Thymeleaf の値を JavaScript内で使えるようにする-->
   <script th:inline ="javascript">
     const data =/*[[${data}]]*/{}
   </script>
+  <!--CSSレイアウト制御用の画面全体を囲うコンテナ-->
   <div class="screen">
-    <!-- Header -->
+     <!-- Header -->
      <header class="app-header">
+     <!--ロゴとテキストをまとめるラッパー-->
      <div class = "header-logo">
        <img src="..\..\static\asset\images\logo.png" th:src="@{asset/images/logo.png}"/>
        <p class="lead">トイタビに出かけよう！<br>エリアを選んでね</p>
      </div>
      </header>
 
+  <!-- Main Content -->
   <main class ="content">
+     <!--レイアウト用のラッパー-->
      <div class="container">
- <div class="areas">
-  <!--フロントエンドデバッグ用、いらなくなったら消す-->
-  <button id="continue-btn" class="continue-btn">
-    <div class="icon-circle">
-      <img src="../../static/asset/images/totyuicon.png" th:src="@{/asset/images/totyuicon.png}">
-    </div>
-    <span class="label">途中から</span>
-  </button>
-  <!--springboot対応バージョン,questionができ次第公開する-->
-</div>
+       <!--エリア選択UI用の領域-->
+       <div class="areas">
+
+<!--フロントエンドデバッグ用、いらなくなったら消す-->
+<!--continueボタン-->
+<button id="continue-btn" class="continue-btn">
+  <!--アイコンを丸く囲う-->
+  <div class="icon-circle">
+    <!--アイコン画像-->
+    <img src="../../static/asset/images/totyuicon.png" th:src="@{/asset/images/totyuicon.png}">
+  </div>
+  <!--ボタンの文字-->
+  <span class="label">途中から</span>
+</button>
+
+<!--springboot対応バージョン,questionができ次第公開する-->
+     </div>
 <!-- OSMの帰属表示（小さくページ下にまとめて表記）-->
+<!--地図表示エリア-->
 <p class="map-attrib">
+  <!--OSMの著作権表記-->
   © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors
 </p>
-</div>
+       </div>
 </main>
 
 
+  <!-- Footer -->
+  <footer class="app-footer">
     <!-- Bottom actions -->
-      <footer class="app-footer">
     <div class="bottom-actions">
+      <!--設定画面へ遷移するボタン-->
       <button class="action-btn" type="button" onclick= "onclickSetting()">
+        <!--ボタンのラベル-->
         <div class ="caption">メニュー</div>
+        <!--メニューアイコン-->
         <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{asset/images/menulogo.png}"/>
       </button>
 
+      <!--投稿画面へ遷移-->
       <button class="action-btn" type="button" onclick= "onclickPost()" >
+        <!--ボタンのラベル-->
         <div class="caption">トイスポットを投稿</div>
+        <!--投稿用アイコン-->
         <img class = "icon-img" src = "../../static/asset/images/spotpostlogo.png" th:src="@{/asset/images/spotpostlogo.png}"/>
       </button>
       
     </div>
+  <!--これ要る？？-->
   </div>
   
   </footer>
+  
   <!-- Leaflet JSライブラリ -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
