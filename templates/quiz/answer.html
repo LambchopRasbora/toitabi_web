@@ -3,105 +3,175 @@
 <head>
   <meta charset="utf-8" />
 
+  <!--CSRFトークン本体を metaタグ として埋め込む-->
   <meta name="_csrf" th:content="${_csrf.token}">
+  <!--CSRFトークンを送信するときに使う HTTPヘッダー名 を埋め込む-->
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <!--CSRFトークンを送信するときの パラメータ名 を埋め込む-->
   <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
-
+  <!--画面幅を端末の幅に合わせ、初期倍率を1倍に設定-->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>ゴール画面</title>
 
-  <!-- Leaflet -->
+  <!--Leafletの CSS（地図の見た目） をCDNから読み込む-->
+  <!--ファイルが改ざんされていないかを検証するためのハッシュ-->
+  <!--CDN利用時の CORS設定（SRIを使うために必要）-->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
+
+  <!--共通CSSを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <!--ゴール画面専用のCSSを読み込む-->
   <link rel="stylesheet" href="../../static/css/goal.css" th:href="@{/css/goal.css}">
+  <!--Leafletの JavaScript本体 をCDNから読み込む-->
+  <!--JavaScriptファイルの 改ざん検証用ハッシュ-->
+  <!--CDN利用時のCORS設定-->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
-  <!-- LeafletLocate CSS / JS（CDN）-->
+
+  <!-- LeafletLocate CSS / JS（CDN）, Leafletの 現在地ボタン（LocateControl） 用CSSを読み込む-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
+  <!--現在地取得・追跡を行う LeafletプラグインのJS を読み込む-->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
 </head>
+
 <body>
+  <!--Thymeleaf の値を JavaScript内に直接埋め込める ようにする設定-->
+  <!--サーバー側の response オブジェクトをJavaScriptの response 変数として受け取る-->
   <script th:inline="javascript">
     let response =/*[[${response}]]*/;
-  </script> 
+  </script>
+  <!--外部 JavaScript の読み込み-->
+  <!--次の問題・スポットへ遷移する ナビゲーション用JS を読み込む-->
   <script src="../../static/js/navigate/questionnavidev.js" th:src="@{/js/navigate/questionnavipro.js}"></script>
+  <!--サーバー通信（fetch / Ajax）をまとめたJS-->
   <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
+  <!--スコア計算・表示ロジック-->
   <script src="../../static/js/quiz/score.js" th:src="@{/js/quiz/score.js}"></script>
+  <!--回答データの処理や結果表示用JS-->
   <script src="../../static/js/quiz/answer.js" th:src="@{/js/quiz/answer.js}"></script>
+  
+  <!--画面全体を包むコンテナ（レイアウト管理用）-->
   <div class="app">
   <!-- 固定ヘッダー -->
   <header class="app-header">
+    <!--ロゴとテキストをまとめる領域-->
     <div class="header-logo">
+      <!--ロゴ画像-->
       <img src="../../static/asset/images/logo.png"
         th:src="@{/asset/images/logo.png}" alt="トイタビ ロゴ" />
+      <!--text-->  
       <p class="lead">ゴールおめでとう！</p>
     </div>
   </header>
-  <!-- スクロール可能メイン -->
+
+  <!--スクロール可能なメイン表示領域-->
   <main class="content" id="scrollArea">
+    <!--中央寄せ・余白管理用のコンテナ-->
     <div class = "container">
+      <!--数値情報（スコア等）をまとめるセクション-->
       <section class="metrics">
+        <!--スコア表示-->
         <div class="scoreCard" aria-label="スコア">
-          <!-- 上段：スコア -->
+          <!--上段-->
+          <!--スコアのメイン表示部分-->
           <div class="score-main">
+            <!--ラベル表示-->
             <div class="label">スコア</div>
+            <!--スコア値表示用-->
             <div class="value">
+              <!--JavaScriptで 点数が書き換えられる場所-->
               <span id="scoreValue">--</span>
+              <!--単位表示-->
               <span class="unit">点</span>
             </div>
           </div>
 
-          <!-- 下段：時間・距離 -->
+          <!--下段-->
+          <!--補助情報の表示領域-->
           <div class="score-sub">
+            <!--時間表示ブロック-->
             <div class="score-sub-item">
+              <!--「時間」ラベル-->
               <span class="score-sub-label">時間</span>
+              <!--プレイ時間がJSで入る-->
               <span id="timeValue">--</span>
+              <!--単位用（分など）-->
               <span class="score-sub-unit"></span>
             </div>
+            <!--距離表示ブロック-->
             <div class="score-sub-item">
+              <!--「距離」ラベル-->
               <span class="score-sub-label">距離</span>
+              <!--移動距離がJSで入る-->
               <span id="distValue">--</span>
+              <!--単位用（m / km）-->
               <span class="score-sub-unit"></span>
             </div>
           </div>
         </div>
       </section>
 
+      <!--地図表示用セクション-->
       <section class="mapCard">
+        <!--Leafletが地図を描画する DOM要素-->
         <div id="map" role="application" aria-label="結果マップ"></div>
       </section>
     </div>
   </main>
 
     <!-- 固定フッター -->
-    <!-- Bottom actions -->
-      <footer class="app-footer">
-    <div class="bottom-actions">
-      <button class="action-btn" type="button" onclick="onclickNext()"> <!--←次の問題への導線リンクを記述-->
-        <div class ="caption">次のスポットへ </div>
-        <img class = "icon-img" src = "../../static/asset/images/nextspoticon.png" th:src="@{/asset/images/nextspoticon.png}"/>
-      </button>
-      <button class="action-btn" type="button" onclick="onclickHome()">
-        <div class="caption">ホームに戻る</div>
-        <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
-      </button>
-    </div>
+    <footer class="app-footer">
+      <!--ボタンを横並びにする領域-->
+      <div class="bottom-actions">
+        <!--次のスポットへボタン-->
+        <button class="action-btn" type="button" onclick="onclickNext()"> <!--←次の問題への導線リンクを記述-->
+          <!--ボタンのテキスト-->
+          <div class ="caption">次のスポットへ </div>
+          <!--次へ進むアイコン-->
+          <img class = "icon-img" src = "../../static/asset/images/nextspoticon.png" th:src="@{/asset/images/nextspoticon.png}"/>
+        </button>
+        
+        <!--ホームに戻るボタン-->
+        <button class="action-btn" type="button" onclick="onclickHome()">
+          <!--ボタンのテキスト-->
+          <div class="caption">ホームに戻る</div>
+          <!--ホームアイコン-->
+          <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
+        </button>
+      </div>
     </footer>
   </div>
 
+  <!--地図で使うアイコン定義-->
+    <!--プレイヤーの確定位置アイコン-->
+    <!--正解スポット位置アイコン-->
+  <!--シェア機能-->
+    <!--シェアボタンDOM取得-->
+    <!--シェアボタンがあればクリック時の処理を登録-->
+    <!--表示中のスコア・時間・距離取得-->
+    <!--投稿するテキスト作成-->
+    <!--共有するURL生成-->
+    <!--Web Share API が使えるか判定-->
+    <!--スマホ標準の共有UIを表示-->
+    <!--X（旧Twitter）用投稿URL生成-->
+    <!--新しいタブで投稿画面を開く-->
+  <!--ゴール画面初期化-->
+    <!--ゴール画面全体を初期化する関数を呼び出す-->
+    <!--プレイ時間（分）・サーバーから受け取った移動距離・スコア・プレイヤーの回答位置・正解スポット位置-->
   <script>
     /** -----------------------
      *  設定：アイコン画像
      *  ----------------------*/
-    const ICONS = {
+     const ICONS = {
       userConfirm: '/asset/images/confirmicon_map.png', // プレイヤー確定位置
       trueSpot: '/asset/images/spoticon_map.png'       // 実スポット位置
     };
