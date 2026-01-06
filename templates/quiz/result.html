@@ -3,43 +3,63 @@
 <head>
   <meta charset="utf-8" />
 
+  <!--CSRFトークン本体をHTMLに埋め込む-->
   <meta name="_csrf" th:content="${_csrf.token}">
+  <!--CSRFトークンを送信するヘッダー名-->
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <!--CSRFトークンを送信する ヘッダー名-->
   <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
 
+  <!--画面幅を端末幅に合わせ、初期倍率1倍にする-->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>リザルト画面</title>
 
   <!-- Leaflet -->
-   
+  <!--Leafletの 地図表示用CSS をCDNから読み込む-->
+  <!--ファイル改ざん検知用のハッシュ（SRI）-->
+  <!--CDN利用時のCORS設定-->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
+
+  <!--Leafletの JavaScript本体 を読み込む-->
+  <!--JSファイルの改ざん検証-->
+  <!--CORS設定-->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
+
   <!-- LeafletLocate CSS / JS（CDN）-->
+  <!--現在地ボタン用CSS-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
+  <!--現在地取得用JS-->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
 
-  
+  <!--全画面共通CSS-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <!--リザルト画面専用CSS-->
   <link rel="stylesheet" href="../../static/css/result.css" th:href="@{/css/result.css}">
 
 </head>
+
 <body>
+  <!--Thymeleafの値をJS内に埋め込む-->
   <script th:inline="javascript">
     let response =/*[[${response}]]*/
-  </script> 
+  </script>
+
+  <!--画面全体のレイアウト用ラッパー-->
   <div class="app">
     <!-- 固定ヘッダー -->
     <header class="app-header">
       <div class="header-logo">
+        <!--ロゴ画像（静的確認用）-->
+        <!--Thymeleaf用の正規パス指定-->
         <img src="../../static/asset/images/logo.png"
          th:src="@{/asset/images/logo.png}" alt="トイタビ ロゴ" />
         <p class="lead">～結果発表～</p>
@@ -47,65 +67,75 @@
     </header>
     <!-- スクロール可能メイン -->
     <main class="content" id="scrollArea">
-     <div class = "container">
+    <div class = "container">
 
-     <section class="metrics">
-  <div class="scoreCard" aria-label="スコア">
-    <!-- 上段：スコア -->
-    <div class="score-main">
-      <div class="label">最終スコア</div>
-      <div class="value">
-        <span id="scoreValue">--</span>
-        <span class="unit">点</span>
-      </div>
-    </div>
+    <section class="metrics">
+      <!--スコア表示カード-->
+      <div class="scoreCard" aria-label="スコア">
+        <!-- 上段：スコア -->
+        <div class="score-main">
+          <!--ラベル表示-->
+          <div class="label">最終スコア</div>
+          <!--スコア値エリア-->
+          <div class="value">
+            <span id="scoreValue">--</span>
+            <span class="unit">点</span>
+          </div>
+        </div>
 
-    <!-- 下段：時間・距離 -->
-    <div class="score-sub">
-      <div class="score-sub-item">
-        <span class="score-sub-label">合計時間</span>
-        <span id="timeValue">--</span>
-        <span class="score-sub-unit"></span>
+        <!-- 下段：時間・距離 -->
+        <div class="score-sub">
+          <!--合計時間ブロック-->
+          <div class="score-sub-item">
+            <span class="score-sub-label">合計時間</span>
+            <span id="timeValue">--</span>
+            <span class="score-sub-unit"></span>
+          </div>
+          <!--合計距離ブロック-->
+          <div class="score-sub-item">
+            <span class="score-sub-label">合計距離</span>
+            <span id="distValue">--</span>
+            <span class="score-sub-unit"></span>
+          </div>
+        </div>
       </div>
-      <div class="score-sub-item">
-        <span class="score-sub-label">合計距離</span>
-        <span id="distValue">--</span>
-        <span class="score-sub-unit"></span>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ② マップ（3スポットのピン & ポップアップ） -->
+    <!-- ② マップ（3スポットのピン & ポップアップ） -->
     <div class="result-map-wrap">
+      <!--Leafletが描画する地図DOM-->
       <div id="result-map"></div>
 
-     <!-- ★ 画面全体オーバーレイ（半透明白） -->
-<div id="overlay" class="overlay hidden"></div>
+    <!-- ★ 画面全体オーバーレイ（半透明白） -->
+    <div id="overlay" class="overlay hidden"></div>
 
-<!-- ★ 画面全体のポップアップ -->
-<div id="spot-popup" class="spot-popup hidden">
-  <div class="spot-popup-inner">
-    <div class="spot-popup-title" id="popup-title">スポット名</div>
-    <div class="spot-popup-photo-wrap">
-      <img id="popup-photo" src="" alt="">
-    </div>
-  </div>
-</div>
-
-
+    <!-- ★ 画面全体のポップアップ -->
+    <div id="spot-popup" class="spot-popup hidden">
+      <!--ポップアップの中身-->
+      <div class="spot-popup-inner">
+        <!--スポット名（JSで差し替え）-->
+        <div class="spot-popup-title" id="popup-title">スポット名</div>
+        <!--写真表示領域-->
+        <div class="spot-popup-photo-wrap">
+          <img id="popup-photo" src="" alt="">
+        </div>
       </div>
+    </div>
+
+    </div>
     </main>
 
     <!-- 固定フッター -->
+    <footer class="app-footer">
     <!-- Bottom actions -->
-      <footer class="app-footer">
     <div class="bottom-actions">
+      <!--SNS共有ボタン-->
       <button class="action-btn" type="button" id="shareBtn">
         <div class ="caption">SNSでシェア </div>
         <img class = "icon-img" src = "../../static/asset/images/shareicon.png" th:src="@{/asset/images/menulogo.png}"/>
       </button>
 
+      <!--ホーム画面へ戻る-->
       <button class="action-btn" type="button" onclick="onclickHome()">
         <div class="caption">ホームに戻る</div>
         <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
@@ -113,7 +143,10 @@
     </div>
     </footer>
   </div>
+  
+  <!--リザルト画面専用ロジック（地図・ピン・ポップアップ）-->
   <script src="../../static/js/quiz/result.js" th:src="@{/js/quiz/result.js}"></script>
+  <!--画面初期化JS-->
   <script>
         initGoalPage({
       minutes: 32,                     // 例
