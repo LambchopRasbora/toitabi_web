@@ -6,10 +6,13 @@
         <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
     </head>
     <body>
+        <!--Thymeleafの変数を JavaScript内に直接展開 できるようにする-->
         <script th:inline="javascript">
             const response =/*[[${response}]]*/
         </script> 
+        <!--fetch / Ajax など、サーバーにリクエストを送る共通処理を読み込む-->
         <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}" ></script>
+        <!--クイズの回答データを サーバーに保存する処理 を行うJS-->
         <script src="../../static/quiz/answerSave.js" th:src="@{/js/quiz/answerSave.js}" ></script>
     </body>
 </html>
