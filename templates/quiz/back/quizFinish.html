@@ -8,12 +8,16 @@
         <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
 
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        
+        <!--ブラウザのタブ・履歴に表示されるタイトル。-->
         <title>トイタビ – クイズ終了中</title>
         <!-- Leaflet CSS / JS（CDN）-->
+        <!--Leaflet地図を正しく表示するための スタイルシート を読み込み-->
         <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         />
+        <!--Leafletの 地図操作用JavaScript本体 を読み込み-->
         <script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
         </script>
@@ -21,17 +25,21 @@
         <script src="
         https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
         "></script>
+        <!--共通通信処理JS を読み込む-->
         <script 
         src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}">
         </script>
     </head>
     <body>
+        <!--Thymeleafの値を JavaScriptに直接展開 可能にする指定-->
         <script th:inline="javascript">
             const response =/*[[${response}]]*/
         </script> 
+        <!--ブロック要素開始-->
         <div>
             Quizを終了しています。
         </div>
+        <!--回答の最終送信/スコア計算/セッション整理/リザルト画面への遷移などを行う 終了処理専用JS を実行-->
         <script src="../../static/js/quiz/quizFinish.js" th:src="@{/js/quiz/quizFinish.js}"></script>
     </body>
 </html>
