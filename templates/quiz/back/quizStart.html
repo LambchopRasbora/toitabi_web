@@ -10,10 +10,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <title>トイタビ – クイズ生成中</title>
         <!-- Leaflet CSS / JS（CDN）-->
+        <!--Leaflet（地図ライブラリ）の スタイル定義-->
         <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         />
+        <!--地図の表示・操作を行うJavaScript本体-->
         <script
         src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
         </script>
@@ -21,17 +23,21 @@
         <script src="
         https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
         "></script>
+        <!--共通通信処理JS-->
         <script 
         src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}">
         </script>
     </head>
     <body>
+        <!--Thymeleafで Javaの値をJSに埋め込む-->
         <script th:inline="javascript">
             const response =/*[[${response}]]*/
         </script> 
+         <!--表示用ブロック-->
          <div>
             画面遷移中_Quiz初期化中
         </div>
+        <!--クイズ作成/問題生成/セッション・Cookie初期化/最初のQuestion画面へ遷移を行う 初期化専用スクリプト-->
         <script src="../../static/js/quiz/quizStart.js" th:src="@{/js/quiz/quizStart.js}"> 
         </script>
        
