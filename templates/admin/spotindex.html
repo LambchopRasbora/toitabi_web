@@ -15,7 +15,7 @@
 			<th>Map</th>
 		</tr>
 		<tr th:each="spot:${spots}">
-			<td th:text="${spot.id}"></td>
+			<td th:text="${spot.spot_id}"></td>
 			<td th:text="${spot.latitude}"></td>
 			<td th:text="${spot.longitude}"></td>
 			<td th:text="${spot.author}"></td>
@@ -42,6 +42,17 @@
 						+ ${spot.latitude} + ',' + ${spot.longitude}" 
 					style="width:300px; height:300px; border:1px solid black">
 				</iframe>
+			</td>
+
+			<!-- 削除フォーム -->
+			<td>
+				<form th:action="@{/admin/spotdelete}" method="post"
+					  onsubmit="return confirm('このSpotを削除しますか？');">
+
+					<input type="hidden" name="spot_id" th:value="${spot.spot_id}" />
+
+					<button type="submit">削除</button>
+				</form>
 			</td>
 		</tr>
 	</table>

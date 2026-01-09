@@ -3,6 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- CSRF -->
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
   <title>トイタビ – エリア選択</title>
   <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">

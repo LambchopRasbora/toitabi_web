@@ -4,16 +4,20 @@
     <head>
     </head>
     <body>
-        <form th:action="@{/login}" method="post">
+        <form th:action="@{/signup/createuser}" method="post">
             <div>
-                <label>ID</label>
+                <label>ユーザー名</label>
                 <input type="text" name="username">
             </div>
             <div>
-                <label>パスワード</label>
-                <input type="password" name="password">
+                <label>メールアドレス</label>
+                <input type="text" name="mail">
             </div>
-            <button type="submit">ログイン</button>
+            <div>
+                <label>パスワード</label>
+                <input type="text" name="password">
+            </div>
+            <button type="submit">登録</button>
         </form>
     </body>
 </html>

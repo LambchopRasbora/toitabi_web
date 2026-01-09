@@ -95,8 +95,8 @@ function fetchLocation()
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       session_id:response.session_id,
-      question_number:response.question_number,
-      spot_id:response.spotDto.id,
+      question_id: response.question_number,
+      spot_id: response.spotDto.spot_id, 
       latitude: latestLocation.coords.latitude,
       longitude: latestLocation.coords.longitude
     })
