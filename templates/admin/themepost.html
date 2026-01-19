@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テーマ投稿</title>
+    <link rel="stylesheet" href="/static/css/admin/themepost.css">
+</head>
+<body>
+    <div class="container">
+        <h1>テーマ投稿</h1>
+        
+        <form method="POST" action="URL" enctype="multipart/form-data">
+            
+            <!-- Area ID -->
+            <div class="form-group">
+                <label for="areaId">エリアID <span class="required">*</span></label>
+                <input type="number" id="areaId" name="areaId" required>
+            </div>
+            
+            <!-- Author ID -->
+            <div class="form-group">
+                <label for="authorId">著者ID <span class="required">*</span></label>
+                <input type="number" id="authorId" name="authorId" required>
+            </div>
+            
+            <!-- Name -->
+            <div class="form-group">
+                <label for="name">テーマ名 <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">説明</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            
+            <!-- Thumbnail File -->
+            <div class="form-group">
+                <label for="thumbnailfile">サムネイル画像</label>
+                <input type="file" id="thumbnailfile" name="thumbnailfile" accept="image/*">
+            </div>
+            
+            <!-- Enabled -->
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="enabled" name="enabled" value="true">
+                    <span>有効にする</span>
+                </label>
+            </div>
+            
+            <!-- Hidden -->
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="hidden" name="hidden" value="true">
+                    <span>非表示にする</span>
+                </label>
+            </div>
+            
+            <!-- Rules Section -->
+            <div class="form-group">
+                <label>ルール</label>
+                <div class="rule-section" id="rulesContainer">
+                    <div class="rule-item" data-rule-index="0">
+                        <div style="grid-column: 1 / -1;">
+                            <label for="ruletype-0">ルールタイプ</label>
+                            <select id="ruletype-0" class="ruletype-select" data-rule-index="0" onchange="updateRuleValueFields(0)" required>
+                                <option value="">選択してください</option>
+                                <option value="NONE">NONE</option>
+                                <option value="ALL">ALL</option>
+                                <option value="TAG_MATCH">TAG_MATCH</option>
+                                <option value="ID_MATCH">ID_MATCH</option>
+                            </select>
+                        </div>
+                        <div style="grid-column: 1 / -1;" id="rulevalues-container-0">
+                            <label>ルール値</label>
+                            <div id="rulevalues-0" style="display: flex; flex-direction: column; gap: 8px;">
+                                <!-- Values will be added here dynamically -->
+                            </div>
+                            <button type="button" class="add-value-btn" onclick="addRuleValue(0)" style="margin-top: 8px; background-color: #2196F3; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">値を追加</button>
+                        </div>
+                        <div style="grid-column: 1 / -1; text-align: right;">
+                            <button type="button" class="remove-rule-btn" onclick="removeRuleItem(0)">ルールを削除</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="add-rule-btn" onclick="addRuleItem()">ルールを追加</button>
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="submit">投稿</button>
+                <button type="reset">リセット</button>
+            </div>
+            
+        </form>
+    </div>
+    
+    <script src="/static/js/admin/themepost.js"></script>
+</body>
+</html>
