@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Area Details</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}" />
+	<link rel="stylesheet" th:href="@{/css/admin/common.css}" />
+</head>
+<body>
+<div class="container">
+	<h1>Area Details</h1>
+
+	<div th:if="${area == null}">Area not found.</div>
+
+	<div th:if="${area != null}">
+		<dl>
+			<dt>Area ID</dt>
+			<dd th:text="${area.areaId}">areaId</dd>
+
+			<dt>Name</dt>
+			<dd th:text="${area.areaname}">areaname</dd>
+
+			<dt>Description</dt>
+			<dd th:text="${area.description}">description</dd>
+
+			<dt>Thumbnail</dt>
+			<dd>
+				<img th:if="${area.thumbnailUri != null}" th:src="${area.thumbnailUri}" th:alt="Thumbnail" class="thumb" />
+				<span th:if="${area.thumbnailUri == null}">—</span>
+			</dd>
+
+			<dt>KML</dt>
+			<dd>
+				<a th:if="${area.kmlUri != null}" th:href="${area.kmlUri}" th:text="${area.kmlUri}">kml</a>
+				<span th:if="${area.kmlUri == null}">—</span>
+			</dd>
+
+			<dt>Min Lat</dt>
+			<dd th:text="${area.minLat}">minLat</dd>
+
+			<dt>Max Lat</dt>
+			<dd th:text="${area.maxLat}">maxLat</dd>
+
+			<dt>Min Lon</dt>
+			<dd th:text="${area.minLon}">minLon</dd>
+
+			<dt>Max Lon</dt>
+			<dd th:text="${area.maxLon}">maxLon</dd>
+
+			<dt>Created At</dt>
+			<dd th:text="${area.createdAt}">createdAt</dd>
+
+			<dt>Updated At</dt>
+			<dd th:text="${area.updatedAt}">updatedAt</dd>
+		</dl>
+
+		<div class="actions">
+			<a th:href="@{/admin/adminareaindex}">← Back to list</a>
+			<a th:href="@{/admin/adminareaedit(areaId=${area.areaId})}">Edit</a>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+

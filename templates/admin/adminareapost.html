@@ -49,25 +49,25 @@
 <body>
     <h1>エリア投稿</h1>
     
-    <form method="POST" enctype="multipart/form-data" action="/admin/areapost" th:action="@{/admin/areapost}">
+    <form method="POST" enctype="multipart/form-data" action="/admin/areapost" th:action="@{/admin/areapost}" th:object="${request}">
         <div>
             <label for="areaname">エリア名:</label>
-            <input type="text" id="areaname" name="areaname" required>
+            <input type="text" id="areaname" name="areaname" required th:field="*{areaname}">
         </div>
         
         <div>
             <label for="description">説明:</label>
-            <textarea id="description" name="description" required></textarea>
+            <textarea id="description" name="description" required th:field="*{description}"></textarea>
         </div>
         
         <div>
             <label for="thumbnailfile">サムネイル画像:</label>
-            <input type="file" id="thumbnailfile" name="thumbnailfile" accept="image/*" required>
+            <input type="file" id="thumbnailfile" name="thumbnailfile" accept="image/*" required th:field="*{thumbnailfile}">
         </div>
         
         <div>
             <label for="kmlfile">KMLファイル:</label>
-            <input type="file" id="kmlfile" name="kmlfile" accept=".kml" required>
+            <input type="file" id="kmlfile" name="kmlfile" accept=".kml" required th:field="*{kmlfile}">
         </div>
         
         <button type="submit">投稿</button>

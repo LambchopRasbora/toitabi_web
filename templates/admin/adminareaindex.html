@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Admin — Areas</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}" />
+	<link rel="stylesheet" th:href="@{/css/admin/common.css}" />
+</head>
+<body>
+
+<h1>Areas</h1>
+<a href ="/admin/home" th:href="@{/admin/home}">管理者用ホーム画面に戻る</a>
+
+<div class="section">
+	<div th:if="${areas == null or #lists.isEmpty(areas)}">No areas available.</div>
+	<table th:if="${areas != null and !#lists.isEmpty(areas)}">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Area ID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Thumbnail</th>
+				<th>KML</th>
+				<th>Min Lat</th>
+				<th>Max Lat</th>
+				<th>Min Lon</th>
+				<th>Max Lon</th>
+				<th>Created At</th>
+				<th>Updated At</th>
+				<th>Details</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="area,iter : ${areas}">
+				<td th:text="${area.areaId}">areaId</td>
+				<td th:text="${area.areaname}">areaname</td>
+				<td th:text="${area.description}">description</td>
+				<td>
+					<img th:if="${area.thumbnailUri != null}" th:src="${area.thumbnailUri}" th:alt="Thumbnail" />
+				</td>
+				<td>
+					<a th:if="${area.kmlUri != null}" th:href="${area.kmlUri}" th:text="${area.kmlUri}">kml</a>
+				</td>
+				<td th:text="${area.minLat}">minLat</td>
+				<td th:text="${area.maxLat}">maxLat</td>
+				<td th:text="${area.minLon}">minLon</td>
+				<td th:text="${area.maxLon}">maxLon</td>
+				<td th:text="${area.createdAt}">createdAt</td>
+				<td th:text="${area.updatedAt}">updatedAt</td>
+				<td>
+					<a th:href="@{/admin/adminareadetail(areaId=${area.areaId})}">Details</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
