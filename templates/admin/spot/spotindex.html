@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Admin — Spots</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}" />
+	<link rel="stylesheet" th:href="@{/css/admin/common.css}" />
+</head>
+<body>
+
+<h1>Spots</h1>
+<a href ="/admin/home" th:href="@{/admin/home}">管理者用ホーム画面に戻る</a>
+
+<div class="section">
+	<table class="admin-area-table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Latitude</th>
+				<th>Longitude</th>
+				<th>Author</th>
+				<th>Images</th>
+				<th>Map</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="spot,iter : ${spots}">
+				<td th:text="${spot.spot_id}">spot_id</td>
+				<td th:text="${spot.latitude}">latitude</td>
+				<td th:text="${spot.longitude}">longitude</td>
+				<td th:text="${spot.author}">author</td>
+
+				<!-- Images: keep data structure, rely on admin CSS for scaling -->
+				<td>
+					<div th:if="${spot.images != null}">
+						<span th:each="img : ${spot.images}">
+							<img th:src="${img}" th:alt="Image" />
+						</span>
+					</div>
+				</td>
+
+				<!-- Embedded OpenStreetMap -->
+				<td>
+					<iframe
+						th:src="'https://www.openstreetmap.org/export/embed.html?bbox=' 
+							+ (${spot.longitude}-0.01) + ',' 
+							+ (${spot.latitude}-0.01) + ',' 
+							+ (${spot.longitude}+0.01) + ',' 
+							+ (${spot.latitude}+0.01) 
+							+ '&layer=mapnik&marker=' 
+							+ ${spot.latitude} + ',' + ${spot.longitude}"
+						style="width:300px; height:300px; border:1px solid black">
+					</iframe>
+				</td>
+
+				<!-- Delete form (kept as-is) -->
+				<td>
+					<form th:action="@{/admin/spotdelete}" method="post"
+						  onsubmit="return confirm('このSpotを削除しますか？');">
+						<input type="hidden" name="spot_id" th:value="${spot.spot_id}" />
+						<button type="submit">削除</button>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+</body>
+</html>

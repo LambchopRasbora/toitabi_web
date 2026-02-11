@@ -13,7 +13,7 @@
     <div th:if="${area == null}">Area not found.</div>
 
     <div th:if="${area != null}">
-        <form th:action="@{/admin/adminareaedit}" th:object="${area}" method="post">
+        <form  id="areaForm" th:action="@{/admin/adminareaedit}" th:object="${area}" method="post">
             <!-- Hidden ID for submission -->
             <div class="form-group">
                 <label for="id">Area ID</label>
@@ -77,24 +77,16 @@
                 <span><strong>Updated</strong></span>
                 <span th:text="${area.updatedAt}">updatedAt</span>
             </div>
-
-            <div class="actions">
-                <button type="button" id="submitBtn">Save Changes</button>
-                <a href="javascript:history.back()">Cancel</a>
-            </div>
         </form>
         <form id="requestform" th:action="@{/admin/adminareaedit}" th:object="${request}" method="post">
-            <input type="hidden" name="areaId" th:field="*{areaId}"/>
-            <input type="hidden" name="areanameChanged" th:field="*{areanameChanged}"/>
-            <input type="hidden" name="areaname" th:field="*{areaname}"/>
-            <input type="hidden" name="descriptionChanged" th:field="*{descriptionChanged}"/>
-            <input type="hidden" name="description" th:field="*{description}"/>
-            <input type="hidden" name="thumbnailChanged" th:field="*{thumbnailChanged}"/>
-            <input type="hidden" name="thumbnailfile" th:field="*{thumbnailfile}"/>
-            <input type="hidden" name="kmlChanged" th:field="*{kmlChanged}"/>
-            <input type="hidden" name="kmlfile" th:field="*{kmlfile}"/>
         </form>
-
+        <form id ="deleteform" th:action="@{/admin/adminareadelete}" th:object="${deleteRequest}" method="post">
+        </form>
+        <div class="actions">
+                <button type="button" id="submitBtn">Save Changes</button>
+                <button type="button" id="deleteBtn">Delete Area</button>
+                <a href="javascript:history.back()">Cancel</a>
+            </div>
     </div>
 </div>
 <script th:src="@{/js/admin/adminareaedit.js}"></script>

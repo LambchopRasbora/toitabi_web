@@ -35,7 +35,7 @@ function postForm(url,formdata)
         return res.json();
     })
     .then(data => {
-        if(data.redirectUrl){
+        if(data.redirected){
             window.location.href=data.redirectUrl;
             return;
         }

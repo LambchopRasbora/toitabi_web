@@ -217,6 +217,25 @@ img.thumb {
     border: 1px solid #ddd;
 }
 
+/* Table thumbnail images in admin area — scale for desktop, responsive on small screens */
+.section table td img,
+.admin-area-table img {
+    width: auto;
+    max-width: min(320px, 100%);
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 767px) {
+    .section table td img,
+    .admin-area-table img {
+        max-width: 180px;
+    }
+}
+
 /* Utility Classes */
 .section {
     margin: 24px 0;

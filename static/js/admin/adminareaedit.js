@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Function to copy area form values to request form and submit
     const submitForm = function() {
-        const firstForm = document.querySelector('form:not(#requestform)');
+        const firstForm = document.getElementById('areaForm');
         const requestForm = document.getElementById('requestform');
         
         if (firstForm && requestForm) {
@@ -84,37 +84,63 @@ document.addEventListener('DOMContentLoaded', function(){
             const thumbnailChangedInput = document.getElementById('thumbCheckbox');
             const kmlChangedInput = document.getElementById('kmlCheckbox');
 
-            // Get or create hidden inputs in request form
-            const setHiddenValue = (name, value) => {
-                let input = requestForm.querySelector(`input[name="${name}"]`);
-                if (input) {
-                    input.value = value;
-                } else {
-                    input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = name;
-                    input.value = value;
-                    requestForm.appendChild(input);
-                }
-            };
+            let formData = new FormData(requestForm);
 
-            // Copy values from area form to request form
-            if (areaIdInput) setHiddenValue('areaId', areaIdInput.value);
-            if (areanameInput) setHiddenValue('areaname', areanameInput.value);
-            if (descriptionInput) setHiddenValue('description', descriptionInput.value);
-            if (areanameChangedInput) setHiddenValue('areanameChanged', areanameChangedInput.value);
-            if (descriptionChangedInput) setHiddenValue('descriptionChanged', descriptionChangedInput.value);
-            if (thumbnailChangedInput) setHiddenValue('thumbnailChanged', thumbnailChangedInput.checked);
-            if (kmlChangedInput) setHiddenValue('kmlChanged', kmlChangedInput.checked);
+            formData.append('areaId', areaIdInput ? areaIdInput.value : '');
+            formData.append('areanameChanged', areanameChangedInput ? areanameChangedInput.value : 'false');
+            formData.append('areaname', areanameInput ? areanameInput.value : '');
+            formData.append('descriptionChanged', descriptionChangedInput ? descriptionChangedInput.value : 'false');
+            formData.append('description', descriptionInput ? descriptionInput.value : '');
+            formData.append('thumbnailChanged', thumbnailChangedInput ? thumbnailChangedInput.checked : false);
+            if( thumbnailChangedInput && thumbnailChangedInput.checked &&thumbFile && thumbFile.files && thumbFile.files.length > 0)
+            {
+              formData.append('thumbnailfile',  thumbFile.files[0]);
+            }
+            console.log(areaIdInput.value);
+            formData.append('kmlChanged', kmlChangedInput ? kmlChangedInput.checked : false);
+            if( kmlChangedInput && kmlChangedInput.checked && kmlFile && kmlFile.files && kmlFile.files.length > 0)
+            {
+              formData.append('kmlfile', kmlFile.files[0]);
+            }
 
-            // Submit the request form
-            requestForm.submit();
-        }
+            fetch(requestForm.action, {
+                method: 'POST',
+                body: formData,
+                redirect: 'follow'
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = response.url;
+                }}).catch(error => {
+                console.error('Error submitting form:', error);
+            });
+        };
     };
+    const deleteForm = function() 
+    {
+        const areaIdInput = firstForm.querySelector('input[name="areaId"]');
 
+        const deleteform=document.getElementById('deleteform');
+        let formData = new FormData(deleteform);
+        formData.append('areaId', areaIdInput ? areaIdInput.value : '');
+
+        fetch(deleteform.action, {
+                method: 'POST',
+                body: formData,
+                redirect: 'follow'
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = response.url;
+                }}).catch(error => {
+                console.error('Error submitting form:', error);
+            });
+    }
     // Attach click handler to submit button
     const submitBtn = document.getElementById('submitBtn');
     if (submitBtn) {
         submitBtn.addEventListener('click', submitForm);
+    }
+    const deleteBtn = document.getElementById('deleteBtn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', deleteForm);
     }
 });
