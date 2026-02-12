@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Admin — Themes</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}" />
+	<link rel="stylesheet" th:href="@{/css/admin/common.css}" />
+</head>
+<body>
+
+<h1>Themes</h1>
+<a href ="/admin/home" th:href="@{/admin/home}">管理者用ホーム画面に戻る</a>
+
+<div class="section">
+	<div th:if="${themes == null or #lists.isEmpty(themes)}">No themes available.</div>
+	<table th:if="${themes != null and !#lists.isEmpty(themes)}">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Theme ID</th>
+				<th>Area ID</th>
+				<th>Author ID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Thumbnail</th>
+				<th>Enabled</th>
+				<th>Hidden</th>
+				<th>Rules</th>
+				<th>Details</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="theme,iter : ${themes}">
+				<td th:text="${iter.count}">count</td>
+				<td th:text="${theme.themeId}">themeId</td>
+				<td th:text="${theme.areaId}">areaId</td>
+				<td th:text="${theme.authorId}">authorId</td>
+				<td th:text="${theme.name}">name</td>
+				<td th:text="${theme.description}">description</td>
+				<td>
+					<img th:if="${theme.thumbnailUri != null}" th:src="${theme.thumbnailUri}" th:alt="Thumbnail" />
+				</td>
+				<td th:text="${theme.enabled}">enabled</td>
+				<td th:text="${theme.hidden}">hidden</td>
+				<td>
+					<div th:if="${theme.rules != null and !#lists.isEmpty(theme.rules)}">
+						<ul>
+							<li th:each="rule : ${theme.rules}">
+								<span th:text="${rule.ruleType}">ruleType</span>: <span th:text="${rule.ruleValue}">ruleValue</span>
+							</li>
+						</ul>
+					</div>
+					<div th:if="${theme.rules == null or #lists.isEmpty(theme.rules)}">No rules</div>
+				</td>
+				<td>
+					<a th:href="@{/admin/adminthemedetail(themeId=${theme.themeId})}">Details</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
