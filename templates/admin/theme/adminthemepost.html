@@ -17,15 +17,9 @@
                 <label for="areaId">エリアID <span class="required">*</span></label>
                 <select id="areaId" name="areaId" required>
                     <option value="">選択してください</option>
+                    <option th:each="area : ${areas}" th:value="${area.areaId}" th:text="${area.areaId} + ' - ' + ${area.areaname}">Area Option</option>
                 </select>
             </div>
-            
-            <!-- Author ID -->
-            <div class="form-group">
-                <label for="authorId">著者ID <span class="required">*</span></label>
-                <input type="number" id="authorId" name="authorId" required>
-            </div>
-            
             <!-- Name -->
             <div class="form-group">
                 <label for="name">テーマ名 <span class="required">*</span></label>
@@ -69,10 +63,11 @@
                             <label for="ruletype-0">ルールタイプ</label>
                             <select id="ruletype-0" class="ruletype-select" data-rule-index="0" onchange="updateRuleValueFields(0)" required>
                                 <option value="">選択してください</option>
-                                <option value="NONE">NONE</option>
-                                <option value="ALL">ALL</option>
-                                <option value="TAG_MATCH">TAG_MATCH</option>
-                                <option value="ID_MATCH">ID_MATCH</option>
+                                <option th:each ="type:${ruletypes}"
+                                    th:value ="${type}"
+                                    th:text ="${type}">
+                                    ルールタイプ
+                                </option>
                             </select>
                         </div>
                         <div style="grid-column: 1 / -1;" id="rulevalues-container-0">
@@ -101,7 +96,7 @@
     
     <!-- Areas data embedded as JSON -->
     <script id="areas-data" type="application/json" th:inline="javascript">
-       let areas= [[${arearesponse}]]
+       let areas= [[${areas}]]
     </script>
     
     <script src="/static/js/admin/themepost.js" th:src="@{/js/admin/themepost.js}"></script>
