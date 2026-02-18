@@ -104,6 +104,144 @@
 
 
 
+
+
+    .ch-bubble{
+  --avatar: 256px;
+
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+  width: 100%;
+  max-width: 960px;
+  margin: 60px auto;
+}
+
+/* キャラクター */
+.ch-avatar{
+  width: var(--avatar);
+  height: auto;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+/* 吹き出し */
+.ch-balloon{
+  position: relative;
+  flex: 1;
+  background: #ffffff;
+  border: 3px solid #111;
+  border-radius: 24px;
+  padding: 32px 36px;
+  line-height: 1.7;
+  box-shadow: 0 18px 40px rgba(0,0,0,.08);
+}
+
+
+
+/* テキスト */
+.ch-title{
+  margin: 0 0 16px 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.ch-text{
+  margin: 0;
+  font-size: 18px;
+}
+
+.ch-link{
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* ===== Speech bubble stacked (balloon on top, character below) ===== */
+.ch-stack{
+  --avatar: 256px;
+
+  width: 100%;
+  max-width: 720px;   /* ここを広げるともっと横いっぱい */
+  margin: 24px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+/* balloon full width */
+.ch-stack .ch-balloon{
+  position: relative;
+  width: 100%;
+  background: #fff;
+  border: 3px solid #111;
+  border-radius: 24px;
+  padding: 22px 22px;
+  line-height: 1.7;
+  box-shadow: 0 18px 40px rgba(0,0,0,.08);
+}
+
+/* tail: bottom center */
+.ch-stack .ch-balloon::after{
+  content:"";
+  position: absolute;
+  left: 50%;
+  bottom: -16px;
+  width: 28px;
+  height: 28px;
+  background: #fff;
+  border-right: 3px solid #111;
+  border-bottom: 3px solid #111;
+  transform: translateX(-50%) rotate(45deg);
+  border-bottom-right-radius: 6px;
+}
+
+/* text */
+.ch-stack .ch-text{
+  margin: 0;
+  font-size: 18px;
+}
+
+/* character below */
+.ch-stack .ch-avatar{
+  width: var(--avatar);
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* ===== Retro pixel float animation ===== */
+
+.ch-stack .ch-avatar{
+  animation: chRetroFloat 1.2s steps(4) infinite;
+  transform-origin: center bottom;
+}
+
+/* カクカク動く */
+@keyframes chRetroFloat{
+  0%   { transform: translateY(0px); }
+  25%  { transform: translateY(-8px); }
+  50%  { transform: translateY(0px); }
+  75%  { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
+}
+
+
+
+
+
+/* small screens */
+@media (max-width: 420px){
+  .ch-stack{ --avatar: 200px; max-width: 92vw; }
+  .ch-stack .ch-text{ font-size: 16px; }
+}
+
+
+
+
     /* ========= ボタン押下時アクション ========= */
     .area-card:active .label,
     .action-btn:active{ transform:translateY(1px); }
