@@ -11,6 +11,12 @@
 <h1>Spots</h1>
 <a href ="/admin/home" th:href="@{/admin/home}">管理者用ホーム画面に戻る</a>
 
+<form th:action="@{/admin/spotsearch}" method="get" class="spot-search-form">
+	<label for="spotSearch">Spot検索:</label>
+	<input type="text" id="spotSearch" name="q" th:value="${q}" placeholder="ID・Author・Lat/Lonで検索" />
+	<button type="submit">検索</button>
+</form>
+
 <div class="section">
 	<table class="admin-area-table">
 		<thead>

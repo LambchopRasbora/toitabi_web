@@ -46,9 +46,9 @@ function updateRuleValueFields(ruleIndex) {
     
     // Hide the entire container if NONE or ALL
     if (selectedType === 'NONE' || selectedType === 'ALL' || selectedType === '') {
-        ruleValueContainerDiv.style.display = 'none';
+        ruleValueContainerDiv.classList.add('hidden');
     } else {
-        ruleValueContainerDiv.style.display = 'block';
+        ruleValueContainerDiv.classList.remove('hidden');
         
         // Add first input field based on type
         if (selectedType === 'ID_MATCH') {
@@ -80,9 +80,6 @@ function addRuleValue(ruleIndex, inputType = null) {
     const valueIndex = ruleValuesContainer.children.length;
     
     const inputWrapper = document.createElement('div');
-    inputWrapper.style.display = 'flex';
-    inputWrapper.style.gap = '8px';
-    inputWrapper.style.alignItems = 'center';
     inputWrapper.className = 'rule-value-input';
     inputWrapper.dataset.valueIndex = valueIndex;
     
@@ -90,7 +87,6 @@ function addRuleValue(ruleIndex, inputType = null) {
     input.type = type;
     input.name = `rulevalues-${ruleIndex}-${valueIndex}`;
     input.className = `rule-value-${ruleIndex}`;
-    input.style.flex = '1';
     input.required = true;
     
     if (type === 'number') {
@@ -104,13 +100,6 @@ function addRuleValue(ruleIndex, inputType = null) {
     removeBtn.type = 'button';
     removeBtn.className = 'remove-value-btn';
     removeBtn.textContent = '削除';
-    removeBtn.style.background = '#f44336';
-    removeBtn.style.color = 'white';
-    removeBtn.style.padding = '5px 10px';
-    removeBtn.style.border = 'none';
-    removeBtn.style.borderRadius = '4px';
-    removeBtn.style.cursor = 'pointer';
-    removeBtn.style.fontSize = '12px';
     removeBtn.onclick = function() {
         inputWrapper.remove();
     };
@@ -128,7 +117,7 @@ function addRuleItem() {
     newRuleItem.dataset.ruleIndex = ruleCount;
     
     newRuleItem.innerHTML = `
-        <div style="grid-column: 1 / -1;">
+        <div data-rule-section="fullwidth">
             <label for="ruletype-${ruleCount}">ルールタイプ</label>
             <select id="ruletype-${ruleCount}" class="ruletype-select" data-rule-index="${ruleCount}" onchange="updateRuleValueFields(${ruleCount})" required>
                 <option value="">選択してください</option>
@@ -138,14 +127,14 @@ function addRuleItem() {
                 <option value="ID_MATCH">ID_MATCH</option>
             </select>
         </div>
-        <div style="grid-column: 1 / -1;" id="rulevalues-container-${ruleCount}">
+        <div data-rule-section="fullwidth" id="rulevalues-container-${ruleCount}">
             <label>ルール値</label>
-            <div id="rulevalues-${ruleCount}" style="display: flex; flex-direction: column; gap: 8px;">
+            <div id="rulevalues-${ruleCount}" class="rule-values-container">
                 <!-- Values will be added here dynamically -->
             </div>
-            <button type="button" class="add-value-btn" onclick="addRuleValue(${ruleCount})" style="margin-top: 8px; background-color: #2196F3; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">値を追加</button>
+            <button type="button" class="add-value-btn" onclick="addRuleValue(${ruleCount})">値を追加</button>
         </div>
-        <div style="grid-column: 1 / -1; text-align: right;">
+        <div class="rule-action-buttons">
             <button type="button" class="remove-rule-btn" onclick="removeRuleItem(${ruleCount})">ルールを削除</button>
         </div>
     `;

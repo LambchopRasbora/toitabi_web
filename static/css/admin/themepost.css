@@ -74,4 +74,66 @@ input[type="checkbox"] {
     background-color: #da190b;
 }
 
+/* Rule value input wrapper */
+.rule-value-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
 
+.rule-value-input input {
+    flex: 1;
+}
+
+/* Rule container section */
+.rule-item > div[data-rule-section="fullwidth"] {
+    grid-column: 1 / -1;
+}
+
+.rule-item > div.rule-action-buttons {
+    grid-column: 1 / -1;
+    text-align: right;
+}
+
+/* Rule values container */
+.rule-values-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Hidden state for rule values container */
+.rule-values-container.hidden {
+    display: none;
+}
+
+/* Add value button */
+.add-value-btn {
+    margin-top: 8px;
+    background-color: #2196F3;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.add-value-btn:hover {
+    background-color: #0b7dda;
+}
+
+/* Remove value button */
+.remove-value-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.remove-value-btn:hover {
+    background-color: #da190b;
+}
