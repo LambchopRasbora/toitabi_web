@@ -104,6 +104,103 @@
 
 
 
+
+
+/* ===== Speech bubble stacked (balloon on top, character below) ===== */
+.ch-stack{
+  --avatar: 256px;
+
+  width: 100%;
+  max-width: 720px;   /* ここを広げるともっと横いっぱい */
+  margin: 24px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ===== Dot / retro balloon ===== */
+.ch-stack .ch-balloon{
+  position: relative;
+  width: 100%;
+
+  /* ドット背景（うっすら） */
+  background:
+    radial-gradient(#dbdbdb 0.8px, transparent 0.9px) 0 0 / 8px 8px,
+    #fff;
+
+  /* レトロ枠：太め＋点線 */
+  border: 3px dashed #111;
+  border-radius: 10px;        /* 角を少し立てる */
+  padding: 22px 22px;
+  line-height: 1.7;
+
+  /* 影も“ベタ”寄りに */
+  box-shadow: 6px 6px 0 #111;
+}
+
+/* 尻尾もドット背景に合わせる */
+.ch-stack .ch-balloon::after{
+  content:"";
+  position: absolute;
+  left: 50%;
+  bottom: -16px;
+  width: 28px;
+  height: 28px;
+
+  background:
+    radial-gradient(#dbdbdb 0.8px, transparent 0.9px) 0 0 / 8px 8px,
+    #fff;
+
+  border-right: 3px dashed #111;
+  border-bottom: 3px dashed #111;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+
+/* text */
+.ch-stack .ch-text{
+  margin: 0;
+  font-size: 18px;
+}
+
+/* character below */
+.ch-stack .ch-avatar{
+  width: var(--avatar);
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* ===== Retro pixel float animation ===== */
+
+.ch-stack .ch-avatar{
+  animation: chRetroFloat 1.2s steps(4) infinite;
+  transform-origin: center bottom;
+}
+
+/* カクカク動く */
+@keyframes chRetroFloat{
+  0%   { transform: translateY(0px); }
+  25%  { transform: translateY(-8px); }
+  50%  { transform: translateY(0px); }
+  75%  { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
+}
+
+
+
+
+
+/* small screens */
+@media (max-width: 420px){
+  .ch-stack{ --avatar: 200px; max-width: 92vw; }
+  .ch-stack .ch-text{ font-size: 16px; }
+}
+
+
+
+
     /* ========= ボタン押下時アクション ========= */
     .area-card:active .label,
     .action-btn:active{ transform:translateY(1px); }

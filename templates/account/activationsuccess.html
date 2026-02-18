@@ -4,13 +4,35 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>アカウント有効化完了</title>
-        <link rel="stylesheet" href="/static/css/common.css">
+        <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
     </head>
     <body>
-        <div class="activation-success-container">
-            <h1>アカウントの有効化が完了しました</h1>
-            <p>アカウントの有効化が正常に完了しました。ログインしてサービスを利用開始してください。</p>
-            <a href="/login" class="btn-primary">ログインページへ</a>
-        </div>
+        <header class="app-header">
+            <div class = "header-logo">
+                 <img src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
+                 <p class="lead">アカウントの有効化が完了しました</p>
+            </div>
+        </header>
+        <main class ="content">
+            <div class="container">
+                <!-- キャラクター吹き出し（左向き） -->
+                <section class="ch-stack">
+  <div class="ch-balloon">
+    <p class="ch-text">
+      アカウントの有効化が正常に完了しました。
+      ログインしてサービスを利用開始してください。
+    </p>
+    <a href="/login" class="btn-primary">ログインページへ</a>
+  </div>
+
+  <img
+    class="ch-avatar"
+    src="../../static/asset/images/character/character_01.png"
+    alt="トイタビキャラクター"
+  />
+</section>
+
+            </div>
+        </main>    
     </body>
 </html>
