@@ -2,38 +2,8 @@ let ruleCount = 1;
 
 // Initialize the first rule's value fields and load areas data
 document.addEventListener('DOMContentLoaded', function() {
-    initializeAreasDropdown();
     updateRuleValueFields(0);
 });
-
-function initializeAreasDropdown() {
-    const areasDataElement = document.getElementById('areas-data');
-    
-    if (!areasDataElement) {
-        console.warn('Areas data element not found');
-        return;
-    }
-    
-    try {
-        const areasData = JSON.parse(areasDataElement.textContent);
-        const areaSelect = document.getElementById('areaId');
-        
-        // Clear existing options except the first placeholder
-        while (areaSelect.options.length > 1) {
-            areaSelect.remove(1);
-        }
-        
-        // Add options from areas data
-        areasData.forEach(function(area) {
-            const option = document.createElement('option');
-            option.value = area.id;
-            option.textContent = area.name || area.areaName;
-            areaSelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Error parsing areas data:', error);
-    }
-}
 
 function updateRuleValueFields(ruleIndex) {
     const ruleTypeSelect = document.querySelector(`#ruletype-${ruleIndex}`);

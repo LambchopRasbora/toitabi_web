@@ -23,13 +23,8 @@
 </head>
 <body>
 	<form class="postingformarea" action="#"
-					th:action="@{/dev/spotpost}" method="post" enctype="multipart/form-data" th:object="${spotpost}">
+					th:action="@{/admin/adminspotpost}" method="post" enctype="multipart/form-data" th:object="${spotpost}">
 		<h1>投稿フォーム</h1>
-
-		<div>
-			<h2>投稿者</h2>
-			<input type="text" th:field="*{author}">
-		</div>
 
 		<div>
 			<h2>緯度(下の地図で選択することで自動的に埋まります)</h2>
@@ -51,6 +46,11 @@
 			       accept=".png, .jpg, .jpeg, .gif" id="postingfile" th:field="*{images}">
 		</div>
 		<div id="preview">
+		</div>
+
+		<div>
+			<h2> 説明</h2>
+			<textarea th:field="*{description}" rows="4" cols="50"></textarea>
 		</div>
 
 		<div class="postingformsubmit">

@@ -10,14 +10,14 @@
     <div class="container">
         <h1>テーマ投稿</h1>
         
-        <form method="POST" action="URL" enctype="multipart/form-data">
+        <form method="POST" th:action="@{/admin/adminthemepost}" action="/admin/adminthemepost" enctype="multipart/form-data">
             
             <!-- Area ID -->
             <div class="form-group">
                 <label for="areaId">エリアID <span class="required">*</span></label>
                 <select id="areaId" name="areaId" required>
                     <option value="">選択してください</option>
-                    <option th:each="area : ${areas}" th:value="${area.areaId}" th:text="${area.areaId} + ' - ' + ${area.areaname}">Area Option</option>
+                    <option th:each="area : ${areas}" th:value="${area.areaId}" th:text="${area.areaname}">Area Option</option>
                 </select>
             </div>
             <!-- Name -->
@@ -96,9 +96,10 @@
     
     <!-- Areas data embedded as JSON -->
     <script id="areas-data" type="application/json" th:inline="javascript">
-       let areas= [[${areas}]]
+       let areas= /*[[${areas}]]*/;
     </script>
     
     <script src="/static/js/admin/themepost.js" th:src="@{/js/admin/themepost.js}"></script>
 </body>
 </html>
+
