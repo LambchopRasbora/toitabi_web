@@ -19,6 +19,11 @@
       margin-right: 4px;
       margin-top: 4px;
     }
+	/* tag styles */
+	.tag { display: inline-flex; align-items: center; background: #eef; color:#033; padding: 4px 8px; margin:4px; border-radius: 12px; font-size: 0.9rem; }
+	.tag .tag-remove { background: transparent; border: none; margin-left: 8px; cursor: pointer; font-weight: bold; color: #900; }
+	#tag-input { padding:6px 8px; font-size:1rem; }
+	#tag-input-area { margin-bottom:6px; }
 </style>
 </head>
 <body>
@@ -52,6 +57,15 @@
 			<h2> 説明</h2>
 			<textarea th:field="*{description}" rows="4" cols="50"></textarea>
 		</div>
+
+		<div>
+			<h2>タグ</h2>
+			<div id="tag-input-area">
+				<input type="text" id="tag-input" placeholder="タグを入力してEnterで追加" autocomplete="off">
+				<button type="button" id="add-tag-btn">追加</button>
+			</div>
+			<div id="tag-list" aria-live="polite"></div>
+			<!-- Hidden inputs for tags will be appended here by JS (name="tags") -->
 
 		<div class="postingformsubmit">
 			<input type="submit" value="投稿">
@@ -122,6 +136,76 @@
 	        reader.readAsDataURL(file);
 	      });
 	    });
+
+	  // タグ入力の処理
+	  (function(){
+	    var form = document.querySelector('.postingformarea');
+	    var tagInput = document.getElementById('tag-input');
+	    var addBtn = document.getElementById('add-tag-btn');
+	    var tagList = document.getElementById('tag-list');
+	    var tags = [];
+
+	    function createHiddenInput(tag){
+	      var input = document.createElement('input');
+	      input.type = 'hidden';
+	      input.name = 'tags';
+	      input.value = tag;
+	      input.dataset.tagValue = tag;
+	      return input;
+	    }
+
+	    function renderTag(tag){
+	      var span = document.createElement('span');
+	      span.className = 'tag';
+	      span.dataset.tag = tag;
+	      span.textContent = tag;
+
+	      var remove = document.createElement('button');
+	      remove.type = 'button';
+	      remove.className = 'tag-remove';
+	      remove.textContent = '×';
+	      remove.addEventListener('click', function(){
+	        tags = tags.filter(function(t){ return t !== tag; });
+	        var hidden = form.querySelector('input[type="hidden"][name="tags"][data-tag-value="'+tag+'"]');
+	        if(hidden) hidden.remove();
+	        span.remove();
+	      });
+
+	      span.appendChild(remove);
+	      tagList.appendChild(span);
+	    }
+
+	    function addTagFromInput(){
+	      var v = tagInput.value.trim();
+	      if(!v) return;
+	      // allow comma-separated multiple
+	      var parts = v.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+	      parts.forEach(function(p){
+				// normalize: force single leading '#'
+				var norm = p.replace(/^#+/, '');
+				if(!norm) return;
+				norm = '#' + norm;
+				if(tags.indexOf(norm) !== -1) return;
+				tags.push(norm);
+				form.appendChild(createHiddenInput(norm));
+				renderTag(norm);
+	      });
+	      tagInput.value = '';
+	      tagInput.focus();
+	    }
+
+	    tagInput.addEventListener('keydown', function(e){
+	      if(e.key === 'Enter'){
+	        e.preventDefault();
+	        addTagFromInput();
+	      } else if(e.key === ','){
+	        e.preventDefault();
+	        addTagFromInput();
+	      }
+	    });
+
+	    addBtn.addEventListener('click', addTagFromInput);
+	  })();
 	</script>
 </body>
 </html>

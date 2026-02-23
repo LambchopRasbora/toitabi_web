@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Spot Details</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}" />
+	<link rel="stylesheet" th:href="@{/css/admin/common.css}" />
+</head>
+<body>
+<div class="container">
+	<h1>Spot Details</h1>
+
+	<div th:if="${spot == null}">Spot not found.</div>
+
+	<div th:if="${spot != null}">
+		<dl>
+			<dt>Spot ID</dt>
+			<dd th:text="${spot.spotId}">spotId</dd>
+
+			<dt>Author ID</dt>
+			<dd th:text="${spot.authorId}">authorId</dd>
+
+			<dt>Description</dt>
+			<dd th:text="${spot.description}">description</dd>
+
+			<dt>Latitude</dt>
+			<dd th:text="${spot.latitude}">latitude</dd>
+
+			<dt>Longitude</dt>
+			<dd th:text="${spot.longitude}">longitude</dd>
+
+            <dt>Map</dt>
+            <dd>
+                <iframe
+                    th:src="'https://www.openstreetmap.org/export/embed.html?bbox=' 
+                        + (${spot.longitude}-0.01) + ',' 
+                        + (${spot.latitude}-0.01) + ',' 
+                        + (${spot.longitude}+0.01) + ',' 
+                        + (${spot.latitude}+0.01) 
+                        + '&layer=mapnik&marker=' 
+                        + ${spot.latitude} + ',' + ${spot.longitude}"
+                    style="width:300px; height:300px; border:1px solid black">
+                </iframe>
+            </dd>
+			<dt>Images</dt>
+			<dd>
+				<div th:if="${spot.images != null and !#lists.isEmpty(spot.images)}">
+					<table>
+						<thead>
+							<tr>
+								<th>Image URL</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="image : ${spot.images}">
+								<td>
+									<a th:href="${image}" th:text="${image}">image</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div th:if="${spot.images == null or #lists.isEmpty(spot.images)}">No images</div>
+			</dd>
+			<dt>タグ</dt>
+			<dd>
+				<table>
+					<thead>
+						<tr>
+							<th>タグID</th>
+							<th>タグ名</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each ="tag:${spot.tags}">
+							<td th:text="${tag.tagId}">tagID</td>
+							<td th:text="${tag.tagName}">tagName</td>
+						</tr>
+					</tbody>
+				</table> 
+			</dd>
+		</dl>
+
+		<div class="actions">
+			<a th:href="@{/admin/spotindex}">← 一覧に戻る</a>
+			<a th:href="@{/admin/spotpost(spotId=${spot.spotId})}">Edit</a>
+		</div>
+	</div>
+</div>
+</body>
+</html>
