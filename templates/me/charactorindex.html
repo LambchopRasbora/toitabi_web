@@ -9,31 +9,10 @@
   <meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 
-  <title>トイタビ – エリア選択</title>
+  <title>トイタビ – キャラクター一覧</title>
   <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <link rel="stylesheet" href="../../static/css/home.css" th:href="@{/css/home.css}">
-<!--Leaflet（地図表示ライブラリ）の CSS をCDNから読み込み-->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-<!--Leafletの JavaScript本体-->
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
-<!--jscookieのライブラリを読み込む-->
-<script src="
-https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
-"></script>
-<!--ホーム画面のナビゲーション関数-->
-<script 
- src="../../static/js/navigate/homenavidev.js" th:src="@{/js/navigate/homenavipro.js}">
-</script>
-<!--サーバーとの通信（API呼び出しなど）を行うJS-->
-<script 
- src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}">
-</script>
 </head>
 
 
@@ -69,18 +48,13 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
     <main class ="content">
      <!--レイアウト用のラッパー-->
      <div class="container">
-       <!--エリア選択UI用の領域-->
-       <div class="areas">
-          <!--continueボタン-->
-          <button id="continue-btn" class="continue-btn">
-            <!--アイコンを丸く囲う-->
-            <div class="icon-circle">
-              <!--アイコン画像-->
-              <img src="../../static/asset/images/totyuicon.png" th:src="@{/asset/images/totyuicon.png}">
-            </div>
-            <!--ボタンの文字-->
-            <span class="label">途中から</span>
-          </button>
+        <h2 class="section-title">キャラクター一覧</h2>
+        <div class = "charactor-conatainer">
+          <!--キャラクターのカードを繰り返し表示-->
+          <div class="charactor-card" th:each="charactor : ${charactors}">
+            <img class="charactor-image" th:src="@{${charactor.lowimageUrl}}" alt="キャラクター画像">
+            <h3 class="charactor-name" th:text="${charactor.name}">キャラクター名</h3>
+          </div>
         </div>
       </div>
     </main>
@@ -88,20 +62,12 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
     <footer class="app-footer">
       <!-- Bottom actions -->
       <div class="bottom-actions">
-        <!--設定画面へ遷移するボタン-->
-        <button class="action-btn" type="button" onclick= "onclickSetting()">
-          <!--ボタンのラベル-->
-          <div class ="caption">メニュー</div>
-          <!--メニューアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{asset/images/menulogo.png}"/>
-        </button>
-
         <!--投稿画面へ遷移-->
-        <button class="action-btn" type="button" onclick= "onclickPost()" >
+        <button class="action-btn" type="button" onclick= "location.href='/'" >
           <!--ボタンのラベル-->
-          <div class="caption">トイスポットを投稿</div>
-          <!--投稿用アイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/spotpostlogo.png" th:src="@{/asset/images/spotpostlogo.png}"/>
+          <div class="caption">ホームへ戻る</div>
+          <!--ホームアイコン-->
+          <img class = "icon-img" src = "../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
         </button>
       </div> 
     </footer>

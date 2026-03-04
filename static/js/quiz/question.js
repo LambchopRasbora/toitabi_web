@@ -1,5 +1,4 @@
  
- 
  // —— サムネ→メイン切替 —— //
 const main = document.getElementById('mainPhoto');
 const thumbs = document.getElementById('thumbs');
@@ -58,7 +57,7 @@ navigator.geolocation.getCurrentPosition(
   },
   () => {
     // 失敗時は表示せずassertを出す
-    console.assert("現在地の取得に失敗しました")
+    alert("現在地の取得に失敗しました")
   },
   { enableHighAccuracy:true, timeout:5000, maximumAge:0 }
 );
@@ -109,9 +108,14 @@ function fetchLocation()
     distanceindicator.textContent='あと'+dis+'m';
     setTimeout(()=>{
     fetchLocation();
-  },fetchTime);
+    },fetchTime);
   })
-  .catch(console.error);
+  .catch((err)=>{
+    console.error("ヒントの取得に失敗しました", err);
+    setTimeout(()=>{
+    fetchLocation();
+    },fetchTime);
+  })
 }
 
 //初期設定
