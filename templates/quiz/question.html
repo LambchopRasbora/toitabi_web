@@ -41,29 +41,40 @@
 <body style="background-color:var(--ink);">
   <!--画面全体のレイアウト管理用-->
   <div class="screen">
-  <!--Thymeleafの値をJS内で使えるようにする-->
-  <!--サーバーから渡された response をJS変数に代入-->
-  <script th:inline="javascript">
-    let response =/*[[${response}]]*/
-  </script> 
+    <!--Thymeleafの値をJS内で使えるようにする-->
+    <!--サーバーから渡された response をJS変数に代入-->
+    <script th:inline="javascript">
+      let response =/*[[${response}]]*/
+    </script> 
 
-  <!-- Header -->
-  <header class="app-header">
-    <!--ロゴとタイトル領域-->
-    <div class="header-logo">
-      <!--ロゴ画像表示-->
-      <img src="../../static/asset/images/logo_white.png" th:src="@{/asset/images/logo.png}" alt="トイタビ ロゴ" />
-      <!--プレイ中メッセージ-->
-      <p class="lead">トイスポットを探そう！</p>
-    </div>
-  </header>
+    <!-- Header -->
+    <header class="app-header">
+      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
+      <p class="lead">トイスポットを探せ!</p>
+      <button class = "menu-btn"id ="menu-btn">
+        <p>メニュー</p>
+        <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
+      </button>
+    </header>
+
+  <!--メニューの画面-->
+  <nav id="side-menu" class="side-menu">
+    <h1 class="menu-title">メニュー</h1>
+    <ul>
+      <li><button class = "menu-content-btn" onclick="location.href='/'">
+        <img class src ="../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
+        <p>ホーム画面へ戻る</p>
+      </button></li>
+    </ul>
+    <button class="menu-close-btn">閉じる</button>
+  </nav>
 
   <!-- 中央スクロール領域 -->
   <main class="content" id="scrollArea">
     <!--中央寄せ・余白調整用-->
     <div class = "container">
       <!-- 写真4枚 -->
-      <section class="gallery card">
+      <section id="gallerySection" class="gallery card">
         <!--メイン写真-->
         <div class="main-photo">
           <!--選択された写真を表示（JSで差し替え）-->
@@ -72,7 +83,6 @@
 
         <!--サムネイル一覧-->
         <div class="thumbs" id="thumbs">
-          <!-- バックエンドから持ってくる（今は仮） -->
           <button class="thumb is-active" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
             <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
           </button>
@@ -87,24 +97,26 @@
           </button>
         </div>
       </section>
+      <!--ヒント-->
+      <section id ="hintSection" class="hintSection">
+        <!-- 必要なら下に説明や距離表示など -->
+        <div style="height:12px">
+          <!--スポット説明文（JSで挿入）-->
+          <p id="description"></p>
+        </div>
+        <div style="height:12px">
+          <!--残り距離表示（JSで更新）-->
+          <p id="distance">あと100m</p>
+        </div>
+      </section>
 
       <!-- 現在地マップ -->
-      <section class="map-wrap card" style="padding:12px">
+      <section id="mapSection" class="map-wrap card" style="padding:12px">
         <!--Leafletが地図を描画するDOM-->
         <div id="map"></div>
         <!--注意書き-->
         <div class="map-caption">現在地を表示中（位置情報の許可が必要です）</div>
       </section>
-
-      <!-- 必要なら下に説明や距離表示など -->
-      <div style="height:12px">
-        <!--スポット説明文（JSで挿入）-->
-        <p id="description"></p>
-      </div>
-      <div style="height:12px">
-        <!--残り距離表示（JSで更新）-->
-        <p id="distance">あと100m</p>
-      </div>
     </div>
   </main>
 
@@ -115,7 +127,7 @@
       <!--メニュー表示ボタン-->
       <button class="action-btn" type="button" onclick= "onclickSetting()">
         <!--text-->
-        <div class ="caption">メニュー</div>
+        <div class ="caption">スキップ</div>
         <!--icon-->
         <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
       </button>
@@ -137,7 +149,7 @@
     <div class="spinner"></div>
   </div>
 
-  <!-- Leaflet JSライブラリ -->
+  <!-- Question制御用スクリプト -->
   <script src="../../static/js/quiz/question.js" th:src="@{/js/quiz/question.js}"></script>
 </body>
 </html>

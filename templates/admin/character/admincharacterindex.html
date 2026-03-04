@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Admin — Characters</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}" />
+	<link rel="stylesheet" th:href="@{/css/admin/common.css}" />
+</head>
+<body>
+
+<h1>Characters</h1>
+<a href="/admin/home" th:href="@{/admin/home}">管理者用ホーム画面に戻る</a>
+
+<form th:action="@{/admin/charactersearch}" method="get" class="spot-search-form">
+	<label for="characterSearch">Character検索:</label>
+	<input type="text" id="characterSearch" name="q" th:value="${q}" placeholder="ID・Nameで検索" />
+	<button type="submit">検索</button>
+</form>
+
+<div class="section">
+	<div th:if="${charas == null or #lists.isEmpty(charas)}">No characters available.</div>
+	<table th:if="${charas != null and !#lists.isEmpty(charas)}" class="admin-area-table">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Chara ID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Low Image</th>
+				<th>High Image</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="ch,iter : ${charas}">
+				<td th:text="${iter.count}">1</td>
+				<td th:text="${ch.charaId}">charaId</td>
+				<td th:text="${ch.name}">name</td>
+				<td>
+					<div th:if="${ch.description != null}">
+						<span th:text="${ch.description}">description</span>
+					</div>
+				</td>
+				<td>
+					<img th:if="${ch.lowImagePath != null}" th:src="${ch.lowImagePath}"  style="max-width:120px; max-height:120px;" />
+				</td>
+				<td>
+					<img th:if="${ch.highImagePath != null}" th:src="${ch.highImagePath}" style="max-width:200px; max-height:200px;" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+</body>
+</html>

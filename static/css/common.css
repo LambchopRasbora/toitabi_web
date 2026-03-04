@@ -1,20 +1,28 @@
 /* ========= CSS Variables ========= */
     :root{
+      /* カラーパレット */
       --bg:#F0F0F0;
       --ink:#28231e;
       --muted:#666;
       --pill:#000;
+      /* サイズ */
+      --screen-max-width:430px; /* 画面幅の最大値 */
+      --screen-width: min(100vw, var(--screen-max-width));/* 画面幅,幅に応じて変動 */
+
+      --screen-heigtht:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)); /* 画面高さ(safariのアドレスバー対応) */
+
       --card-radius:26px;
       --button-radius:24px;
-      --header-h: 120px;  /* ヘッダー高さ */
+      --header-h: 100px;  /* ヘッダー高さ */
       --footer-h: 120px; /* フッター高さ */
       --radius: 14px;
+      --button-font-size:12px;
     }
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
-      margin:0;
+      margin-right: auto;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
       color:var(--ink);
       background:var(--bg);
@@ -27,88 +35,159 @@
       min-height:100dvh; /* modern */
       min-height:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
       padding: max(20px, env(safe-area-inset-top)) 18px calc(16px + env(safe-area-inset-bottom));
-      max-width:430px;
-      margin:0 auto;
+      width: var(--screen-width);
+      margin:auto auto;
       display:flex;
       flex-direction:column;
-      gap:18px;
+      gap:clamp(12px,4vw,18px);
     }
+
+
 
     /* ========= Header/footer(固定） ========= */
-    header.app-header, footer.app-footer{
-     position:fixed; 
-     left:0;  
-     right:0; z-index:20; 
+
+     header.app-header{ 
+      z-index: 20;
+      width: var(--screen-width);
+      position: fixed;
+      top: 0;
+      height:var(--header-h); 
+      padding: 5px clamp(5px, 3vw, 20px);
+      display:flex;
+      justify-content: space-between;
      }
 
-     header.app-header{ top: 5px; height:var(--header-h); display:grid; place-items:center; }
-     footer.app-footer{ bottom: 20px; height:var(--footer-h); display:grid; place-items:center; }
-    .header-logo{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:10px;
-      margin:10px auto 0; /* ← autoで左右中央寄せ */
-    }
-    .header-logo img {
-      width: 60px; 
+    .header-logo-img {
+      width: clamp(40px, 40%, 60px);
+      height: auto;
+      object-fit: contain;
     }
     .lead{
       text-align:center;
-      margin-top:6px;
+      margin-top: 5px;
       line-height:1.6;
-      font: size 16px;
+      font-size: var(--button-font-size);
+    }
+    .menu-btn
+    {
+      background:var(--bg);
+      border:3px solid #000;
+      border-radius:10px;
+      --menu-button-size:  calc(var(--header-h) * 0.5);
+      width: var(--menu-button-size);
+      height: var(--menu-button-size);
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+    .menu-btn p
+    {
+      font-size: 50%;
+    }
+    .menu-btn img
+    {
+      width: clamp(20px, 60%, 30px);
     }
 
-      /* —— main(スクロール) —— */
-  main.content{
-    position:fixed; z-index:10;
-    top:var(--header-h); bottom:var(--footer-h); left:0; right:0;
-    overflow-y:auto; -webkit-overflow-scrolling:touch;
-    padding:18px 16px 24px;
-  }
+    /*メニュー画面*/
+    .side-menu{
+      position: fixed;
+      z-index: 30;
+      top: 0%;
+      background-color: var(--bg);
+      width: var(--screen-width);
+      height: 100vh;
+      padding: 5px clamp(5%, 3vw, 20px);
+      display: none;
+    }
+    .side-menu ul{
+      list-style: none;
+      padding-left: 0%;
+    }
+    .side-menu li{
+      padding: 8px 8px 8px;
+    }
+    .menu-content-btn{
+      display:flex;
+      background-color: var(--bg);
+      border: 3px solid #000;
+      border-radius: 10px;
+      width: 100%;
+      height: clamp(40px, 8vw, 60px);
+      gap: clamp(12px, 3vw, 16px);
+    }
+    .menu-content-btn img
+    {
+      width: clamp(30px, 10vw, 42px);
+      object-fit: contain;
+    }
+    .side-menu.active
+    {
+      display: block;
+    }
 
-  .content .container{
-    max-width: 430px;
-    margin: 0 auto;
-    padding: 0; 
-  }
+    /* —— main(スクロール) —— */
 
-      /* ========= フッターのボタン ========= */
+    main{
+      width: var(--screen-width);
+      position: fixed;
+      z-index: 10;
+      top:var(--header-h); bottom:var(--footer-h);
+      overflow-y:auto; -webkit-overflow-scrolling:touch;
+      padding: clamp(14px,4vw,18px) clamp(12px,3vw,16px) clamp(20px,5vw,24px);
+    }
+    .content .container{
+      margin: 0 auto;
+      padding: 0; 
+    }
+
+    /* ========= フッター ========= */
+
+    footer.app-footer{ 
+      position: fixed;
+      width: var(--screen-width);
+      z-index: 20;
+      bottom: 10px;
+      height:var(--footer-h); 
+      display:grid; 
+      place-items:center;
+      padding: 5px clamp(5px, 3vw, 20px);
+    }
     .bottom-actions{
       margin-top:auto;
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap: 20px;
+      gap: clamp(12px,5vw,20px);
+      align-items: center;
     }
     .action-btn{
-      background:#fff;
+      background:var(--bg);
       border:3px solid #000;
       border-radius:var(--button-radius);
-      padding:16px 14px 22px;
+      /* 高さはフッター変数の一定割合を目安に clamp() で制限 */
+      height: calc(var(--footer-h) * 0.8);
+      padding: clamp(12px,4vw,16px) clamp(10px,4vw,14px) clamp(16px,5vw,22px);
       display:flex;
       flex-direction:column;
       align-items:center;
       justify-content:center;
-      gap:10px;
-      box-shadow:0 2px 0 #00000010;
+      gap:clamp(8px,3vw,10px);
       font-weight:600;
     }
     .action-btn .caption{
-      font-size:16px;
+      font-size: var(--button-font-size);
       color:#000000;
     }
     .icon-img{
-     width:42px;  /* PNGなら実寸の半分～等倍、SVGなら自由 */
+     width: clamp(30px,10vw,42px); 
     }
 
-
-
-
-
+/* 以下の処理は移してね(森より)*/
 /* ===== Speech bubble stacked (balloon on top, character below) ===== */
 .ch-stack{
-  --avatar: 256px;
+  --avatar: clamp(150px, 60vw, 256px);
 
   width: 100%;
   max-width: 720px;   /* ここを広げるともっと横いっぱい */
@@ -116,8 +195,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-}
+  gap: clamp(12px,4vw,18px);
 
 /* ===== Dot / retro balloon ===== */
 .ch-stack .ch-balloon{
@@ -144,9 +222,9 @@
   content:"";
   position: absolute;
   left: 50%;
-  bottom: -16px;
-  width: 28px;
-  height: 28px;
+  bottom: clamp(-12px, -4vw, -16px);
+  width: clamp(20px, 7vw, 28px);
+  height: clamp(20px, 7vw, 28px);
 
   background:
     radial-gradient(#dbdbdb 0.8px, transparent 0.9px) 0 0 / 8px 8px,
@@ -211,3 +289,4 @@
       .thumb{ width:120px; height:120px; }
       .label{ font-size:18px; padding:18px 22px; min-height:64px; }
     }
+  }

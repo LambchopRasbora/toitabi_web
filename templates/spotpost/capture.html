@@ -18,10 +18,12 @@
   <main class="screen">
     <!-- Header -->
     <header class="app-header">
-      <div class = "header-logo" >
-        <img src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
-        <p class="lead">トイスポットを投稿しよう！</p>
-      </div>
+      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{asset/images/logo.png}"/>
+      <p class="lead">トイスポットを投稿しよう!</p>
+      <button class = "menu-btn"id ="menu-btn">
+        <p>メニュー</p>
+        <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{asset/images/menulogo.png}"/>
+      </button>
     </header>
 
 <main class ="content">

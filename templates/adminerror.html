@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>エラーページ</title>
+  <title>管理者エラーページ</title>
 </head>
 <body>
   <div th:text="'timestamp: ' + ${timestamp}"></div>
@@ -13,7 +13,8 @@
   <div th:text="'errors: ' + ${errors}"></div>
   <div th:text="'trace: ' + ${trace}"></div>
   <div th:text="'path: ' + ${path}"></div>
-  <div>エラーページです</div>
+  <div>管理者用のエラーページです<br>上記のエラーメッセージをコピペとスクリーンショットをはり、エラー報告用スプシにあげてください。</div>
+  <a href ='/admin/home'>管理者用ホーム画面へ戻る</a><br>
   <a href='/'>ホームへ戻る</a>
 </body>
 </html>

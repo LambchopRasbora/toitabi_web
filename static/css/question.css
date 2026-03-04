@@ -4,20 +4,6 @@
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
   }
 
-
-  /* —— 中央だけスクロール —— */
-  main.content{
-    position:fixed; 
-    z-index:10;
-    top:var(--header-h); 
-    bottom:var(--footer-h); 
-    left:0; 
-    right:0;
-    overflow-y:auto; 
-    -webkit-overflow-scrolling:touch;
-    padding:18px 16px 24px;
-  }
-
   .card{
     background:#0f0f0f; border-radius:var(--radius);
     border:1px solid #222;

@@ -1,7 +1,5 @@
 //areasを取得
 const areas=document.getElementsByClassName("areas")[0];
-
-
 const zones=data?data.zoneDtos:null;
 
 
@@ -25,6 +23,8 @@ function quizCotinue({session_id})
   };
   post("/game/quizResume",params);
 }
+
+
 
 //保存されているlocalsessionがあれば途中からを表示
 if(continue_btn)
@@ -64,29 +64,3 @@ if(zones)
     area_card.appendChild(label);
   });
 }
-
-
-
-// 地図を作成する関数
-function initThumbMap({ el, center, zoom }) {
-  // Leaflet地図の初期化
-  const map = L.map(el, {
-    center,
-    zoom,
-    zoomControl: false,
-    dragging: false,
-    scrollWheelZoom: false,
-    doubleClickZoom: false,
-    boxZoom: false,
-    keyboard: false,
-    tap: false,
-    attributionControl: false,
-  });
-
-  // OSMタイルを追加
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-  }).addTo(map);
-}
-
-

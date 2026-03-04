@@ -57,14 +57,26 @@
   <div class="app">
     <!-- 固定ヘッダー -->
     <header class="app-header">
-      <div class="header-logo">
-        <!--ロゴ画像（静的確認用）-->
-        <!--Thymeleaf用の正規パス指定-->
-        <img src="../../static/asset/images/logo.png"
-         th:src="@{/asset/images/logo.png}" alt="トイタビ ロゴ" />
-        <p class="lead">～結果発表～</p>
-     </div>
+      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
+      <p class="lead">最終結果!!</p>
+      <button class = "menu-btn"id ="menu-btn">
+        <p>メニュー</p>
+        <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
+      </button>
     </header>
+
+    <!--メニューの画面-->
+    <nav id="side-menu" class="side-menu">
+      <h1 class="menu-title">メニュー</h1>
+      <ul>
+        <li><button class = "menu-content-btn" onclick="location.href='/'">
+          <img class src ="../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
+          <p>ホーム画面へ戻る</p>
+        </button></li>
+      </ul>
+      <button class="menu-close-btn">閉じる</button>
+    </nav>
+
     <!-- スクロール可能メイン -->
     <main class="content" id="scrollArea">
     <div class = "container">
@@ -144,6 +156,7 @@
     </footer>
   </div>
   
+  <script src="../../static/js/common.js" th:src="@{/js/common.js}"></script> 
   <!--リザルト画面専用ロジック（地図・ピン・ポップアップ）-->
   <script src="../../static/js/quiz/result.js" th:src="@{/js/quiz/result.js}"></script>
   <!--画面初期化JS-->
