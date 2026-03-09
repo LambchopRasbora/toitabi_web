@@ -6,8 +6,6 @@ const distanceindicator=document.getElementById('distance');
 const thumbbutton=thumbs.children;
 const descriptionText=document.getElementById('description');
 
-
-
 const currentSpot=response.spotDto;
 const images=currentSpot.images;
 
@@ -59,16 +57,18 @@ navigator.geolocation.getCurrentPosition(
     // 失敗時は表示せずassertを出す
     alert("現在地の取得に失敗しました")
   },
-  { enableHighAccuracy:true, timeout:5000, maximumAge:0 }
+  { enableHighAccuracy:false, timeout:20000, maximumAge:0 }
 );
 
 //最新の現在地(この変数が変更される)
 let latestLocation=null;
+let lastsent=null;
 
 //現在地を取得し続ける設定
-navigator.geolocation.watchPosition(
+const watchId= navigator.geolocation.watchPosition(
   (pos)=>{
     latestLocation = pos;
+    lastsent=Date.now();
   },
   (err)=>{
     latestLocation=null;
@@ -77,7 +77,7 @@ navigator.geolocation.watchPosition(
   { enableHighAccuracy:true, timeout:8000, maximumAge:0 });
 
 //サーバー通信のインターバル
-const fetchTime=5000;
+const fetchTime=10000;
 //latestLocationを用いてサーバーからヒントを返してもらう関数
 function fetchLocation()
 {
@@ -124,10 +124,8 @@ fetchLocation();
 //POST用関数
 function postQuestion(isskip)
 {
-  // ロード画面を表示
-  document.getElementById("loadingOverlay").style.display = "flex";
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
+  // 現在地を取得してからサーバーに送る関数
+  const postCallback= (pos) => {
       const {latitude, longitude} = pos.coords;
       const params={
         "session_id":response.session_id,
@@ -138,13 +136,16 @@ function postQuestion(isskip)
       }
       console.log(params);
       post("./answerSave",params);
-    },
-    () => {
+    };
+  // 位置情報の取得に失敗したときのコールバック
+  const errorCallback=(err) => {
       alert("現在地の取得に失敗しました");
-      console.log("現在地取得失敗");
-      // ロード画面を表示
+      console.log("現在地取得失敗",err);
+      // ロード画面を削除
       document.getElementById("loadingOverlay").style.display = "none";
-    },
-    { enableHighAccuracy:true, timeout:8000, maximumAge:0 }
-  );
+    };
+  // ロード画面を表示
+  document.getElementById("loadingOverlay").style.display = "flex";
+  if(Date.now()-lastsent<fetchTime) postCallback(latestLocation);
+  else navigator.geolocation.getCurrentPosition(postCallback,errorCallback, { enableHighAccuracy:true, timeout:20000, maximumAge:0 });
 }
