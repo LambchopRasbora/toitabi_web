@@ -70,7 +70,7 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
      <!--レイアウト用のラッパー-->
      <div class="container">
        <!--エリア選択UI用の領域-->
-       <div class="areas">
+       <div class="buttonareas">
           <!--continueボタン-->
           <button id="continue-btn" class="continue-btn">
             <!--アイコンを丸く囲う-->
@@ -81,6 +81,38 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
             <!--ボタンの文字-->
             <span class="label">途中から</span>
           </button>
+          <!--ここにエリアやゾーンが入る-->
+          <!--エリアカードのテンプレート-->
+          <template id="area-card-template">
+            <div class="area-card-caontainer">
+              <button class="area-card">
+                <!--アイコンを丸く囲う-->
+                <div class="icon-circle">
+                  <!--アイコン画像-->
+                  <img class="thumbnail-img" src="../../static/asset/images/totyuicon.png" th:src="@{/asset/images/totyuicon.png}">
+                </div>
+                <!--ボタンの文字-->
+                <span class="label">途中から</span>
+              </button>
+              <div class="theme-list">
+                <!--テーマカードが入る-->
+              </div>
+            </div>
+          </template>
+
+          <!--テーマのテンプレート-->
+          <template id="theme-card-template">
+            <button class="area-card">
+              <!--アイコンを丸く囲う-->
+              <div class="icon-circle">
+                <!--アイコン画像-->
+                <img class="thumbnail-img" src="../../static/asset/images/totyuicon.png" th:src="@{/asset/images/totyuicon.png}">
+              </div>
+              <!--ボタンの文字-->
+              <span class="label">途中から</span>
+            </button>
+          </template>
+
         </div>
       </div>
     </main>

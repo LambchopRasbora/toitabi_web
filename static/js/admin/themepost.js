@@ -180,6 +180,7 @@ document.querySelector('form').addEventListener('submit', function(e) {
         ruleValueInput.value = JSON.stringify(rule.values);
         this.appendChild(ruleValueInput);
     });
+    console.log(rulesData);
     
     // Create hidden inputs for checkboxes
     if (!enabledCheckbox.checked) {

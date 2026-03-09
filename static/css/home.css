@@ -2,7 +2,7 @@
 
 
 /* ========= Area List ========= */
-    .areas{
+    .buttonareas{
       margin-top:10px;
       display:flex;
       flex-direction:column;
@@ -32,6 +32,17 @@
       background-position:center;
       flex:0 0 auto;
       box-shadow:0 1px 0 rgba(0,0,0,.04) inset;
+    }
+
+    .theme-list
+    {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .theme-list.open
+    {
+      max-height: 100vh; 
     }
 
 .thumb .map{

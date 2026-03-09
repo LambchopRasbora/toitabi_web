@@ -3,8 +3,7 @@ const heroImg=document.getElementById("heroImg");
 const thumbList=document.getElementById("thumbList");
 const captionEl=document.getElementById("captionText");
 
-const currentSpot=postResponse.spotDto;
-const imagePaths=currentSpot.images;
+const imagePaths=postResponse.images;
 
 let currentForucusImgId=0;
 
@@ -13,18 +12,14 @@ let currentForucusImgId=0;
 function setcurrentForcusImgId(id)
 {
   thumImgs=thumbList.children;
-  console.log(id);
   currentForucusImgId=id; 
   currentForucusImgId=Math.min(imagePaths.length-1,currentForucusImgId);
-
-  console.log(currentForucusImgId);
 
   //現在選択されているimgのクラスをfocusedに設定
   for(let i=0;i<thumImgs.length;i++)
   {
     thumImgs[i].classList.toggle('focused',i==currentForucusImgId);
   }
-
   heroImg.src=imagePaths[currentForucusImgId];
 }
 

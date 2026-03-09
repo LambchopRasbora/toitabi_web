@@ -122,7 +122,7 @@ function fetchLocation()
 fetchLocation();
 
 //POST用関数
-function onclickPost()
+function postQuestion(isskip)
 {
   // ロード画面を表示
   document.getElementById("loadingOverlay").style.display = "flex";
@@ -133,7 +133,7 @@ function onclickPost()
         "session_id":response.session_id,
         "answerDto.answerLat": latitude,
         "answerDto.answerLng": longitude,
-        "answerDto.isSkip": false,
+        "answerDto.isSkip": isskip,
         "answerDto.point": 0
       }
       console.log(params);

@@ -22,10 +22,6 @@
 				<th>Description</th>
 				<th>Thumbnail</th>
 				<th>KML</th>
-				<th>Min Lat</th>
-				<th>Max Lat</th>
-				<th>Min Lon</th>
-				<th>Max Lon</th>
 				<th>Created At</th>
 				<th>Updated At</th>
 				<th>Details</th>
@@ -42,10 +38,6 @@
 				<td>
 					<a th:if="${area.kmlUri != null}" th:href="${area.kmlUri}" th:text="${area.kmlUri}">kml</a>
 				</td>
-				<td th:text="${area.minLat}">minLat</td>
-				<td th:text="${area.maxLat}">maxLat</td>
-				<td th:text="${area.minLon}">minLon</td>
-				<td th:text="${area.maxLon}">maxLon</td>
 				<td th:text="${area.createdAt}">createdAt</td>
 				<td th:text="${area.updatedAt}">updatedAt</td>
 				<td>
