@@ -27,7 +27,7 @@
   <!--共通CSSを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <!--ゴール画面専用のCSSを読み込む-->
-  <link rel="stylesheet" href="../../static/css/goal.css" th:href="@{/css/goal.css}">
+  <link rel="stylesheet" href="../../static/css/game/goal.css" th:href="@{/css/game/goal.css}">
   <!--Leafletの JavaScript本体 をCDNから読み込む-->
   <!--JavaScriptファイルの 改ざん検証用ハッシュ-->
   <!--CDN利用時のCORS設定-->
@@ -47,22 +47,20 @@
   <!--Thymeleaf の値を JavaScript内に直接埋め込める ようにする設定-->
   <!--サーバー側の response オブジェクトをJavaScriptの response 変数として受け取る-->
   <script th:inline="javascript">
-    let response =/*[[${response}]]*/;
-  </script>
-  <script src="../../static/js/common.js" th:src="@{/js/common.js}"></script> 
+    let response =/*[[${response}]]*/; </script>
   <!--外部 JavaScript の読み込み-->
   <!--次の問題・スポットへ遷移する ナビゲーション用JS を読み込む-->
   <script src="../../static/js/navigate/questionnavidev.js" th:src="@{/js/navigate/questionnavipro.js}"></script>
   <!--サーバー通信（fetch / Ajax）をまとめたJS-->
   <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
-  <!--スコア計算・表示ロジック-->
-  <script src="../../static/js/quiz/score.js" th:src="@{/js/quiz/score.js}"></script>
+  <!--アニメーション表示用JS-->
+  <script src="../../static/js/quiz/getanimation.js" th:src="@{/js/quiz/getanimation.js}"></script>
   <!--回答データの処理や結果表示用JS-->
-  <script src="../../static/js/quiz/answer.js" th:src="@{/js/quiz/answer.js}"></script>
+  <script type="module" src="../../static/js/quiz/answer.js" th:src="@{/js/quiz/answer.js}"></script>
   
   <!--画面全体を包むコンテナ（レイアウト管理用）-->
-  <div class="app">
-  <!-- 固定ヘッダー -->
+  <div class="app hidden">
+    <!-- 固定ヘッダー -->
     <header class="app-header">
       <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
       <p class="lead">結果発表!!</p>
@@ -84,60 +82,60 @@
       <button class="menu-close-btn">閉じる</button>
     </nav>
 
-  <!--スクロール可能なメイン表示領域-->
-  <main class="content" id="scrollArea">
-    <!--中央寄せ・余白管理用のコンテナ-->
-    <div class = "container">
-      <!--数値情報（スコア等）をまとめるセクション-->
-      <section class="metrics">
-        <!--スコア表示-->
-        <div class="scoreCard" aria-label="スコア">
-          <!--上段-->
-          <!--スコアのメイン表示部分-->
-          <div class="score-main">
-            <!--ラベル表示-->
-            <div class="label">スコア</div>
-            <!--スコア値表示用-->
-            <div class="value">
-              <!--JavaScriptで 点数が書き換えられる場所-->
-              <span id="scoreValue">--</span>
-              <!--単位表示-->
-              <span class="unit">点</span>
+    <!--スクロール可能なメイン表示領域-->
+    <main class="content" id="scrollArea">
+      <!--中央寄せ・余白管理用のコンテナ-->
+      <div class = "container">
+        <!--数値情報（スコア等）をまとめるセクション-->
+        <section class="metrics">
+          <!--スコア表示-->
+          <div class="scoreCard" aria-label="スコア">
+            <!--上段-->
+            <!--スコアのメイン表示部分-->
+            <div class="score-main">
+              <!--ラベル表示-->
+              <div class="label">スコア</div>
+              <!--スコア値表示用-->
+              <div class="value">
+                <!--JavaScriptで 点数が書き換えられる場所-->
+                <span id="scoreValue">--</span>
+                <!--単位表示-->
+                <span class="unit">点</span>
+              </div>
+            </div>
+
+            <!--下段-->
+            <!--補助情報の表示領域-->
+            <div class="score-sub">
+              <!--時間表示ブロック-->
+              <div class="score-sub-item">
+                <!--「時間」ラベル-->
+                <span class="score-sub-label">時間</span>
+                <!--プレイ時間がJSで入る-->
+                <span id="timeValue">--</span>
+                <!--単位用（分など）-->
+                <span class="score-sub-unit"></span>
+              </div>
+              <!--距離表示ブロック-->
+              <div class="score-sub-item">
+                <!--「距離」ラベル-->
+                <span class="score-sub-label">距離</span>
+                <!--移動距離がJSで入る-->
+                <span id="distValue">--</span>
+                <!--単位用（m / km）-->
+                <span class="score-sub-unit"></span>
+              </div>
             </div>
           </div>
+        </section>
 
-          <!--下段-->
-          <!--補助情報の表示領域-->
-          <div class="score-sub">
-            <!--時間表示ブロック-->
-            <div class="score-sub-item">
-              <!--「時間」ラベル-->
-              <span class="score-sub-label">時間</span>
-              <!--プレイ時間がJSで入る-->
-              <span id="timeValue">--</span>
-              <!--単位用（分など）-->
-              <span class="score-sub-unit"></span>
-            </div>
-            <!--距離表示ブロック-->
-            <div class="score-sub-item">
-              <!--「距離」ラベル-->
-              <span class="score-sub-label">距離</span>
-              <!--移動距離がJSで入る-->
-              <span id="distValue">--</span>
-              <!--単位用（m / km）-->
-              <span class="score-sub-unit"></span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!--地図表示用セクション-->
-      <section class="mapCard">
-        <!--Leafletが地図を描画する DOM要素-->
-        <div id="map" role="application" aria-label="結果マップ"></div>
-      </section>
-    </div>
-  </main>
+        <!--地図表示用セクション-->
+        <section class="mapCard">
+          <!--Leafletが地図を描画する DOM要素-->
+          <div id="map" role="application" aria-label="結果マップ"></div>
+        </section>
+      </div>
+    </main>
 
     <!-- 固定フッター -->
     <footer class="app-footer">
@@ -161,75 +159,20 @@
       </div>
     </footer>
   </div>
-
-  <!--地図で使うアイコン定義-->
-    <!--プレイヤーの確定位置アイコン-->
-    <!--正解スポット位置アイコン-->
-  <!--シェア機能-->
-    <!--シェアボタンDOM取得-->
-    <!--シェアボタンがあればクリック時の処理を登録-->
-    <!--表示中のスコア・時間・距離取得-->
-    <!--投稿するテキスト作成-->
-    <!--共有するURL生成-->
-    <!--Web Share API が使えるか判定-->
-    <!--スマホ標準の共有UIを表示-->
-    <!--X（旧Twitter）用投稿URL生成-->
-    <!--新しいタブで投稿画面を開く-->
-  <!--ゴール画面初期化-->
-    <!--ゴール画面全体を初期化する関数を呼び出す-->
-    <!--プレイ時間（分）・サーバーから受け取った移動距離・スコア・プレイヤーの回答位置・正解スポット位置-->
-  <script>
-    /** -----------------------
-     *  設定：アイコン画像
-     *  ----------------------*/
-     const ICONS = {
-      userConfirm: '/asset/images/confirmicon_map.png', // プレイヤー確定位置
-      trueSpot: '/asset/images/spoticon_map.png'       // 実スポット位置
-    };
-
-
-    /** -----------------------
-     *  シェア（X/Instagram/汎用）
-     *  ----------------------*/
-    const shareBtn = document.getElementById("shareBtn");
-    shareBtn?.addEventListener("click", async () => {
-      // 共有テキストを組み立て
-      const score = document.getElementById("scoreValue").textContent;
-      const time  = document.getElementById("timeValue").textContent;
-      const dist  = document.getElementById("distValue").textContent;
-      const text  = `#トイタビ をゴール！ スコア ${score} 点｜時間 ${time}｜距離 ${dist}`;
-
-      const shareUrl = location.origin + "/"; // ランディング等があれば差し替え
-
-      // 1) Web Share API（iOS/Androidのブラウザで動作）
-      if (navigator.share) {
-        try {
-          await navigator.share({ title: "トイタビ", text, url: shareUrl });
-          return;
-        } catch (_) { /* キャンセル等 */ }
-      }
-
-      // 2) X（Twitter）intent
-      const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`;
-      window.open(xUrl, "_blank", "noopener,noreferrer");
-
-      // 3) Instagram はURLテキスト共有の公式エンドポイントがないため、
-      //    画像投稿やストーリーズ共有はアプリ連携が必要。
-      //    ここではXにフォールバックした上で、必要ならトースト表示などで
-      //    「Instagramは画像共有のみ対応」と案内すると良いです。
-    });
-
-    /** -----------------------
-     *  minutes: プレイ時間(分), distanceMeters: 移動距離(m)
-     *  score: スコア(int), userLatLng / spotLatLng: [lat, lng]
-     *  ----------------------*/
-    initGoalPage({
-      minutes: 32,                     
-      distanceMeters: response.answerDto.distance_meter,           
-      score: response.answerDto.point,                       // 例
-      userLatLng: [response.answerDto.answerLat, response.answerDto.answerLng], // 例：プレイヤー確定位置
-      spotLatLng: [response.spotDto.latitude, response.spotDto.longitude]  // 例：実スポット位置
-    });
-  </script>
+  <div id="get-overlay" class ="overlay">
+    <div class ="character-title-container">
+      <h1 class="character-title">キャラクターゲット!!</h1>
+    </div>
+    <div class ="character-area-container">
+      <img class ="character-img" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}" alt="キャラクター画像">
+    </div>
+    <div class = "message-area-container">
+      <h2 class="message-title">キャラクターの名前</h2>
+      <p class="message-text">キャラクターの説明</p>
+    </div>
+    <div class ="button-area-container">
+      <button class="get-close-btn">閉じる</button>
+    </div>
+  </div>
 </body>
 </html>

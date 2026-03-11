@@ -152,3 +152,44 @@ main {
     font-size:12px; color:#bbb; margin:8px 2px 0;
     display:flex; align-items:center; gap:.4em;
   }
+
+  .hidden{ display:none; }
+
+  #get-overlay{
+    width: var(--screen-width);
+  }
+
+  .character-area-container{
+    border: #0f0f0f solid 1px;
+    display: flex;
+    flex:  content;
+    justify-content: center;
+  }
+
+  .character-img
+  {
+    width: 80%;
+    opacity: 0;
+    animation:characterFade 1.5s ease forwards;
+  }
+  
+  .message-area-container{
+    border: #0f0f0f solid 1px;
+    background: #222;
+    color: #fff;
+    padding: 12px;
+    border-radius: var(--radius);
+    margin-top: 12px;
+    opacity: 0;
+  }
+
+  @keyframes characterFade{
+  from{
+    opacity:0;
+    transform:scale(0.8);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
