@@ -21,12 +21,13 @@
   <script th:inline ="javascript">
     const data =/*[[${data}]]*/{}
   </script>
+  <script type="module" src="../../static/js/me/characterindex.js" th:src="@{/js/me/characterindex.js}"></script>
   <!--CSSレイアウト制御用の画面全体を囲うコンテナ-->
   <div class="screen">
     <!-- Header -->
     <header class="app-header">
       <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
-      <p class="lead">トイタビに出かけよう！<br>エリアを選んでね</p>
+      <p class="lead">手に入れたキャラクターの一覧</p>
       <button class = "menu-btn"id ="menu-btn">
         <p>メニュー</p>
         <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
@@ -71,12 +72,16 @@
         </button>
       </div> 
     </footer>
+    <div id ="character-detail" class ="hidden">
+      <div class="detail-container">
+        <h2 class="detail-title">キャラクターの名前</h2>
+        <img class="detail-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}" alt="キャラクター画像">
+        <p class="detail-description">キャラクターの説明文がここに入ります。キャラクターの特徴や背景などを詳しく説明します。</p>
+        <button class="detail-close-btn">閉じる</button>
+      </div>
+    </div>
   
   <!-- Leaflet JSライブラリ -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- menu制御スクリプトとhomeの制御スクリプト -->
-  <script src ="../../static/js/common.js" th:src="@{/js/common.js}"></script>
-  <script src="../../static/js/pages/home.js" th:src="@{/js/pages/home.js}"></script>
 </body>
 </html>

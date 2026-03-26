@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>Admin — Character Detail</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}" />
+	<link rel="stylesheet" th:href="@{/css/admin/common.css}" />
+</head>
+<body>
+
+<h1>Character Detail</h1>
+<a href="/admin/admincharacterindex" th:href="@{/admin/admincharacterindex}">キャラクター一覧に戻る</a>
+
+<div class="section">
+	<div th:if="${chara == null}">No character data available.</div>
+	<div th:if="${chara != null}">
+		<h2 th:text="${chara.name}">Character Name</h2>
+		<p><strong>Chara ID:</strong> <span th:text="${chara.charaId}">ID</span></p>
+		<p><strong>Description:</strong> <span th:text="${chara.description}">Description</span></p>
+		<div>
+			<strong>Low Resolution Image:</strong><br>
+			<img th:if="${chara.lowImagePath != null}" th:src="${chara.lowImagePath}" style="max-width:300px; max-height:300px;" alt="Low Res Image" />
+			<span th:if="${chara.lowImagePath == null}">No low resolution image available.</span>
+		</div>
+		<div>
+			<strong>High Resolution Image:</strong><br>
+			<img th:if="${chara.highImagePath != null}" th:src="${chara.highImagePath}" style="max-width:500px; max-height:500px;" alt="High Res Image" />
+			<span th:if="${chara.highImagePath == null}">No high resolution image available.</span>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

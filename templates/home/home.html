@@ -58,8 +58,12 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
       <h1 class="menu-title">メニュー</h1>
       <ul>
         <li><button class = "menu-content-btn" onclick="location.href='/'">
-          <img class src ="../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
+          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
           <p>ホーム画面へ戻る</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
+          <p>My図鑑</p>
         </button></li>
       </ul>
       <button class="menu-close-btn">閉じる</button>
@@ -89,7 +93,7 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
                 <!--アイコンを丸く囲う-->
                 <div class="icon-circle">
                   <!--アイコン画像-->
-                  <img class="thumbnail-img" src="../../static/asset/images/totyuicon.png" th:src="@{/asset/images/totyuicon.png}">
+                  <img class="thumbnail-img" src="../../static/asset/images/icon/totyuicon.png" th:src="@{/asset/images/icon/totyuicon.png}">
                 </div>
                 <!--ボタンの文字-->
                 <span class="label">途中から</span>
