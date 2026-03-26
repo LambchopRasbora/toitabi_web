@@ -17,7 +17,7 @@
   <!--LeafletのCDNに 事前接続 して読み込みを高速化-->
   <link rel="preconnect" href="https://unpkg.com" />
   <!--プレイ中（問題画面）専用のCSS-->
-  <link rel="stylesheet" href="../../static/css/question.css" th:href="@{/css/question.css}">
+  <link rel="stylesheet" href="../../static/css/game/question.css" th:href="@{/css/game/question.css}">
   <!-- Leaflet CSS / JS（CDN）, 地図表示用CSS-->
   <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <!--LeafletのJavaScript本体-->
@@ -100,13 +100,16 @@
       <!--ヒント-->
       <section id ="hintSection" class="hintSection">
         <!-- 必要なら下に説明や距離表示など -->
-        <div style="height:12px">
+        <div>
           <!--スポット説明文（JSで挿入）-->
           <p id="description"></p>
         </div>
-        <div style="height:12px">
+        <div>
           <!--残り距離表示（JSで更新）-->
           <p id="distance">あと100m</p>
+        </div>
+        <div>
+          <p id="tags">タグ</p>
         </div>
       </section>
 
