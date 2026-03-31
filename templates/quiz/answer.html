@@ -53,8 +53,6 @@
   <script src="../../static/js/navigate/questionnavidev.js" th:src="@{/js/navigate/questionnavipro.js}"></script>
   <!--サーバー通信（fetch / Ajax）をまとめたJS-->
   <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
-  <!--アニメーション表示用JS-->
-  <script src="../../static/js/quiz/getanimation.js" th:src="@{/js/quiz/getanimation.js}"></script>
   <!--回答データの処理や結果表示用JS-->
   <script type="module" src="../../static/js/quiz/answer.js" th:src="@{/js/quiz/answer.js}"></script>
   
@@ -73,6 +71,8 @@
     <!--メニューの画面-->
     <nav id="side-menu" class="side-menu">
       <h1 class="menu-title">メニュー</h1>
+      
+
       <ul>
         <li><button class = "menu-content-btn" onclick="location.href='/'">
           <img class src ="../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
@@ -142,7 +142,7 @@
       <!--ボタンを横並びにする領域-->
       <div class="bottom-actions">
         <!--次のスポットへボタン-->
-        <button class="action-btn" type="button" onclick="onclickNext()"> <!--←次の問題への導線リンクを記述-->
+        <button class="action-btn next-btn" type="button" onclick=""> 
           <!--ボタンのテキスト-->
           <div class ="caption">次のスポットへ </div>
           <!--次へ進むアイコン-->
@@ -150,7 +150,7 @@
         </button>
         
         <!--ホームに戻るボタン-->
-        <button class="action-btn" type="button" onclick="onclickHome()">
+        <button class="action-btn home-btn" type="button" onclick="location.href='/'"> 
           <!--ボタンのテキスト-->
           <div class="caption">ホームに戻る</div>
           <!--ホームアイコン-->
@@ -159,7 +159,7 @@
       </div>
     </footer>
   </div>
-  <div id="get-overlay" class ="overlay">
+  <div id="get-overlay" class ="overlay character-overlay-area">
     <div class ="character-title-container">
       <h1 class="character-title">キャラクターゲット!!</h1>
     </div>

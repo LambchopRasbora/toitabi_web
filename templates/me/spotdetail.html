@@ -17,27 +17,9 @@
 			<dt>トイスポットID</dt>
 			<dd th:text="${spot.spotId}">spotId</dd>
 
-			<dt>投稿者ID</dt>
-			<dd th:text="${spot.authorId}">authorId</dd>
 			<dt>投稿者</dt>
 			<dd th:text="${spot.authorName}">authorName</dd>
 
-			<dt>説明</dt>
-			<dd th:text="${spot.description}">description</dd>
-
-            <dt>場所</dt>
-            <dd>
-                <iframe
-                    th:src="'https://www.openstreetmap.org/export/embed.html?bbox=' 
-                        + (${spot.longitude}-0.01) + ',' 
-                        + (${spot.latitude}-0.01) + ',' 
-                        + (${spot.longitude}+0.01) + ',' 
-                        + (${spot.latitude}+0.01) 
-                        + '&layer=mapnik&marker=' 
-                        + ${spot.latitude} + ',' + ${spot.longitude}"
-                    style="width:300px; height:300px; border:1px solid black">
-                </iframe>
-            </dd>
 			<dt>画像</dt>
 			<dd>
 				<div th:if="${spot.images != null and !#lists.isEmpty(spot.images)}">
@@ -58,18 +40,34 @@
 				</div>
 				<div th:if="${spot.images == null or #lists.isEmpty(spot.images)}">No images</div>
 			</dd>
+
+			<dt>説明</dt>
+			<dd th:text="${spot.description}">description</dd>
+
+            <dt>場所</dt>
+            <dd>
+                <iframe
+                    th:src="'https://www.openstreetmap.org/export/embed.html?bbox=' 
+                        + (${spot.longitude}-0.01) + ',' 
+                        + (${spot.latitude}-0.01) + ',' 
+                        + (${spot.longitude}+0.01) + ',' 
+                        + (${spot.latitude}+0.01) 
+                        + '&layer=mapnik&marker=' 
+                        + ${spot.latitude} + ',' + ${spot.longitude}"
+                    style="width:300px; height:300px; border:1px solid black">
+                </iframe>
+            </dd>
+			
 			<dt>タグ</dt>
 			<dd>
 				<table>
 					<thead>
 						<tr>
-							<th>タグID</th>
 							<th>タグ名</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each ="tag:${spot.tags}">
-							<td th:text="${tag.tagId}">tagID</td>
 							<td th:text="${tag.name}">tagName</td>
 						</tr>
 					</tbody>

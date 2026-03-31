@@ -47,6 +47,22 @@ function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
   line.bindTooltip(`誤差 約 ${meters < 1000 ? Math.round(meters) + "m" : (meters/1000).toFixed(2) + "km"}`, { sticky: true });
 }
 
+function showMessage()
+{
+    const charactermessage= document.getElementsByClassName("message-area-container")[0];
+    charactermessage.style.opacity = "1";
+}
+
+function hiddengetOverlay()
+{
+    const getoverlay=document.getElementById("get-overlay");
+    getoverlay.classList.add("hidden");
+}
+function showMain()
+{
+    const app=document.getElementsByClassName("app")[0];
+    app.classList.remove("hidden");
+}
 
 function onclickNext()
 {
@@ -104,6 +120,44 @@ document.addEventListener("DOMContentLoaded",()=>{
       //    ここではXにフォールバックした上で、必要ならトースト表示などで
       //    「Instagramは画像共有のみ対応」と案内すると良いです。
     });
+
+    //キャラクターの表示
+    const obtainedChara=response.obtainedChara;
+    
+    //キャラクター表示用の要素を取得
+    const overlay_title=document.getElementsByClassName("character-title")[0];
+    const characterimg = document.getElementsByClassName("character-img")[0];
+    const messageTitle=document.getElementsByClassName("message-title")[0];
+    const messageText=document.getElementsByClassName("message-text")[0];
+    if(obtainedChara)
+    {
+      overlay_title.textContent="キャラクターをゲット！";
+
+      characterimg.src=obtainedChara.lowImagePath;
+      characterimg.addEventListener("animationend",showMessage);
+
+      messageTitle.textContent=obtainedChara.name;
+
+      messageText.textContent=obtainedChara.description;
+
+      
+    }
+    else
+    {
+        overlay_title.textContent="キャラクターゲット失敗...";
+        messageTitle.textContent="ゲット失敗...";
+        messageText.textContent="";
+    }
+    const get_close_btn=document.getElementsByClassName("get-close-btn")[0];
+      get_close_btn.addEventListener("click",()=>{
+          console.log("close btn clicked");
+          hiddengetOverlay();
+          showMain();
+      });
+    
+    //次の問題へボタンのイベントリスナーを設定
+    const next_btn=document.getElementsByClassName("next-btn")[0];
+    next_btn.addEventListener("click",onclickNext);
 
     menuInitialize();
     

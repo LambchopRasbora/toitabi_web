@@ -10,10 +10,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>トイタビ – エリア選択</title>
 
+  <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <link rel="stylesheet" href="../../static/css/capture.css" th:href="@{/css/capture.css}">
   <link rel="stylesheet" href="../../static/css/loading.css" th:href="@{/css/loading.css}">
-  <script src="../../static/js/navigate/capturenavidev.js" th:src="@{/js/navigate/capturenavipro.js}"></script>
+
 </head>
 <body>
   <main class="screen">
@@ -70,12 +71,12 @@
     <!-- Bottom actions -->
       <footer class="app-footer">
     <div class="bottom-actions">
-      <button class="action-btn" type="button" onclick="onclickSetting()">
+      <button class="action-btn menu-btn"  type="button" >
         <div class ="caption">メニュー </div>
         <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
       </button>
 
-      <button class="action-btn" type="button" onclick="onclickHome()">
+      <button class="action-btn" type="button" onclick="location.href='/'">
         <div class="caption">ホームに戻る</div>
         <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
       </button>
@@ -86,7 +87,6 @@
       <div class="spinner"></div>
     </div>
   </main>
-  <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
   <script type="module" src="../../static/js/capture/capture.js" th:src="@{/js/capture/capture.js}"></script>
 </body>
 </html>

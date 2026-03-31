@@ -1,188 +1,200 @@
 /* ========= CSS Variables ========= */
-    :root{
-      /* カラーパレット */
-      --bg:#F0F0F0;
-      --ink:#28231e;
-      --muted:#666;
-      --pill:#000;
-      /* サイズ */
-      --screen-max-width:430px; /* 画面幅の最大値 */
-      --screen-width: min(100vw, var(--screen-max-width));/* 画面幅,幅に応じて変動 */
+  :root{
+    /* カラーパレット */
+    --bg:#F0F0F0;
+    --ink:#28231e;
+    --muted:#666;
+    --pill:#000;
+    /* サイズ */
+    --screen-max-width:430px; /* 画面幅の最大値 */
+    --screen-width: min(100vw, var(--screen-max-width));/* 画面幅,幅に応じて変動 */
 
-      --screen-heigtht:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)); /* 画面高さ(safariのアドレスバー対応) */
+    --screen-heigtht:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)); /* 画面高さ(safariのアドレスバー対応) */
 
-      --card-radius:26px;
-      --button-radius:24px;
-      --header-h: 100px;  /* ヘッダー高さ */
-      --footer-h: 120px; /* フッター高さ */
-      --radius: 14px;
-      --button-font-size:12px;
-    }
+    --card-radius:26px;
+    --button-radius:24px;
+    --header-h: 100px;  /* ヘッダー高さ */
+    --footer-h: 120px; /* フッター高さ */
+    --radius: 14px;
+    --button-font-size:12px;
+  }
 
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin-right: auto;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color:var(--ink);
-      background:var(--bg);
-      -webkit-font-smoothing:antialiased;
-      -webkit-text-size-adjust:100%;
-    }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin-right: auto;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    color:var(--ink);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+  }
 
-    /* iOS 100vh対策: 画面高をCSS変数に格納 */
-    .screen{
-      min-height:100dvh; /* modern */
-      min-height:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-      padding: max(20px, env(safe-area-inset-top)) 18px calc(16px + env(safe-area-inset-bottom));
-      width: var(--screen-width);
-      margin:auto auto;
-      display:flex;
-      flex-direction:column;
-      gap:clamp(12px,4vw,18px);
-    }
+  /* iOS 100vh対策: 画面高をCSS変数に格納 */
+  .screen{
+    min-height:100dvh; /* modern */
+    min-height:calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    padding: max(20px, env(safe-area-inset-top)) 18px calc(16px + env(safe-area-inset-bottom));
+    width: var(--screen-width);
+    margin:auto auto;
+    display:flex;
+    flex-direction:column;
+    gap:clamp(12px,4vw,18px);
+  }
 
 
 
-    /* ========= Header/footer(固定） ========= */
+  /* ========= Header/footer(固定） ========= */
 
-     header.app-header{ 
-      z-index: 20;
-      width: var(--screen-width);
-      position: fixed;
-      top: 0;
-      height:var(--header-h); 
-      padding: 5px clamp(5px, 3vw, 20px);
-      display:flex;
-      justify-content: space-between;
-     }
-
-    .header-logo-img {
-      width: clamp(40px, 40%, 60px);
-      height: auto;
-      object-fit: contain;
-    }
-    .lead{
-      text-align:center;
-      margin-top: 5px;
-      line-height:1.6;
-      font-size: var(--button-font-size);
-    }
-    #menu-btn
-    {
-      background:var(--bg);
-      border:3px solid #000;
-      border-radius:10px;
-      --menu-button-size:  calc(var(--header-h) * 0.5);
-      width: var(--menu-button-size);
-      height: var(--menu-button-size);
-      display:flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 4px;
-      padding-bottom: 4px;
-    }
-    #menu-btn p
-    {
-      font-size: 50%;
-    }
-    #menu-btn img
-    {
-      width: clamp(20px, 60%, 30px);
+    header.app-header{ 
+    z-index: 20;
+    width: var(--screen-width);
+    position: fixed;
+    top: 0;
+    height:var(--header-h); 
+    padding: 5px clamp(5px, 3vw, 20px);
+    display:flex;
+    justify-content: space-between;
     }
 
-    /*メニュー画面*/
-    .side-menu{
-      position: fixed;
-      z-index: 30;
-      top: 0%;
-      background-color: var(--bg);
-      width: var(--screen-width);
-      height: 100vh;
-      padding: 5px clamp(5%, 3vw, 20px);
-      display: none;
-    }
-    .side-menu ul{
-      list-style: none;
-      padding-left: 0%;
-    }
-    .side-menu li{
-      padding: 8px 8px 8px;
-    }
-    .menu-content-btn{
-      display:flex;
-      background-color: var(--bg);
-      border: 3px solid #000;
-      border-radius: 10px;
-      width: 100%;
-      height: clamp(40px, 8vw, 60px);
-      gap: clamp(12px, 3vw, 16px);
-    }
-    .menu-content-btn img
-    {
-      width: clamp(30px, 10vw, 42px);
-      object-fit: contain;
-    }
-    .side-menu.active
-    {
-      display: block;
-    }
+  .header-logo-img {
+    width: clamp(40px, 40%, 60px);
+    height: auto;
+    object-fit: contain;
+  }
+  .lead{
+    text-align:center;
+    margin-top: 5px;
+    line-height:1.6;
+    font-size: var(--button-font-size);
+  }
+  #menu-btn
+  {
+    background:var(--bg);
+    border:3px solid #000;
+    border-radius:10px;
+    --menu-button-size:  calc(var(--header-h) * 0.5);
+    width: var(--menu-button-size);
+    height: var(--menu-button-size);
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  #menu-btn p
+  {
+    font-size: 50%;
+  }
+  #menu-btn img
+  {
+    width: clamp(20px, 60%, 30px);
+  }
 
-    /* —— main(スクロール) —— */
+  /*メニュー画面*/
+  .side-menu{
+    position: fixed;
+    z-index: 30;
+    top: 0%;
+    background-color: var(--bg);
+    width: var(--screen-width);
+    height: 100vh;
+    padding: 5px clamp(5%, 3vw, 20px);
+    display: none;
+  }
+  .side-menu ul{
+    list-style: none;
+    padding-left: 0%;
+  }
+  .side-menu li{
+    padding: 8px 8px 8px;
+  }
+  .menu-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .user-info-btn{
+    background-color: var(--bg);
+    border: 3px solid #000;
+    border-radius: 10px;
+    width: 30%;
+    height: 100%;
+  }
+  .menu-content-btn{
+    display:flex;
+    background-color: var(--bg);
+    border: 3px solid #000;
+    border-radius: 10px;
+    width: 100%;
+    height: clamp(40px, 8vw, 60px);
+    gap: clamp(12px, 3vw, 16px);
+  }
+  .menu-content-btn img
+  {
+    width: clamp(30px, 10vw, 42px);
+    object-fit: contain;
+  }
+  .side-menu.active
+  {
+    display: block;
+  }
 
-    main{
-      width: var(--screen-width);
-      position: fixed;
-      z-index: 10;
-      top:var(--header-h); bottom:var(--footer-h);
-      overflow-y:auto; -webkit-overflow-scrolling:touch;
-      padding: clamp(14px,4vw,18px) clamp(12px,3vw,16px) clamp(20px,5vw,24px);
-    }
-    .content .container{
-      margin: 0 auto;
-      padding: 0; 
-    }
+  /* —— main(スクロール) —— */
 
-    /* ========= フッター ========= */
+  main{
+    width: var(--screen-width);
+    position: fixed;
+    z-index: 10;
+    top:var(--header-h); bottom:var(--footer-h);
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding: clamp(14px,4vw,18px) clamp(12px,3vw,16px) clamp(20px,5vw,24px);
+  }
+  .content .container{
+    margin: 0 auto;
+    padding: 0; 
+  }
 
-    footer.app-footer{ 
-      position: fixed;
-      width: var(--screen-width);
-      z-index: 20;
-      bottom: 10px;
-      height:var(--footer-h); 
-      display:grid; 
-      place-items:center;
-      padding: 5px clamp(5px, 3vw, 20px);
-    }
-    .bottom-actions{
-      margin-top:auto;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap: clamp(12px,5vw,20px);
-      align-items: center;
-    }
-    .action-btn{
-      background:var(--bg);
-      border:3px solid #000;
-      border-radius:var(--button-radius);
-      /* 高さはフッター変数の一定割合を目安に clamp() で制限 */
-      height: calc(var(--footer-h) * 0.8);
-      padding: clamp(12px,4vw,16px) clamp(10px,4vw,14px) clamp(16px,5vw,22px);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:clamp(8px,3vw,10px);
-      font-weight:600;
-    }
-    .action-btn .caption{
-      font-size: var(--button-font-size);
-      color:#000000;
-    }
-    .icon-img{
-     width: clamp(30px,10vw,42px); 
-    }
+  /* ========= フッター ========= */
+
+  footer.app-footer{ 
+    position: fixed;
+    width: var(--screen-width);
+    z-index: 20;
+    bottom: 10px;
+    height:var(--footer-h); 
+    display:grid; 
+    place-items:center;
+    padding: 5px clamp(5px, 3vw, 20px);
+  }
+  .bottom-actions{
+    margin-top:auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap: clamp(12px,5vw,20px);
+    align-items: center;
+  }
+  .action-btn{
+    background:var(--bg);
+    border:3px solid #000;
+    border-radius:var(--button-radius);
+    /* 高さはフッター変数の一定割合を目安に clamp() で制限 */
+    height: calc(var(--footer-h) * 0.8);
+    padding: clamp(12px,4vw,16px) clamp(10px,4vw,14px) clamp(16px,5vw,22px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:clamp(8px,3vw,10px);
+    font-weight:600;
+  }
+  .action-btn .caption{
+    font-size: var(--button-font-size);
+    color:#000000;
+  }
+  .icon-img{
+    width: clamp(30px,10vw,42px); 
+  }
 
 /* 以下の処理は移してね(森より)*/
 /* ===== Speech bubble stacked (balloon on top, character below) ===== */
@@ -265,10 +277,6 @@
   75%  { transform: translateY(-4px); }
   100% { transform: translateY(0px); }
 }
-
-
-
-
 
 /* small screens */
 @media (max-width: 420px){

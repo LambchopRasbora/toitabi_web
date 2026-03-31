@@ -1,3 +1,6 @@
+import { post } from "../common/serverRequest.js";
+import { menuInitialize}from "../common/menu.js"
+
 //areasを取得
 const buttonareas=document.getElementsByClassName("buttonareas")[0];
 const zones=data?data.zoneDtos:null;
@@ -84,57 +87,59 @@ async function togglethemeList(areaId,container)
   return;
 }
 
-//保存されているlocalsessionがあれば途中からを表示
-if(continue_btn)
-{
-  if(localsession)
+document.addEventListener('DOMContentLoaded',()=>{
+  //保存されているlocalsessionがあれば途中からを表示
+  if(continue_btn)
   {
-    continue_btn.addEventListener('click',()=>quizCotinue({session_id:localsession}));
+    if(localsession)
+    {
+      continue_btn.addEventListener('click',()=>quizCotinue({session_id:localsession}));
+    }
+    else
+    {
+      continue_btn.remove();
+    }
   }
-  else
+
+  //送信されたzoneを用いてクイズスタートボタンを作成
+  if(zones)
   {
-    continue_btn.remove();
+    zones.forEach(zone=>{
+      //area-card部分作成
+      let area_card=document.createElement("button");
+      area_card.className="area-card";
+      buttonareas.appendChild(area_card);
+      area_card.addEventListener('click',()=>{quizStart({id: zone.id,number: 3})});
+      //thumb部分作成
+      let thumb=document.createElement("div");
+      thumb.className="icon-circle";
+      area_card.appendChild(thumb);
+      //map部分作成
+      let icon=document.createElement("img");
+      icon.src=zone.imagepath;
+      thumb.appendChild(icon);
+      //label作成
+      let label=document.createElement("div");
+      label.className="label";
+      label.textContent=zone.name;
+      area_card.appendChild(label);
+    });
   }
-}
 
-
-//送信されたzoneを用いてクイズスタートボタンを作成
-if(zones)
-{
-  zones.forEach(zone=>{
-    //area-card部分作成
-    let area_card=document.createElement("button");
-    area_card.className="area-card";
-    buttonareas.appendChild(area_card);
-    area_card.addEventListener('click',()=>{quizStart({id: zone.id,number: 3})});
-    //thumb部分作成
-    let thumb=document.createElement("div");
-    thumb.className="icon-circle";
-    area_card.appendChild(thumb);
-    //map部分作成
-    let icon=document.createElement("img");
-    icon.src=zone.imagepath;
-    thumb.appendChild(icon);
-    //label作成
-    let label=document.createElement("div");
-    label.className="label";
-    label.textContent=zone.name;
-    area_card.appendChild(label);
-  });
-}
-
-if(areas)
-{
-  areas.forEach(area=>{
-    //area-card部分作成
-    const fragment=areacardtemplate.content.cloneNode(true);
-    const area_card=fragment.querySelector(".area-card");
-    const theme_list=fragment.querySelector(".theme-list");
-    area_card.addEventListener('click',()=>{togglethemeList(area.areaId, theme_list)});
-    const img=area_card.querySelector("img");
-    img.src=area.thumbnailUri;
-    const label=area_card.querySelector(".label");
-    label.textContent=area.areaname;
-    buttonareas.appendChild(fragment);
-  });
-}
+  if(areas)
+  {
+    areas.forEach(area=>{
+      //area-card部分作成
+      const fragment=areacardtemplate.content.cloneNode(true);
+      const area_card=fragment.querySelector(".area-card");
+      const theme_list=fragment.querySelector(".theme-list");
+      area_card.addEventListener('click',()=>{togglethemeList(area.areaId, theme_list)});
+      const img=area_card.querySelector("img");
+      img.src=area.thumbnailUri;
+      const label=area_card.querySelector(".label");
+      label.textContent=area.areaname;
+      buttonareas.appendChild(fragment);
+    });
+  }
+  menuInitialize();
+});

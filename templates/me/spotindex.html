@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<title>投稿したトイスポット</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}" />
+	
+</head>
+<body>
+    <div class="screen">
+        <!-- Header -->
+    <header class="app-header">
+      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
+      <p class="lead">投稿したトイスポット一覧</p>
+      <button class = "menu-btn"id ="menu-btn">
+        <p>メニュー</p>
+        <img class = "icon-img" src="..\..\static\asset\images\icon\icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
+      </button>
+    </header>
+    <!--メニューの画面-->
+    <nav id="side-menu" class="side-menu">
+      <div class ="menu-header">
+        <h1 class="menu-title">メニュー</h1>
+        <!--ログイン情報-->
+        <button class="user-info-btn" sec:authorize="isAuthenticated()" onclick="location.href='/mypage'">
+          <span class="username"
+                sec:authentication="name">
+          </span>
+        </button>
+        <!-- 未ログイン -->
+        <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
+          <span class="username">ログイン</span>
+        </button>
+      </div>
+      <ul>
+        <li><button class = "menu-content-btn" onclick="location.href='/'">
+          <img class src ="../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          <p>ホーム画面へ戻る</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
+          <p>My図鑑</p>
+        </button></li>
+      </ul>
+      <button class="menu-close-btn">閉じる</button>
+    </nav>
+    <main>
+    <h1>Spots</h1>
+    <div class="section">
+        <table class="spot-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Images</th>
+                    <th>Map</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="spot,iter : ${spots}">
+                    <td th:text="${spot.spotId}">spotId</td>
+                    <!-- 画像たち -->
+                    <td>
+                        <div th:if="${spot.images != null}">
+                            <span th:each="img : ${spot.images}">
+                                <img th:src="${img}" th:alt="Image" />
+                            </span>
+                        </div>
+                    </td>
+
+                    <!-- オープンストリートマップによる位置の表示 -->
+                    <td>
+                        <iframe
+                            th:src="'https://www.openstreetmap.org/export/embed.html?bbox=' 
+                                + (${spot.longitude}-0.01) + ',' 
+                                + (${spot.latitude}-0.01) + ',' 
+                                + (${spot.longitude}+0.01) + ',' 
+                                + (${spot.latitude}+0.01) 
+                                + '&layer=mapnik&marker=' 
+                                + ${spot.latitude} + ',' + ${spot.longitude}"
+                            style="width:300px; height:300px; border:1px solid black">
+                        </iframe>
+                    </td>
+
+                    <!-- 詳細を見るボタン -->
+                    <td>
+                        <form th:action="@{/me/spotdetail}" method="get">
+                        <input type="hidden" name="spotId" th:value="${spot.spotId}" />
+                            <button type="submit">詳細を見る</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </main>
+    <!-- Footer -->
+    <footer class="app-footer">
+      <!-- Bottom actions(この画面にはなし) -->
+      <div class="bottom-actions">
+        <!--設定画面へ遷移するボタン-->
+        <button class="action-btn" type="button">
+          <!--ボタンのラベル-->
+          <div class ="caption">ホームへ戻る</div>
+          <!--メニューアイコン-->
+          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{asset/images/icon/icon_home.png}"/>
+        </button>
+
+        <!--投稿画面へ遷移-->
+        <button class="action-btn" type="button" onclick= "location.href='/spotpost/capture'" >
+          <!--ボタンのラベル-->
+          <div class="caption">トイスポットを投稿</div>
+          <!--投稿用アイコン-->
+          <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+        </button>
+      </div> 
+    </footer>
+<div>
+</body>
+</html>

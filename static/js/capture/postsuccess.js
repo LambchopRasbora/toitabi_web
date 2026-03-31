@@ -7,8 +7,6 @@ const imagePaths=postResponse.images;
 
 let currentForucusImgId=0;
 
-
-
 function setcurrentForcusImgId(id)
 {
   thumImgs=thumbList.children;

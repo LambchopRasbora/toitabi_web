@@ -1,3 +1,7 @@
+import{post,uploadImageToPresignedURL } from '../common/serverRequest.js';
+import {menuInitialize} from '../common/menu.js';
+
+
 const shootBtn   = document.getElementById('shootBtn');
 const fileInputtemp=document.getElementById('fileInputtemp');
 const fileInput  = document.getElementById('fileInput');
@@ -119,8 +123,9 @@ retakeBtn.addEventListener('click', () => {
   files = [];
 });
 
-// 投稿ボタン
-submitBtn.addEventListener('click', async () => {
+// 投稿時の処理
+submitBtn.addEventListener('click', async () => 
+{
   if (files.length === 0) return;
 
   const fd = new FormData();
@@ -155,4 +160,8 @@ submitBtn.addEventListener('click', async () => {
    console.log(params);
    console.log(params.images.at(0));
   post('./confirm',params,);
+});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  menuInitialize();
 });

@@ -60,50 +60,57 @@ export function GetListparamURL(url,list)
     return `${url}?${param.toString()}`;
 }
 
-export function post(path, params, method='post') {
+export async function post(path, params, method='post') 
+{
+  var formData = new FormData();
+  
+  //フォームデータにパラメータを追加
+  for (const key in params) {
+    if (!params.hasOwnProperty(key)) continue;
 
-  // The rest of this code assumes you are not using a library.
-  // It can be made less wordy if you use one.
-  const form = document.createElement('form');
-  form.method = method;
-  form.action = path;
+    const value = params[key];
 
-  for (const key in params) 
+    // 配列
+    if(value===null || value === undefined)
     {
-  if (!params.hasOwnProperty(key)) continue;
-
-    // 配列なら複数 input を作る
-    if (Array.isArray(params[key])) {
-
-      params[key].forEach(v => {
-        const hiddenField = document.createElement('input');
-        hiddenField.type = 'hidden';
-        hiddenField.name = key;   // ← 同じ name を複数送る
-        hiddenField.value = v;
-        form.appendChild(hiddenField);
-      });
-
-    } else {
-      const hiddenField = document.createElement('input');
-      hiddenField.type = 'hidden';
-      hiddenField.name = key;
-      hiddenField.value = params[key];
-      form.appendChild(hiddenField);
+      continue;
+    }
+    else if (Array.isArray(value)) {
+      value.forEach(v => formData.append(key, v));
+    }
+    // ファイル（File or Blob）
+    else if (value instanceof File || value instanceof Blob) {
+      formData.append(key, value);
+    }
+    // 通常値
+    else {
+      formData.append(key, value);
     }
   }
-  
+
   // ===== CSRF 追加 =====
   const csrfToken = document.querySelector('meta[name="_csrf"]').content;
   const csrfParam = document.querySelector('meta[name="_csrf_parameter"]').content;
 
-  const csrfInput = document.createElement('input');
-  csrfInput.type = 'hidden';
-  csrfInput.name = csrfParam;
-  csrfInput.value = csrfToken;
-  form.appendChild(csrfInput);
+  formData.append(csrfParam, csrfToken);
 
-  document.body.appendChild(form);
-  form.submit();
+  //送信
+  const response= await fetch(path,{
+    method: method.toUpperCase(),
+    body:formData
+  });
+
+  //遷移処理
+  if (response.redirected) {
+    // サーバーがリダイレクトした場合
+    window.location.href = response.url;
+  } else if (response.ok) {
+    // 正常終了（リダイレクトなし）
+    window.location.href = "/success";
+  } else {
+    // エラー
+    alert("送信に失敗しました");
+  }
 }
 
 /**
@@ -114,17 +121,16 @@ export function post(path, params, method='post') {
  */
 export async function uploadImageToPresignedURL(uploadUrl, file) 
 {
-  const res = await fetch(uploadUrl, {
+  const response = await fetch(uploadUrl, {
     method: "PUT",
     body: file,
     headers: {
-      // S3/GCS に Content-Type を送っておくと良い
       "Content-Type": file.type
     }
   });
 
-  if (!res.ok) {
-    throw new Error(`画像アップロードに失敗しました: ${res.status}`);
+  if (!response.ok) {
+    throw new Error(`画像アップロードに失敗しました: ${response.status}`);
   }
-  return res.json();
+  return response.json();
 }

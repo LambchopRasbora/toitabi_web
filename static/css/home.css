@@ -1,54 +1,47 @@
-
-
-
 /* ========= Area List ========= */
-    .buttonareas{
-      margin-top:10px;
-      display:flex;
-      flex-direction:column;
-      gap:28px;
-    }
-
-    .area-card{
-      position: relative; /* ← 子要素のz-index制御を有効にする */
-      display:flex;
-      align-items:center;
-      border:none;
-      background:transparent;
-      padding:0;
-      text-align:left;
-      width:100%;
-      cursor:pointer;
-    }
-
-    .thumb{
-      position: relative;
-      overflow:hidden; 
-      z-index: 2; /* ← thumbを前面に */
-      width:140px; height:140px;
-      border-radius:50%;
-      border:10px solid #000;
-      background-size:cover;
-      background-position:center;
-      flex:0 0 auto;
-      box-shadow:0 1px 0 rgba(0,0,0,.04) inset;
-    }
-
-    .theme-list
-    {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-    }
-    .theme-list.open
-    {
-      max-height: 100vh; 
-    }
-
-.thumb .map{
-  position:absolute; inset:0;
-  width:100%; height:100%;
+.buttonareas{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:28px;
 }
+
+.area-card{
+  position: relative; /* ← 子要素のz-index制御を有効にする */
+  display:flex;
+  align-items:center;
+  border:none;
+  background:transparent;
+  padding:0;
+  text-align:left;
+  width:100%;
+  cursor:pointer;
+}
+
+.thumb{
+  position: relative;
+  overflow:hidden; 
+  z-index: 2; /* ← thumbを前面に */
+  width:140px; height:140px;
+  border-radius:50%;
+  border:10px solid #000;
+  background-size:cover;
+  background-position:center;
+  flex:0 0 auto;
+  box-shadow:0 1px 0 rgba(0,0,0,.04) inset;
+}
+
+.theme-list
+{
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.theme-list.open
+{
+  max-height: 100vh; 
+}
+
 #totyu{
   background-image: url("/static/asset/images//totyuicon.png");
 }
