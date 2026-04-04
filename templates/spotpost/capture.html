@@ -15,55 +15,65 @@
   <link rel="stylesheet" href="../../static/css/capture.css" th:href="@{/css/capture.css}">
   <link rel="stylesheet" href="../../static/css/loading.css" th:href="@{/css/loading.css}">
 
+  <script type="module" src="../../static/js/capture/capture.js" th:src="@{/js/capture/capture.js}"></script>
 </head>
 <body>
-  <main class="screen">
+  <div class="screen">
     <!-- Header -->
     <header class="app-header">
-      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{asset/images/logo.png}"/>
+      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
       <p class="lead">トイスポットを投稿しよう!</p>
       <button class = "menu-btn"id ="menu-btn">
         <p>メニュー</p>
-        <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{asset/images/menulogo.png}"/>
+        <img class = "icon-img" src="..\..\static\asset\images\icon\icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
       </button>
     </header>
 
 <main class ="content">
      <div class="container">
     <button class="camera-btn" id="shootBtn" type="button" aria-label="カメラを起動">
-    <img src="../../static/asset/images/cameraicon.png" th:src="@{/asset/images/cameraicon.png}" alt="" class="camera-icon">
+      <p>画像を選択する<br>(人の顔などのプライバシーに注意してください)</p>
+      <img src="../../static/asset/images/cameraicon.png" th:src="@{/asset/images/cameraicon.png}" alt="" class="camera-icon">
     </button>
-    <p>カメラを起動してトイスポットを投稿しよう！</p>
+   
     
   <!-- 実際の入力要素（4枚まで） -->
-  <input id="fileInput" type="file" accept="image/*" capture="environment" multiple hidden />
+  <input id="fileInput" type="file" accept="image/*" multiple hidden />
 
-  <!-- プレビューエリア -->
+  <!-- フォームエリア-->
   <section id="formArea" class="form-area is-hidden">
+    <!-- プレビューエリア -->
     <div class="preview-grid" id="previewGrid"></div>
+
+    <button type="button" id="retakeBtn" class="ghost-btn field">撮り直す</button>
 
     <div class="form-fields">
       <label class="field">
         <span class="label">説明文</span>
-        <textarea id="caption" rows="3" placeholder="どんな場所か、ひとこと説明を書いてください（任意）"></textarea>
+        <textarea id="caption" rows="3" placeholder="どんな場所か、ひとこと説明を書いてください（お気に入りの理由・あなたのエピソードなど、任意）"></textarea>
       </label>
 
-      <div class="field-row">
+      <!--位置情報を添付する-->
+      <div class="field">
         <button type="button" id="locBtn" class="sec-btn">現在地を添付</button>
         <span id="locStatus" class="muted">位置情報は未取得</span>
       </div>
 
+      <div class="field">
+        <span class="label">タグ</span>
+        <input type="text" id="tagInput" placeholder="タグを追加 (例: #自然 #夜景)" />
+      </div>
+
       <div class="actions">
-        <button type="button" id="retakeBtn" class="ghost-btn">撮り直す</button>
-        <button type="button" id="submitBtn" class="primary-btn icon-btn" disabled>
+        
+        <button type="button" id="submitBtn" class="icon-btn" disabled>
+          <p>投稿する!!</p>
           <img src="../../static/asset/images/spotpostlogo.png" th:src="@{/asset/images/spotpostlogo.png}" alt="投稿" class="btn-icon">
-          投稿する
         </button>
       </div>
     </div>
   </section>
 
-  <p class="map-attrib">※ 写真に人物が映らないように注意してください。</p>
      </div>
      </main>
 
@@ -73,12 +83,12 @@
     <div class="bottom-actions">
       <button class="action-btn menu-btn"  type="button" >
         <div class ="caption">メニュー </div>
-        <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
+        <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
       </button>
 
       <button class="action-btn" type="button" onclick="location.href='/'">
         <div class="caption">ホームに戻る</div>
-        <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
+        <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
       </button>
     </div>
     </footer>
@@ -86,7 +96,7 @@
     <div id="loadingOverlay">
       <div class="spinner"></div>
     </div>
-  </main>
-  <script type="module" src="../../static/js/capture/capture.js" th:src="@{/js/capture/capture.js}"></script>
+  </div>
+  
 </body>
 </html>

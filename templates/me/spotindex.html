@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>投稿したトイスポット</title>
 	<link rel="stylesheet" th:href="@{/css/common.css}" />
-	
+	<script type="module" th:src="@{/js/me/spotindex.js}"></script>
 </head>
 <body>
     <div class="screen">
@@ -99,11 +99,11 @@
       <!-- Bottom actions(この画面にはなし) -->
       <div class="bottom-actions">
         <!--設定画面へ遷移するボタン-->
-        <button class="action-btn" type="button">
+        <button class="action-btn" type="button" onclick= "location.href='/'" >
           <!--ボタンのラベル-->
           <div class ="caption">ホームへ戻る</div>
           <!--メニューアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{asset/images/icon/icon_home.png}"/>
+          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
         </button>
 
         <!--投稿画面へ遷移-->

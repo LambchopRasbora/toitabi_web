@@ -1,4 +1,4 @@
-import { menuInitialize } from "../common/menu";
+import { menuInitialize } from "../common/menu.js";
 
 
 

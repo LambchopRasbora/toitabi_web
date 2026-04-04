@@ -1,5 +1,6 @@
  
- // —— サムネ→メイン切替 —— //
+
+// —— サムネ→メイン切替 —— //
 const main = document.getElementById('mainPhoto');
 const thumbs = document.getElementById('thumbs');
 const distanceindicator=document.getElementById('distance');

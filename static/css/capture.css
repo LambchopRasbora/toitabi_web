@@ -32,15 +32,23 @@
 /* ===== アイコン付きボタン ===== */
 .icon-btn {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;           /* アイコンと文字の間隔 */
-  padding: 10px 16px;
+  width: 50%;
+  aspect-ratio: 3/2;
+  gap: 4px;           /* アイコンと文字の間隔 */
+  padding: 5px 10px;
+
+  border: #000 2px solid;
+  border-radius: 10px;
+
+  /* 影とタップ感 */
+  transition: transform .06s ease, box-shadow .06s ease;
 }
 
 .btn-icon {
-  width: 28px;        /* アイコンのサイズ調整 */
-  height: auto;
+  height: 80%;
   display: block;
 }
 
@@ -67,4 +75,17 @@
   object-fit: cover;
   border-radius: 12px;
   border: 5px solid #000;
+}
+
+/*フォームエリアの要素*/
+
+.field
+{
+  margin: 10px 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+
+  border: #000 2px solid;
+  border-radius: 10px;
 }

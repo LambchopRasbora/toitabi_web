@@ -12,7 +12,9 @@
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <link rel="stylesheet" href="../../static/css/capture.css" th:href="@{/css/capture.css}">
   <link rel="stylesheet" href="../../static/css/postsuccess.css" th:href="@{/css/postsuccess.css}">
-  <script src="../../static/js/navigate/capturenavidev.js" th:src="@{/js/navigate/capturenavipro.js}"></script>
+
+  <script type="module" src="../../static/js/capture/postsuccess.js" th:src="@{/js/capture/postsuccess.js}"></script>
+</body>
 </head>
 <body>
   <script th:inline="javascript">
@@ -34,31 +36,24 @@
     <ul class="thumbs" id="thumbList">
  
     </ul>
-
     <!-- 説明文 -->
     <p class="caption" id="captionText"></p>
 
-    <!-- 投稿日時 -->
-    <div class="meta">
-      <span id="postedAtText"></span>
-    </div>
   </section>
 
 
     <!-- Bottom actions -->
     <div class="bottom-actions">
-      <button class="action-btn" type="button" onclick="onclickSetting()">
+      <button class="action-btn menu-btn" type="button" onclick="onclickSetting()">
         <div class ="caption">メニュー </div>
-        <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
+        <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
       </button>
 
-      <button class="action-btn" type="button" onclick="onclickHome()">
+      <button class="action-btn" type="button" onclick="location.href='/'">
         <div class="caption">ホームに戻る</div>
-        <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
+        <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
       </button>
     </div>
   </main>
-  <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
-  <script src="../../static/js/capture/postsuccess.js" th:src="@{/js/capture/postsuccess.js}"></script>
-</body>
+  
 </html>
