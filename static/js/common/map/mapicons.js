@@ -9,5 +9,11 @@ export const mapIcons = {
     iconUrl: "/asset/images/spoticon_map.png",
     iconSize: [40, 40],
     iconAnchor: [20, 40]
+  }),
+
+  postedSpot: L.icon({
+    iconUrl: "/asset/images/icon/icon_post.png",
+    iconSize: [40, 40],
+    iconAnchor: [20, 40]
   })
 };

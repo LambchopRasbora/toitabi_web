@@ -8,7 +8,13 @@
   <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
 
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>トイタビ – エリア選択</title>
+  <title>トイタビ – トイスポット投稿</title>
+
+
+  <!-- Leaflet CSS / JS（CDN）, 地図表示用CSS-->
+  <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <!--LeafletのJavaScript本体-->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
@@ -55,13 +61,25 @@
 
       <!--位置情報を添付する-->
       <div class="field">
-        <button type="button" id="locBtn" class="sec-btn">現在地を添付</button>
+        <div id="mapFrame" class="map" src="" title="地図"></div>
+        <button type="button" id="locBtn" class="sec-btn">現在地に設定</button>
         <span id="locStatus" class="muted">位置情報は未取得</span>
       </div>
 
       <div class="field">
         <span class="label">タグ</span>
-        <input type="text" id="tagInput" placeholder="タグを追加 (例: #自然 #夜景)" />
+        <div class ="grid tag-area">
+        </div>
+        <template id="tag-template">
+          <button class="tags" data-active="false" data-tagName="">
+            <span class="tag-label">グルメ</span>
+          </button>
+        </template>
+
+        <div class ="tag-input-container">
+          <input class="tag-input-field" type="text" id="tagInput" placeholder="タグを追加" />
+          <button class="tag-add-btn" id="addTagBtn" type="button">新しいタグを追加</button>
+        </div>
       </div>
 
       <div class="actions">

@@ -132,5 +132,5 @@ export async function uploadImageToPresignedURL(uploadUrl, file)
   if (!response.ok) {
     throw new Error(`画像アップロードに失敗しました: ${response.status}`);
   }
-  return response.json();
+  return response;
 }

@@ -83,9 +83,63 @@
 {
   margin: 10px 0;
   padding: 10px;
+  gap: 4px;
   display: flex;
   flex-direction: column;
 
   border: #000 2px solid;
   border-radius: 10px;
+}
+
+/*タグ入力スペースのスタイル*/
+.grid
+{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.tags
+{
+  border: #000 2px solid;
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.tags[data-active="true"]
+{
+  background-color: #fff;
+
+  border: #000 4px solid;
+}
+.tags[data-active="true"] .tag-label
+{
+  color: #000;
+}
+
+.tags[data-active="false"]
+{
+  background-color: #000;
+}
+
+.tags[data-active="false"] .tag-label
+{
+  color: #fff;
+}
+
+.tag-input-area
+{
+  display: flex;
+  gap: 4px;
+}
+
+/*表示地図*/
+.map{
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+
+  /* iOS: 長押し時のシステムメニューを禁止 */
+    -webkit-touch-callout: none;
 }

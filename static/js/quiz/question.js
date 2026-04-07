@@ -58,7 +58,7 @@ navigator.geolocation.getCurrentPosition(
     // 失敗時は表示せずassertを出す
     alert("現在地の取得に失敗しました")
   },
-  { enableHighAccuracy:false, timeout:20000, maximumAge:0 }
+  { enableHighAccuracy:false, timeout:20000, maximumAge:5000 }
 );
 
 //最新の現在地(この変数が変更される)
@@ -75,10 +75,10 @@ const watchId= navigator.geolocation.watchPosition(
     latestLocation=null;
     console.error("位置情報に関するエラー"+err);
   },
-  { enableHighAccuracy:true, timeout:8000, maximumAge:0 });
+  { enableHighAccuracy:true, timeout:10000, maximumAge:5000 });
 
 //サーバー通信のインターバル
-const fetchTime=10000;
+const fetchTime=20000;
 //latestLocationを用いてサーバーからヒントを返してもらう関数
 function fetchLocation()
 {
