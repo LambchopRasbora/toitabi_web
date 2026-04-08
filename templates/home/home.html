@@ -74,8 +74,16 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
           <p>My図鑑</p>
         </button></li>
         <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
-          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
+          <img class src ="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
           <p>投稿したトイスポット</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/terms'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>利用規約</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/privacy'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>プライバシーポリシー</p>
         </button></li>
       </ul>
       <button class="menu-close-btn">閉じる</button>
@@ -92,7 +100,7 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
             <!--アイコンを丸く囲う-->
             <div class="icon-circle">
               <!--アイコン画像-->
-              <img src="../../static/asset/images/totyuicon.png" th:src="@{/asset/images/totyuicon.png}">
+              <img src="../../static/asset/images/icon/totyuicon.png" th:src="@{/asset/images/icon/totyuicon.png}">
             </div>
             <!--ボタンの文字-->
             <span class="label">途中から</span>
@@ -118,14 +126,9 @@ https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js
 
           <!--テーマのテンプレート-->
           <template id="theme-card-template">
-            <button class="area-card">
-              <!--アイコンを丸く囲う-->
-              <div class="icon-circle">
-                <!--アイコン画像-->
-                <img class="thumbnail-img" src="../../static/asset/images/totyuicon.png" th:src="@{/asset/images/totyuicon.png}">
-              </div>
+            <button class="theme-card">
               <!--ボタンの文字-->
-              <span class="label">途中から</span>
+              <span class="theme-label">途中から</span>
             </button>
           </template>
 

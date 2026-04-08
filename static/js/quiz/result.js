@@ -1,8 +1,6 @@
-function onclickHome(){
-  location.href='/'
-}
-
-const scoreValueText=document.getElementById("scoreValue");
+import { mapIcons } from "../common/map/mapicons.js";
+import {menuInitialize} from "../common/menu.js";
+import { snsShare } from "../common/snsShare.js";
 
 function initGoalPage({distanceMeters, questions,answers}) 
 {
@@ -57,7 +55,7 @@ function initGoalPage({distanceMeters, questions,answers})
       // 失敗時は表示せずassertを出す
       console.console("現在地の取得に失敗しました")
     },
-    { enableHighAccuracy:true, timeout:5000, maximumAge:0 }
+    { enableHighAccuracy:false, timeout:5000, maximumAge:5000 }
   );
 
   // --- ポップアップ要素を取得 ---
@@ -89,11 +87,7 @@ function initGoalPage({distanceMeters, questions,answers})
   }
 
   //mapのスポットアイコン
-  const spotIcon = L.icon({
-    iconUrl: '/asset/images/spoticon_map.png',   // <-- あなたのマーカー画像パス
-    iconSize: [30, 40],                    // アイコンの表示サイズ（画像に合わせて調整）
-    iconAnchor: [20, 40],                  // 先端（ピンの尖った部分）がどこか
-  });
+  const spotIcon = mapIcons.spot;
 
   //各スポットをタッチしたときに表示するようにする
   spots.forEach(spot => {
@@ -108,33 +102,23 @@ function initGoalPage({distanceMeters, questions,answers})
   overlayEl.addEventListener("click", hideSpotPopup);
 }
 
-/** -----------------------
- *  シェア（X/Instagram/汎用）
- *  ----------------------*/
-const shareBtn = document.getElementById("shareBtn");
-shareBtn?.addEventListener("click", async () => {
-  // 共有テキストを組み立て
-  const score = document.getElementById("scoreValue").textContent;
-  const time  = document.getElementById("timeValue").textContent;
-  const dist  = document.getElementById("distValue").textContent;
-  const text  = `#トイタビ をゴール！ スコア ${score} 点｜時間 ${time}｜距離 ${dist}`;
+//ドキュメントが読み込まれたときに実行する関数
+document.addEventListener("DOMContentLoaded",()=>{
 
-  const shareUrl = location.origin + "/"; // ランディング等があれば差し替え
+  //シェアボタンにシェアイベントを追加
+  const shareBtn = document.getElementById("shareBtn");
+  shareBtn?.addEventListener("click", async () => {
+    await snsShare(0, "かかった時間は未実装", 0);
+  });
 
-  // 1) Web Share API（iOS/Androidのブラウザで動作）
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: "トイタビ", text, url: shareUrl });
-      return;
-    } catch (_) { /* キャンセル等 */ }
-  }
+  //ゴールページの作成
+  initGoalPage({
+    minutes: 0,
+    distanceMeters: 0,
+    questions: response.questions,
+    answers: response.answers
+  });
 
-  // 2) X（Twitter）intent
-  const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`;
-  window.open(xUrl, "_blank", "noopener,noreferrer");
-
-  // 3) Instagram はURLテキスト共有の公式エンドポイントがないため、
-  //    画像投稿やストーリーズ共有はアプリ連携が必要。
-  //    ここではXにフォールバックした上で、必要ならトースト表示などで
-  //    「Instagramは画像共有のみ対応」と案内すると良いです。
+  //メニューの作成
+  menuInitialize();
 });

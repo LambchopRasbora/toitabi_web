@@ -36,7 +36,7 @@
         <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
       </button>
     </header>
-    <!--メニューの画面-->
+   <!--メニューの画面-->
     <nav id="side-menu" class="side-menu">
       <div class ="menu-header">
         <h1 class="menu-title">メニュー</h1>
@@ -62,8 +62,16 @@
           <p>My図鑑</p>
         </button></li>
         <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
-          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
+          <img class src ="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
           <p>投稿したトイスポット</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/terms'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>利用規約</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/privacy'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>プライバシーポリシー</p>
         </button></li>
       </ul>
       <button class="menu-close-btn">閉じる</button>
@@ -233,7 +241,7 @@
           <!--ボタンのラベル-->
           <div class ="caption">ホームへ戻る</div>
           <!--メニューアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{asset/images/icon_home.png}"/>
+          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{asset/images/icon/icon_home.png}"/>
         </button>
 
         <!--投稿画面へ遷移-->

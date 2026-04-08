@@ -27,7 +27,6 @@
 
   <!--Leafletの JavaScript本体 を読み込む-->
   <!--JSファイルの改ざん検証-->
-  <!--CORS設定-->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -67,11 +66,40 @@
 
     <!--メニューの画面-->
     <nav id="side-menu" class="side-menu">
-      <h1 class="menu-title">メニュー</h1>
+      <div class ="menu-header">
+        <h1 class="menu-title">メニュー</h1>
+        <!--ログイン情報-->
+        <button class="user-info-btn" sec:authorize="isAuthenticated()" onclick="location.href='/mypage'">
+          <span class="username"
+                sec:authentication="name">
+          </span>
+        </button>
+        <!-- 未ログイン -->
+        <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
+          <span class="username">ログイン</span>
+        </button>
+      </div>
+      <!--メニュー項目 -->
       <ul>
         <li><button class = "menu-content-btn" onclick="location.href='/'">
-          <img class src ="../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
+          <img class src ="../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
           <p>ホーム画面へ戻る</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
+          <p>My図鑑</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+          <p>投稿したトイスポット</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/terms'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>利用規約</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/privacy'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>プライバシーポリシー</p>
         </button></li>
       </ul>
       <button class="menu-close-btn">閉じる</button>
@@ -148,7 +176,7 @@
       </button>
 
       <!--ホーム画面へ戻る-->
-      <button class="action-btn" type="button" onclick="onclickHome()">
+      <button class="action-btn" type="button" onclick="location.href='/'">
         <div class="caption">ホームに戻る</div>
         <img class = "icon-img" src = "../../static/asset/images/homeicon.png" th:src="@{/asset/images/homeicon.png}"/>
       </button>
@@ -156,17 +184,8 @@
     </footer>
   </div>
   
-  <script src="../../static/js/common.js" th:src="@{/js/common.js}"></script> 
-  <!--リザルト画面専用ロジック（地図・ピン・ポップアップ）-->
-  <script src="../../static/js/quiz/result.js" th:src="@{/js/quiz/result.js}"></script>
-  <!--画面初期化JS-->
-  <script>
-        initGoalPage({
-      minutes: 32,                     // 例
-      distanceMeters: 0,                  
-      questions:response.questions,
-      answers:response.answers
-    });
-  </script>
+  <!--リザルト画面専用ロジック）-->
+  <script type="module" src="../../static/js/quiz/result.js" th:src="@{/js/quiz/result.js}"></script>
+  
 </body>
 </html>

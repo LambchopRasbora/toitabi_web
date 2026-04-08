@@ -1,4 +1,4 @@
-<!doctype html>
+d<!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
@@ -20,11 +20,59 @@
   <script th:inline="javascript">
     const postResponse =/*[[${postResponse}]]*/{};
   </script>
-  <main class="screen">
-    <!-- Header -->
-    <img class = "header-logo" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
-       <p class="lead">トイスポットが投稿できました！</p>
+  <div class ="screen">
+   <!-- Header -->
+    <header class="app-header">
+      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
+      <p class="lead">トイスポットが投稿できました</p>
+      <button class = "menu-btn"id ="menu-btn">
+        <p>メニュー</p>
+        <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
+      </button>
+    </header>
+    <!--メニューの画面-->
+    <nav id="side-menu" class="side-menu">
+      <div class ="menu-header">
+        <h1 class="menu-title">メニュー</h1>
+        <!--ログイン情報-->
+        <button class="user-info-btn" sec:authorize="isAuthenticated()" onclick="location.href='/mypage'">
+          <span class="username"
+                sec:authentication="name">
+          </span>
+        </button>
+        <!-- 未ログイン -->
+        <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
+          <span class="username">ログイン</span>
+        </button>
+      </div>
+      <!--メニュー項目 -->
+      <ul>
+        <li><button class = "menu-content-btn" onclick="location.href='/'">
+          <img class src ="../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          <p>ホーム画面へ戻る</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
+          <p>My図鑑</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+          <p>投稿したトイスポット</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/terms'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>利用規約</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/privacy'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>プライバシーポリシー</p>
+        </button></li>
+      </ul>
+      <button class="menu-close-btn">閉じる</button>
+    </nav>
 
+
+  <main class="content">
    <!-- 黒いカード -->
   <section class="spot-card">
     <!-- メイン写真 -->
@@ -39,21 +87,29 @@
     <!-- 説明文 -->
     <p class="caption" id="captionText"></p>
 
+    <!-- タグ -->
+    <div class="tag-list" id="tagList">
+
+    </div>
+
   </section>
 
-
-    <!-- Bottom actions -->
-    <div class="bottom-actions">
-      <button class="action-btn menu-btn" type="button" onclick="onclickSetting()">
-        <div class ="caption">メニュー </div>
-        <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
-      </button>
-
-      <button class="action-btn" type="button" onclick="location.href='/'">
-        <div class="caption">ホームに戻る</div>
-        <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-      </button>
-    </div>
   </main>
+
+  <!-- Bottom actions -->
+    <footer class="app-footer">
+  <div class="bottom-actions">
+    <button class="action-btn menu-btn"  type="button" >
+      <div class ="caption">メニュー </div>
+      <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
+    </button>
+
+    <button class="action-btn" type="button" onclick="location.href='/'">
+      <div class="caption">ホームに戻る</div>
+      <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+    </button>
+  </div>
+  </footer>
+</div>
   
 </html>

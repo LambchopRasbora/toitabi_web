@@ -49,10 +49,6 @@
   <script th:inline="javascript">
     let response =/*[[${response}]]*/; </script>
   <!--外部 JavaScript の読み込み-->
-  <!--次の問題・スポットへ遷移する ナビゲーション用JS を読み込む-->
-  <script src="../../static/js/navigate/questionnavidev.js" th:src="@{/js/navigate/questionnavipro.js}"></script>
-  <!--サーバー通信（fetch / Ajax）をまとめたJS-->
-  <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
   <!--回答データの処理や結果表示用JS-->
   <script type="module" src="../../static/js/quiz/answer.js" th:src="@{/js/quiz/answer.js}"></script>
   
@@ -70,13 +66,40 @@
 
     <!--メニューの画面-->
     <nav id="side-menu" class="side-menu">
-      <h1 class="menu-title">メニュー</h1>
-      
-
+      <div class ="menu-header">
+        <h1 class="menu-title">メニュー</h1>
+        <!--ログイン情報-->
+        <button class="user-info-btn" sec:authorize="isAuthenticated()" onclick="location.href='/mypage'">
+          <span class="username"
+                sec:authentication="name">
+          </span>
+        </button>
+        <!-- 未ログイン -->
+        <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
+          <span class="username">ログイン</span>
+        </button>
+      </div>
+      <!--メニュー項目 -->
       <ul>
         <li><button class = "menu-content-btn" onclick="location.href='/'">
-          <img class src ="../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
+          <img class src ="../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
           <p>ホーム画面へ戻る</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
+          <p>My図鑑</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+          <p>投稿したトイスポット</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/terms'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>利用規約</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/privacy'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>プライバシーポリシー</p>
         </button></li>
       </ul>
       <button class="menu-close-btn">閉じる</button>

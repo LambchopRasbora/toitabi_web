@@ -1,4 +1,6 @@
  
+ import { post } from "../common/serverRequest.js";
+ import { menuInitialize}from "../common/menu.js";
 
 // —— サムネ→メイン切替 —— //
 const main = document.getElementById('mainPhoto');
@@ -147,6 +149,19 @@ function postQuestion(isskip)
     };
   // ロード画面を表示
   document.getElementById("loadingOverlay").style.display = "flex";
+
+  //送信前に現在地が最新であるか確認し、最新でなければ再取得する
   if(Date.now()-lastsent<fetchTime) postCallback(latestLocation);
-  else navigator.geolocation.getCurrentPosition(postCallback,errorCallback, { enableHighAccuracy:true, timeout:20000, maximumAge:0 });
+  else navigator.geolocation.getCurrentPosition(postCallback,errorCallback, { enableHighAccuracy:true, timeout:20000, maximumAge:5000 });
 }
+
+//ドキュメントが読み込まれた際のイベント
+document.addEventListener('DOMContentLoaded',()=>{
+
+  const skip_btn=document.querySelector('.skip-btn');
+  const post_btn=document.querySelector('.post-btn');
+  if(skip_btn) skip_btn.addEventListener('click',()=>{postQuestion(true)});
+  if(post_btn) post_btn.addEventListener('click',()=>{postQuestion(false)});
+
+  menuInitialize();
+});

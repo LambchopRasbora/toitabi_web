@@ -12,7 +12,6 @@
   align-items:center;
   border:none;
   background:transparent;
-  padding:0;
   text-align:left;
   width:100%;
   cursor:pointer;
@@ -20,6 +19,7 @@
   /* 影とタップ感 */
   transition: transform .06s ease, box-shadow .06s ease;
 }
+
 
 .thumb{
   position: relative;
@@ -43,6 +43,41 @@
 .theme-list.open
 {
   max-height: 100vh; 
+}
+
+.theme-card{
+  position: relative; 
+  display:flex;
+  align-items:center;
+  border:none;
+  background:transparent;
+  text-align:left;
+  width:100%;
+  cursor:pointer;
+  
+  /* 影とタップ感 */
+  transition: transform .06s ease, box-shadow .06s ease;
+}
+
+.theme-label{
+  position: relative;
+  z-index: 1; 
+  background: #fff;
+  color:#000;
+  padding:24px 28px;
+  border-radius:999px;
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  width:100%;
+
+  border: #000 solid 2px;
+
+  /* ドット感のあるフォントに寄せる: ピクセル風が入っていれば上書き */
+  font-family: "Press Start 2P", "DotGothic16", "M PLUS 1 Code", system-ui, monospace;
+  font-size:22px;
+  letter-spacing:0.1em;
 }
 
 #totyu{

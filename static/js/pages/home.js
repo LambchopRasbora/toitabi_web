@@ -14,8 +14,6 @@ const localsession=Cookies.get('session_id');
 const continue_btn=document.getElementById('continue-btn');
 
 
-
-
 const themeCache=new Map();
 
 //クイズをスタートさせる関数
@@ -29,6 +27,7 @@ function quizStart({id,number})
   post("/game/quizStart",params);
 }
 
+//クイズをテーマでスタートさせる関数
 function quizStartWithTheme({id,number})
 {
   const params={
@@ -48,12 +47,13 @@ function quizCotinue({session_id})
   post("/game/quizResume",params);
 }
 
+//テーマカードを作成する関数
 function createThemeCard(theme)
 {
   const fragment=themecardtemplate.content.cloneNode(true);
-  fragment.querySelector(".area-card").addEventListener('click',()=>{quizStartWithTheme({id: theme.themeId,number: 3})});
-  fragment.querySelector("img").src=theme.thumbnailUri;
-  fragment.querySelector(".label").textContent=theme.name;
+  fragment.querySelector(".theme-card").addEventListener('click',()=>{quizStartWithTheme({id: theme.themeId,number: 3})});
+  //fragment.querySelector("img").src=theme.thumbnailUri;
+  fragment.querySelector(".theme-label").textContent=theme.name;
   return fragment;
 }
 

@@ -1,6 +1,7 @@
 import{post,uploadImageToPresignedURL } from '../common/serverRequest.js';
 import {menuInitialize} from '../common/menu.js';
 import { mapIcons } from "../common/map/mapicons.js";
+import { resizeImage } from '../common/imageResize.js';
 
 //filesは先に4の配列にしておくnullの場所にファイルを当てはめていく
 let files = [null,null,null,null];
@@ -92,17 +93,22 @@ async function postSpot(captionEl)
 
   console.log(files);
 
+  
+  //リサイズを行う
+  const resizedImagePromises=files.map(file=>resizeImage(file, { maxWidth: 1280, maxHeight: 1280, quality: 0.8, contenttype: 'image/jpeg' }));
+
+  
+  // presigned URL の取得
   //画像送信用のURL
   const url="/api/spotpost/uploadurl";
 
   const imagedescriptions=files.map((file)=>{
       return {
-        "extension":file?'.'+file.name.split('.').pop().toLowerCase():`.jpg`,
-        "contentType":file?file.type:'image/jpeg',
+        "extension":`.jpg`,
+        "contentType":'image/jpeg',
         "filesize":file?file.size:0
       }});
 
-  console.log(imagedescriptions);
   const presignedURLPromises = fetch(url,{method:'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -111,13 +117,15 @@ async function postSpot(captionEl)
     "images":imagedescriptions
   })});
 
-  // presigned URL の取得
+  //リサイズの完了を待つ(resizedImagesは純粋なバイナリの配列)
+  const resizedImages= await Promise.all(resizedImagePromises);
+
   const presignedURLResponse = await presignedURLPromises;
   if(!presignedURLResponse.ok)showError('アップロードURLの取得に失敗しました'+presignedURLResponse.statusText);
   const presignedURLData = await presignedURLResponse.json();
 
-  const promises = files
-    .map((f,i )=> uploadImageToPresignedURL(presignedURLData.images[i].uploadUri, f));
+
+  const promises = resizedImages.map((f,i )=> uploadImageToPresignedURL(presignedURLData.images[i].uploadUri, f));
   
   //タグの収集
   let tags = [];

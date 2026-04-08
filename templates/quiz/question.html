@@ -26,15 +26,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
   <!--現在地取得用JS-->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
-
-  <!--サーバー通信（fetch / Ajax）用-->
-  <script src="../../static/js/serverRequest.js" th:src="@{/js/serverRequest.js}"></script>
-  <!--データ暗号化処理-->
-  <script src="../../static/js/encrypt.js" th:src="@{/js/encrypt.js}"/></script>
-  <!--共通関数まとめ-->
-  <script src="../../static/js/common.js" th:src="@{/js/common.js}"/></script>
-  <!--問題画面の画面遷移制御-->
-  <script src="../../static/js/navigate/questionnavidev.js" th:src="@{/js/navigate/questionnavipro.js}"></script>
 </head>
 
 <!--ページ本体開始 背景色をCSS変数 --ink に設定-->
@@ -57,17 +48,46 @@
       </button>
     </header>
 
-  <!--メニューの画面-->
-  <nav id="side-menu" class="side-menu">
-    <h1 class="menu-title">メニュー</h1>
-    <ul>
-      <li><button class = "menu-content-btn" onclick="location.href='/'">
-        <img class src ="../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
-        <p>ホーム画面へ戻る</p>
-      </button></li>
-    </ul>
-    <button class="menu-close-btn">閉じる</button>
-  </nav>
+<!--メニューの画面-->
+    <nav id="side-menu" class="side-menu">
+      <div class ="menu-header">
+        <h1 class="menu-title">メニュー</h1>
+        <!--ログイン情報-->
+        <button class="user-info-btn" sec:authorize="isAuthenticated()" onclick="location.href='/mypage'">
+          <span class="username"
+                sec:authentication="name">
+          </span>
+        </button>
+        <!-- 未ログイン -->
+        <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
+          <span class="username">ログイン</span>
+        </button>
+      </div>
+      <!--メニュー項目 -->
+      <ul>
+        <li><button class = "menu-content-btn" onclick="location.href='/'">
+          <img class src ="../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          <p>ホーム画面へ戻る</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
+          <p>My図鑑</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
+          <img class src ="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+          <p>投稿したトイスポット</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/terms'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>利用規約</p>
+        </button></li>
+        <li><button class = "menu-content-btn" onclick="location.href='/privacy'">
+          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
+          <p>プライバシーポリシー</p>
+        </button></li>
+      </ul>
+      <button class="menu-close-btn">閉じる</button>
+    </nav>
 
   <!-- 中央スクロール領域 -->
   <main class="content" id="scrollArea">
@@ -128,19 +148,19 @@
     <!-- Bottom actions -->
     <div class="bottom-actions">
       <!--メニュー表示ボタン-->
-      <button class="action-btn" type="button" onclick= "postQuestion(true)" >
+      <button class="action-btn menu-btn" type="button" >
         <!--text-->
-        <div class ="caption">スキップ</div>
+        <div class ="caption">メニュー</div>
         <!--icon-->
         <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
       </button>
 
       <!--スポット確定ボタン-->
-      <button class="action-btn" type="button" onclick= "postQuestion(false)" >
+      <button class="action-btn post-btn" type="button">
         <!--text-->
         <div class="caption">トイスポット確定</div>
         <!--icon-->
-        <img class = "icon-img" src = "../../static/asset/images/confirmicon.png" th:src="@{/asset/images/spotpostlogo.png}"/>
+        <img class = "icon-img" src = "../../static/asset/images/icon/icon_guess.png" th:src="@{/asset/images/icon/icon_guess.png}"/>
       </button>
     </div>
   </footer>
@@ -153,6 +173,6 @@
   </div>
 
   <!-- Question制御用スクリプト -->
-  <script src="../../static/js/quiz/question.js" th:src="@{/js/quiz/question.js}"></script>
+  <script type="module" src="../../static/js/quiz/question.js" th:src="@{/js/quiz/question.js}"></script>
 </body>
 </html>
