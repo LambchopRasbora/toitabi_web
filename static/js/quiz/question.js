@@ -44,7 +44,7 @@ const mapElement = document.getElementById("map");
 const map = mapInitialize(mapElement);
 
 //位置情報初期設定
-let lc=L.control.locate({ position: "topright" }).addTo(map);
+let lc=L.control.locate({ position: "topright" ,setView: "never",keepCurrentZoomLevel: true}).addTo(map);
 lc.start();
 
 navigator.geolocation.getCurrentPosition(

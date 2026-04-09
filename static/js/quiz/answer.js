@@ -5,6 +5,8 @@ import { snsShare } from "../common/snsShare.js";
 import { mapInitialize } from "../common/map/mapInitialize.js";
 
 let map;
+let bounds;
+
 function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
   // 数値表示
   const km = distanceMeters >= 1000? (distanceMeters / 1000).toFixed(1) + " km": Math.round(distanceMeters) + " m";
@@ -17,7 +19,7 @@ function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
   map = mapInitialize(mapElement);
 
   //現在地マーカーの設置
-  let lc = L.control.locate({ position: "topright" }).addTo(map);
+  let lc = L.control.locate({ position: "topright" ,setView: "never",keepCurrentZoomLevel: true}).addTo(map);
   lc.start();
 
   const confirmMarker = L.marker(userLatLng, { icon: mapIcons.userConfirm }).addTo(map).bindTooltip("あなたの確定位置");
@@ -25,7 +27,7 @@ function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
 
   // ライン&両者が入る範囲にフィット
   const line = L.polyline([userLatLng, spotLatLng], { weight: 4, opacity: 0.6 }).addTo(map);
-  map.fitBounds(line.getBounds().pad(0.3));
+  bounds=line.getBounds().pad(0.3);
 
   // ざっくり距離（地図上）を表示（任意）
   const meters = map.distance(userLatLng, spotLatLng);
@@ -47,6 +49,10 @@ function showMain()
 {
     const app=document.getElementsByClassName("app")[0];
     app.classList.remove("hidden");
+
+    //地図サイズの再設定
+    map.invalidateSize();
+    if(bounds)map.fitBounds(bounds);
 }
 
 function onclickNext()

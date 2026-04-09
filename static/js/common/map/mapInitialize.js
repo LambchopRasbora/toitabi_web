@@ -5,7 +5,7 @@ export function mapInitialize(mapContainer)
 
     
     const map=L.map(mapContainer,{zoomControl:false,maxZoom:21}) //地図上のズームコントロールを消す
-        .setView([34.985458, 135.757756], 19); // 京都駅の座標を初期表示
+        .setView([34.985458, 135.757756], 13); // 京都駅の座標を初期表示
 
     //openstreetmapのタイルレイヤーを追加
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
