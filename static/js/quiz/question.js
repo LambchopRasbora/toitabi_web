@@ -1,6 +1,7 @@
  
  import { post } from "../common/serverRequest.js";
  import { menuInitialize}from "../common/menu.js";
+ import { mapInitialize } from "../common/map/mapInitialize.js"
 
 // —— サムネ→メイン切替 —— //
 const main = document.getElementById('mainPhoto');
@@ -39,22 +40,17 @@ if(currentSpot.description)descriptionText.textContent=currentSpot.description;
 
 // —— 現在地マップ（Leaflet） —— //
 //マップオブジェクトの作成
-const map = L.map('map', { zoomControl: false });
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap contributors'}).addTo(map);
+const mapElement = document.getElementById("map");
+const map = mapInitialize(mapElement);
 
 //位置情報初期設定
+let lc=L.control.locate({ position: "topright" }).addTo(map);
+lc.start();
+
 navigator.geolocation.getCurrentPosition(
   (pos) => {
     const {latitude, longitude} = pos.coords;
     map.setView([latitude, longitude], 17);
-    //現在地を表示するマーカーの初期化
-    var lc = L.control
-      .locate({
-        position: "topright"
-      })
-      .addTo(map);
-    lc.start();
   },
   () => {
     // 失敗時は表示せずassertを出す

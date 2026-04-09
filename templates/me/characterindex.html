@@ -80,7 +80,7 @@
      <!--レイアウト用のラッパー-->
      <div class="container">
         <h2 class="section-title">キャラクター一覧</h2>
-        <div class = "charactor-conatainer">
+        <div class = "charactor-container">
           <!--キャラクターのカードを繰り返し表示-->
           <div class="charactor-card" th:each="charactor : ${charactors}">
             <img class="charactor-image" th:src="@{${charactor.lowimageUrl}}" alt="キャラクター画像">

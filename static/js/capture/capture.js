@@ -2,10 +2,10 @@ import{post,uploadImageToPresignedURL } from '../common/serverRequest.js';
 import {menuInitialize} from '../common/menu.js';
 import { mapIcons } from "../common/map/mapicons.js";
 import { resizeImage } from '../common/imageResize.js';
+import { mapInitialize } from '../common/map/mapInitialize.js';
 
 //filesは先に4の配列にしておくnullの場所にファイルを当てはめていく
 let files = [null,null,null,null];
-let geo = null; 
  //最新の現在地(この変数が変更される)
 let latestLocation={latitude:null,longitude:null};
 
@@ -162,11 +162,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   const mapFrame=document.getElementById('mapFrame');
   const locStatus  = document.getElementById('locStatus');
 
-  const map=L.map(mapFrame).setView([34.985458, 135.757756], 13);
+  const map=mapInitialize(mapFrame);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
   const marker=L.marker([34.985458, 135.757756],{icon:mapIcons.postedSpot}).bindTooltip('現在地').addTo(map);
 
   //現在地を取得
