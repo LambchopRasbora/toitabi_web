@@ -26,136 +26,91 @@
 <body>
   <div class="screen">
     <!-- Header -->
-    <header class="app-header">
-      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
-      <p class="lead">トイスポットを投稿しよう!</p>
-      <button class = "menu-btn" id ="menu-btn">
-        <p>メニュー</p>
-        <img class = "icon-img" src="..\..\static\asset\images\icon\icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
-      </button>
-    </header>
+    <div th:replace="~{common/layout :: header-nav('トイスポット投稿')}"></div>
 
-    <!--メニューの画面-->
-    <nav id="side-menu" class="side-menu">
-      <div class ="menu-header">
-        <h1 class="menu-title">メニュー</h1>
-        <!--ログイン情報-->
-        <button class="user-info-btn" sec:authorize="isAuthenticated()" onclick="location.href='/mypage'">
-          <span class="username"
-                sec:authentication="name">
-          </span>
+    <main class ="content">
+      <div class="container">
+        <button class="camera-btn" id="shootBtn" type="button" aria-label="カメラを起動">
+          <p>画像を選択する<br>(人の顔などのプライバシーに注意してください)</p>
+          <img src="../../static/asset/images/cameraicon.png" th:src="@{/asset/images/cameraicon.png}" alt="" class="camera-icon">
         </button>
-        <!-- 未ログイン -->
-        <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
-          <span class="username">ログイン</span>
-        </button>
-      </div>
-      <!--メニュー項目 -->
-      <ul>
-        <li><button class = "menu-content-btn" onclick="location.href='/'">
-          <img class src ="../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-          <p>ホーム画面へ戻る</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
-          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
-          <p>My図鑑</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
-          <img class src ="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-          <p>投稿したトイスポット</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/terms'">
-          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
-          <p>利用規約</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/privacy'">
-          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
-          <p>プライバシーポリシー</p>
-        </button></li>
-      </ul>
-      <button class="menu-close-btn">閉じる</button>
-    </nav>
-
-<main class ="content">
-  <div class="container">
-    <button class="camera-btn" id="shootBtn" type="button" aria-label="カメラを起動">
-      <p>画像を選択する<br>(人の顔などのプライバシーに注意してください)</p>
-      <img src="../../static/asset/images/cameraicon.png" th:src="@{/asset/images/cameraicon.png}" alt="" class="camera-icon">
-    </button>
-   
-    
-  <!-- 実際の入力要素（4枚まで） -->
-  <input id="fileInput" type="file" accept="image/*" multiple hidden />
-
-  <!-- フォームエリア-->
-  <section id="formArea" class="form-area is-hidden">
-    <!-- プレビューエリア -->
-    <div class="preview-grid" id="previewGrid"></div>
-
-    <button type="button" id="retakeBtn" class="ghost-btn field">撮り直す</button>
-
-    <div class="form-fields">
-      <label class="field">
-        <span class="label">説明文</span>
-        <textarea id="caption" rows="3" placeholder="どんな場所か、ひとこと説明を書いてください（お気に入りの理由・あなたのエピソードなど、任意）"></textarea>
-      </label>
-
-      <!--位置情報を添付する-->
-      <div class="field">
-        <div id="mapFrame" class="map" src="" title="地図"></div>
-        <button type="button" id="locBtn" class="sec-btn">現在地に設定</button>
-        <span id="locStatus" class="muted">位置情報は未取得</span>
-      </div>
-
-      <div class="field">
-        <span class="label">タグ</span>
-        <div class ="grid tag-area">
-        </div>
-        <template id="tag-template">
-          <button class="tags" data-active="false" data-tagName="">
-            <span class="tag-label">グルメ</span>
-          </button>
-        </template>
-
-        <div class ="tag-input-container">
-          <input class="tag-input-field" type="text" id="tagInput" placeholder="タグを追加" />
-          <button class="tag-add-btn" id="addTagBtn" type="button">新しいタグを追加</button>
-        </div>
-      </div>
-
-      <div class="actions">
         
-        <button type="button" id="submitBtn" class="icon-btn" disabled>
-          <p>投稿する!!</p>
-          <img src="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}" alt="投稿" class="btn-icon">
+        <!-- 実際の入力要素（4枚まで） -->
+        <input id="fileInput" type="file" accept="image/*" multiple hidden />
+
+        <!-- フォームエリア-->
+        <section id="formArea" class="form-area is-hidden">
+          <!-- プレビューエリア -->
+          <div class="preview-grid" id="previewGrid"></div>
+
+          <button type="button" id="retakeBtn" class="ghost-btn field">撮り直す</button>
+
+          <div class="form-fields">
+            <div class="field">
+              <span class="username" sec:authentication="name"></span>
+              <!--未ログイン時-->
+              <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
+                <span class="username">ログイン</span>
+              </button>
+            </div>
+
+            <label class="field">
+              <span class="label">説明文</span>
+              <textarea id="caption" rows="3" placeholder="どんな場所か、ひとこと説明を書いてください（お気に入りの理由・あなたのエピソードなど、任意）"></textarea>
+            </label>
+
+            <!--位置情報を添付する-->
+            <div class="field">
+              <div id="mapFrame" class="map" src="" title="地図"></div>
+              <button type="button" id="locBtn" class="sec-btn">現在地に設定</button>
+              <span id="locStatus" class="muted">位置情報は未取得</span>
+              <span>地図上を長押しでも位置を設定できます</span>
+            </div>
+
+            <div class="field">
+              <span class="label">タグ</span>
+              <div class ="grid tag-area">
+              </div>
+              <template id="tag-template">
+                <button class="tags" data-active="false" data-tagName="">
+                  <span class="tag-label">グルメ</span>
+                </button>
+              </template>
+
+              <div class ="tag-input-container">
+                <input class="tag-input-field" type="text" id="tagInput" placeholder="タグを追加" />
+                <button class="tag-add-btn" id="addTagBtn" type="button">新しいタグを追加</button>
+              </div>
+            </div>
+
+            <div class="actions">
+              
+              <button type="button" id="submitBtn" class="icon-btn" disabled>
+                <p>投稿する!!</p>
+                <img src="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}" alt="投稿" class="btn-icon">
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!-- Bottom actions -->
+    <footer class="app-footer">
+      <div class="bottom-actions">
+        <button class="action-btn menu-btn"  type="button" >
+          <div class ="caption">メニュー </div>
+          <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
+        </button>
+        <button class="action-btn" type="button" onclick="location.href='/'">
+          <div class="caption">ホームに戻る</div>
+          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
         </button>
       </div>
-    </div>
-  </section>
-
-     </div>
-     </main>
-
-
-    <!-- Bottom actions -->
-      <footer class="app-footer">
-    <div class="bottom-actions">
-      <button class="action-btn menu-btn"  type="button" >
-        <div class ="caption">メニュー </div>
-        <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
-      </button>
-
-      <button class="action-btn" type="button" onclick="location.href='/'">
-        <div class="caption">ホームに戻る</div>
-        <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-      </button>
-    </div>
     </footer>
     <!-- ローディングオーバーレイ -->
     <div id="loadingOverlay">
       <div class="spinner"></div>
     </div>
   </div>
-  
 </body>
 </html>

@@ -3,29 +3,15 @@ import { menuInitialize}from "../common/menu.js"
 
 //areasを取得
 const buttonareas=document.getElementsByClassName("buttonareas")[0];
-const zones=data?data.zoneDtos:null;
 const areas=data?data.areas:null;
 
 const areacardtemplate=document.getElementById("area-card-template");
 
 const themecardtemplate=document.getElementById("theme-card-template");
 
-const localsession=Cookies.get('session_id');
-const continue_btn=document.getElementById('continue-btn');
-
-
+//キャッシュしたエリアのテーマを保存するためのMap
 const themeCache=new Map();
 
-//クイズをスタートさせる関数
-function quizStart({id,number})
-{
-  const params={
-    "zoneId":id,
-    "themeId":null,
-    "totalQuestionNumber":number
-  };
-  post("/game/quizStart",params);
-}
 
 //クイズをテーマでスタートさせる関数
 function quizStartWithTheme({id,number})
@@ -36,6 +22,15 @@ function quizStartWithTheme({id,number})
     "totalQuestionNumber":number
   };
   post("/game/quizStart",params);
+}
+
+function quizStartTemporary({polygon,number})
+{
+  const params={
+    "polygon":polygon,
+    "totalQuestionNumber":number
+  };
+  post("/game/quizStartTemporary",params);
 }
 
 //quizを途中から行う関数
@@ -52,7 +47,6 @@ function createThemeCard(theme)
 {
   const fragment=themecardtemplate.content.cloneNode(true);
   fragment.querySelector(".theme-card").addEventListener('click',()=>{quizStartWithTheme({id: theme.themeId,number: 3})});
-  //fragment.querySelector("img").src=theme.thumbnailUri;
   fragment.querySelector(".theme-label").textContent=theme.name;
   return fragment;
 }
@@ -64,17 +58,12 @@ async function togglethemeList(areaId,container)
     container.classList.toggle("open");
     return;
   }
-  if(themeCache.has(areaId))
-  {
-    return;
-  }
-  const res= await fetch(`/api/theme/findbyareaid?areaId=${areaId}`);
-  if(!res.ok)
-  {
-    throw new Error('Failed to fetch themes');
-  }
-  const data=await res.json();
+  if(themeCache.has(areaId)) return;
 
+  const res= await fetch(`/api/theme/findbyareaid?areaId=${areaId}`);
+  if(!res.ok)throw new Error('Failed to fetch themes');
+  
+  const data=await res.json();
   themeCache.set(areaId,data);
   
   for(const theme of data)
@@ -87,10 +76,13 @@ async function togglethemeList(areaId,container)
   return;
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',()=>
+{
+  const continue_btn=document.getElementById('continue-btn');
   //保存されているlocalsessionがあれば途中からを表示
   if(continue_btn)
   {
+    const localsession=Cookies.get('session_id');
     if(localsession)
     {
       continue_btn.addEventListener('click',()=>quizCotinue({session_id:localsession}));
@@ -101,31 +93,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
   }
 
-  //送信されたzoneを用いてクイズスタートボタンを作成
-  if(zones)
-  {
-    zones.forEach(zone=>{
-      //area-card部分作成
-      let area_card=document.createElement("button");
-      area_card.className="area-card";
-      buttonareas.appendChild(area_card);
-      area_card.addEventListener('click',()=>{quizStart({id: zone.id,number: 3})});
-      //thumb部分作成
-      let thumb=document.createElement("div");
-      thumb.className="icon-circle";
-      area_card.appendChild(thumb);
-      //map部分作成
-      let icon=document.createElement("img");
-      icon.src=zone.imagepath;
-      thumb.appendChild(icon);
-      //label作成
-      let label=document.createElement("div");
-      label.className="label";
-      label.textContent=zone.name;
-      area_card.appendChild(label);
-    });
-  }
-
+  //areasがあればエリアカードを作成
   if(areas)
   {
     areas.forEach(area=>{
@@ -141,5 +109,8 @@ document.addEventListener('DOMContentLoaded',()=>{
       buttonareas.appendChild(fragment);
     });
   }
+
+  //menuの初期化
   menuInitialize();
+  
 });

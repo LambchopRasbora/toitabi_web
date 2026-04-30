@@ -16,3 +16,26 @@ export function mapInitialize(mapContainer)
 
     return map;
 }
+
+export function locateInitialize(map)
+{
+    const lc = L.control.locate({ position: "topright",setView: "never",keepCurrentZoomLevel: true}).addTo(map);
+    lc.start();
+    return lc;
+}
+
+export function polygonInitialize(geoJson,map)
+{
+    const styles={
+        color:"#000",
+        weight:4,
+        opacity:1,
+        fill:false
+    };
+
+    L.geoJson(geoJson,
+        {
+            style:styles
+        }
+    ).addTo(map);
+}

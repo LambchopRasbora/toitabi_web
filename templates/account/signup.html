@@ -1,23 +1,42 @@
-
 <!DOCTYPE html>
 <html>
-    <head>
-    </head>
-    <body>
-        <form th:action="@{/signup/createuser}" method="post">
+  <head>
+      <!-- CSRF -->
+      <meta name="_csrf" th:content="${_csrf.token}" />
+      <meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
+      <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+      <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+      <title>アカウント登録</title>
+  </head>
+
+  <body>
+    <div class="screen">
+      <div th:replace="~{common/layout :: header-nav('ログイン')}"></div>
+      <script th:inline ="javascript">
+        const error= /*[[${error}]]*/;
+      </script>
+      <main>
+        <form th:action="@{/signup}" th:object="${form}" method="post">
             <div>
                 <label>ユーザー名</label>
-                <input type="text" name="username">
+                <input type="text" name="username" required>
+                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
             </div>
             <div>
                 <label>メールアドレス</label>
-                <input type="text" name="mail">
+                <input type="email" name="mail" required>
+                <p th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
             </div>
             <div>
                 <label>パスワード</label>
-                <input type="text" name="password">
+                <input type="password" name="password" required>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
             </div>
             <button type="submit">登録</button>
         </form>
-    </body>
-</html>
+      </main>
+    </div>
+    <script type="module" src="../../static/js/account/signup.js" th:src="@{/js/account/signup.js}"></script>
+  </body>
+    </html>

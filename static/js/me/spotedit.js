@@ -1,15 +1,23 @@
-import{post,uploadImageToPresignedURL } from '../common/serverRequest.js';
+import{post,uploadImageToPresignedURL,fetchPresignedURL } from '../common/serverRequest.js';
 import {menuInitialize} from '../common/menu.js';
 import { mapIcons } from "../common/map/mapicons.js";
 import { resizeImage } from '../common/imageResize.js';
 import { mapInitialize } from '../common/map/mapInitialize.js';
 
-//filesは先に4の配列にしておくnullの場所にファイルを当てはめていく
-let files = [null,null,null,null];
+
+let images=[
+    {id:0,src:'/asset/images/default/NoImage.jpg',file:null,status:'NONE'},
+    {id:1,src:'/asset/images/default/NoImage.jpg',file:null,status:'NONE'},
+    {id:2,src:'/asset/images/default/NoImage.jpg',file:null,status:'NONE'},
+    {id:3,src:'/asset/images/default/NoImage.jpg',file:null,status:'NONE'},
+];
+
  //最新の現在地(この変数が変更される)
 let latestLocation={latitude:null,longitude:null};
 
 let currentForucusImgId=0;
+
+let editSpot=null;
 
 //currentForcusImgIdを更新して、プレビューのimgのfocusedクラスを切り替える
 function setcurrentForcusImgId(id,previewGrid)
@@ -26,19 +34,24 @@ function setcurrentForcusImgId(id,previewGrid)
 }
 
 //画像関係をリセットする
-function resetImages(fileInput, previewGrid, formArea, submitBtn)
+function resetImages(imageLements, formArea, submitBtn)
 {
-  fileInput.value = '';
-  previewGrid.innerHTML = '';
-  formArea.classList.add('is-hidden');
   submitBtn.disabled = true;
-  files = [];
+  images = [
+    {id:0,src:'/asset/images/default/NoImage.jpg',file:null,status:'NONE'},
+    {id:1,src:'/asset/images/default/NoImage.jpg',file:null,status:'NONE'},
+    {id:2,src:'/asset/images/default/NoImage.jpg',file:null,status:'NONE'},
+    {id:3,src:'/asset/images/default/NoImage.jpg',file:null,status:'NONE'},
+  ];
+
+  imageLements.forEach((el,index)=>el.src=images[index].src);
 }
 
 //送信する位置情報をセットする
 function setlatestLocation(lat, lng,marker,locationStatusElement)
 {
-  latestLocation={latitude:lat,longitude:lng};
+  latestLocation.latitude=lat;
+  latestLocation.longitude=lng;
   marker.setLatLng([lat, lng]);
   locationStatusElement.textContent = `位置: 緯度 ${latestLocation.latitude.toFixed(5)}, 経度 ${latestLocation.longitude.toFixed(5)} `;
 }
@@ -74,95 +87,85 @@ function showError(message)
 //スポットのポストを行う
 async function postSpot(captionEl)
 {
-  //filesからnull/undefinedを除外してFileオブジェクトだけにする
-  files=files.filter(f=>f instanceof File);
-
-  const fd = new FormData();
-  if(files.length<1){
-    alert('画像が選択されていません!!');
-    return;
-  }
-  if(!latestLocation)
-  {
-    alert('トイスポットの位置が選択されていません!!');
-    return;
-  }
-  // ロード画面を表示
-  document.getElementById("loadingOverlay").style.display = "flex";
-  
-  //リサイズを行う
-  const resizedImagePromises=files.map(
-    file=>resizeImage(file, { maxWidth: 1280, maxHeight: 1280, quality: 0.8, contenttype: 'image/jpeg' })
-    .catch(err=>{showError('画像のリサイズに失敗しました');})
-  );
-  
-  // presigned URL の取得
-  //画像送信用のURL
-  const url="/api/spotpost/uploadurl";
-
-  const imagedescriptions=files.map((file,index)=>{
-      return {
-        "id":index,
-        "extension":`.jpg`,
-        "contentType":'image/jpeg',
-        "filesize":file?file.size:0
-      }});
-
-  const presignedURLPromises = fetch(url,{method:'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body:JSON.stringify({
-    "images":imagedescriptions
-  })});
-
-  //リサイズの完了を待つ(resizedImagesは純粋なバイナリの配列)
-  const resizedImages= await Promise.all(resizedImagePromises);
-
-  const presignedURLResponse = await presignedURLPromises;
-  if(!presignedURLResponse.ok)showError('アップロードURLの取得に失敗しました'+presignedURLResponse.statusText);
-  const presignedURLData = await presignedURLResponse.json();
-
-
-  const promises = resizedImages.map((f,i)=> uploadImageToPresignedURL(presignedURLData.images[i].uploadUri, f));
-  
-  //タグの収集
-  let tags = [];
-
-  const tagElements=document.getElementsByClassName('tags');
-
-  for(let tagElement of tagElements)
-  {
-    if(tagElement.dataset.active==='true')
+    if(images.filter(img=>img.status!='NONE').length<1)
     {
-      tags.push(tagElement.dataset.tagName);
+        alert('画像が選択されていません!!');
+        return;
     }
-  }
+    
+    // ロード画面を表示
+    document.getElementById("loadingOverlay").style.display = "flex";
+
+    try
+    {
+        //アップロード用のURL
+        const imagedescriptions=images.filter(img=>img.status==='NEW')
+        .map(img=>({
+            "extension":`.jpg`,
+            "contentType":'image/jpeg',
+            "filesize":img.file.size
+        }));
+
+        const presignedURLs = await fetchPresignedURL(imagedescriptions);
+
+        const uploadPromises=images.map(async (img,index)=>{
+            if(img.status==='NEW')
+            {
+                const resizedFile = await resizeImage(img.file, { maxWidth: 1280, maxHeight: 1280, quality: 0.8, contenttype: 'image/jpeg' })
+                .catch(err=>{throw new Error('画像のリサイズに失敗しました'+err.message);});
+
+                const presingedURL=presignedURLs.images.shift();
+                await uploadImageToPresignedURL(presingedURL.uploadUri,resizedFile)
+                .catch(err=>{throw new Error('画像のアップロードに失敗しました'+err.message);});
+                return {id:index,src:presingedURL.publicAccessUri,file:null,status:'NEW'}; 
+            }
+            return img;
+        });
+        
+        images = await Promise.all(uploadPromises);
+    }
+    catch(err)
+    {
+        showError(err.message);
+        return;
+    }
+
+  //タグの収集
+  let tags=[];
+  const tagElements=document.getElementsByClassName('tags');
+  Array.from(tagElements).filter(tagElement=>tagElement.dataset.active==='true')
+  .forEach(tagElement=>tags.push(tagElement.dataset.tagName));
 
   //スポットのフォーム作成
   let params={
+    "spotId":editSpot.spotId,
     "latitude":latestLocation.latitude,
     "longitude":latestLocation.longitude,
     "description":captionEl.value,
-    "images":presignedURLData.images.map(img=>img.publicAccessUri),
-    "tags":tags
+    "images":images.filter(img=>img.status!=='NONE').map(img=>img.src),
+    "tags": tags
   }
-  //画像のアップロード完了まで待つ
-  const responses= await Promise.all(promises);
-
-  if(responses.some(res=>!res.ok))
+  //ポストを行う
+  try{
+    post('/me/spotedit',params,);
+  }
+  catch(err)
   {
-    showError('画像のアップロードに失敗しました');
+    showError('スポットの投稿に失敗しました'+err.message);
     return;
   }
-
-  //ポストを行う
-  post('./confirm',params,);
 }
+
+
 
 //初期化管理(ページのすべてが読み込まれた後に実行)
 document.addEventListener('DOMContentLoaded',()=>{
-  
+    //spotから値をセットする
+    if(!spot)alert('スポットの情報の取得に失敗しました');
+    editSpot=structuredClone(spot);
+    latestLocation={latitude:editSpot.latitude,longitude:editSpot.longitude};
+    editSpot.images.forEach((img, index)=>{images[index]={id:index,src:img,status:'STAY'};});
+
   //地図関係の初期化
   const mapFrame=document.getElementById('mapFrame');
   const locStatus  = document.getElementById('locStatus');
@@ -170,18 +173,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   const map=mapInitialize(mapFrame);
 
   const marker=L.marker([34.985458, 135.757756],{icon:mapIcons.postedSpot}).bindTooltip('現在地').addTo(map);
-
-  //現在地を取得
-  navigator.geolocation.getCurrentPosition(
-    (pos)=>{
-      setlatestLocation(pos.coords.latitude,pos.coords.longitude,marker,locStatus);
-      map.setView([pos.coords.latitude, pos.coords.longitude], 13);
-    },
-    (err)=>{
-      latestLocation=null;
-      console.error("位置情報に関するエラー"+err);
-    },
-    { enableHighAccuracy:true, timeout:10000, maximumAge:5000 });
+    setlatestLocation(latestLocation.latitude,latestLocation.longitude,marker,locStatus);
+    map.setView([latestLocation.latitude, latestLocation.longitude], 13);
 
   //mapFrameでのイベントを削除
   mapFrame.addEventListener('contextmenu', (e) => e.preventDefault(),false);
@@ -192,7 +185,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   const fileInput  = document.getElementById('fileInput');
   const formArea   = document.getElementById('formArea');
   const previewGrid = document.getElementById('previewGrid');
+    const imageEls=previewGrid.children;
+    Array.from(imageEls).forEach((e,i)=>e.onclick=()=>setcurrentForcusImgId(i,previewGrid))
+    images.forEach((img,index)=>{imageEls[index].src=img.src;});
+
   const captionEl  = document.getElementById('caption');
+  captionEl.value=editSpot.description;
   const submitBtn  = document.getElementById('submitBtn');
   const retakeBtn  = document.getElementById('retakeBtn');
 
@@ -204,7 +202,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   fileInput.addEventListener('change', () => {
 
     const fileNumber=fileInput.files.length;
-    if(currentForucusImgId+fileNumber>files.length)
+    if(fileNumber<1)return;
+
+    if(currentForucusImgId+fileNumber>images.length)
     {
       alert('アップロードは最大4枚までです。');
       fileInput.value = '';
@@ -213,67 +213,35 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     //currentForcusImgIdからfilesを更新していく(nullでなくても置き換え)
     for (let i = 0; i < fileNumber; i++) {
-      const targetIndex = currentForucusImgId + i;
-      if (targetIndex >= files.length) break;
-      files[targetIndex] = fileInput.files[i];
+        const targetIndex = currentForucusImgId + i;
+        if (targetIndex >= images.length)
+        {
+        alert('アップロードは最大4枚までです。');
+        break;
+      }
+      images[targetIndex]={id:targetIndex,src:URL.createObjectURL(fileInput.files[i]),file:fileInput.files[i],status:'NEW'};
+      imageEls[targetIndex].src = images[targetIndex].src;
     }
 
     //追加した分だけcurrentForcusImgidを進める(0<=currentForcusImgId<4)
     currentForucusImgId+=fileNumber;
     currentForucusImgId=Math.min(3,currentForucusImgId);
-
-    // ファイルが選択されていない場合は処理を終了
-    if (files.length === 0) return;
-
-    // 4枚制限
-    if (files.length > 4) {
-      alert('アップロードは最大4枚までです。');
-      fileInput.value = '';
-      files = files.slice(0, 4);
-    }
-
-    // プレビュー表示
-    previewGrid.innerHTML = '';
-    files.forEach((file,index )=> {
-      if(file)
-      {
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        img.onclick=()=>{ setcurrentForcusImgId(index,previewGrid); }
-        previewGrid.appendChild(img);
-      }
-    });
-
+    
     //現在選択されているimgのクラスをfocusedに設定
     setcurrentForcusImgId(currentForucusImgId,previewGrid);
     
     fileInput.value = '';
-    submitBtn.disabled = (files.length < 1);
+    submitBtn.disabled = (images.filter(img => img.status !== 'NONE').length < 1);
   });
 
-  // 位置情報取得
-  const locBtn     = document.getElementById('locBtn');
-  locBtn.addEventListener('click', () => {
-    if (!('geolocation' in navigator)) {
-      locStatus.textContent = 'この端末は位置情報に非対応です';
-      return;
-    }
-    locStatus.textContent = '取得中…';
-    navigator.geolocation.getCurrentPosition(
-      pos =>  setlatestLocation(pos.coords.latitude,pos.coords.longitude,marker,locStatus),
-      err => {
-        console.warn(err);
-        locStatus.textContent = '取得に失敗しました';
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
-  });
+  setcurrentForcusImgId(0,previewGrid);
+
   //タグの初期化
-  const initailTags=["グルメ","観光地","ショップ","何気ない景色","史跡","みんなの思い出"]
+  const initailTags=new Set(["グルメ","観光地","ショップ","何気ない景色","史跡","みんなの思い出"],editSpot.tags);
   const tagArea=document.getElementsByClassName('tag-area')[0];
   const tagTemplate=document.getElementById('tag-template');
 
-  initailTags.forEach(tag=>addTag(tagArea,tagTemplate,tag,false));
+  initailTags.forEach(tag=>addTag(tagArea,tagTemplate,tag,editSpot.tags.includes(tag)));
 
   //タグの追加ボタンの設定
   const addTagBtn=document.getElementById('addTagBtn');
@@ -288,21 +256,19 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
   //タグ入力でEnterキーが押されたときのイベント
   tagInput.addEventListener('keypress',(e)=>{
-    if(e.key==='Enter')
-    {
-      addTagBtn.click();
-    } 
+    if(e.key==='Enter')addTagBtn.click();
   });
 
 
   // 撮り直しボタンの設定
-  retakeBtn.addEventListener('click', () => {resetImages(fileInput, previewGrid, formArea, submitBtn);});
+  retakeBtn.addEventListener('click', () => {resetImages(imageEls, formArea, submitBtn);});
 
   // 投稿ボタンの設定
   submitBtn.addEventListener('click', async () => 
   {
     await postSpot(captionEl);
   });
+  submitBtn.disabled = (images.filter(img => img.status !== 'NONE').length < 1);
   //メニューの初期化
   menuInitialize();
 });

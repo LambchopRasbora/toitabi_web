@@ -1,0 +1,46 @@
+.login-main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.login-title
+{
+    text-align: center;
+}
+.login-form
+{
+    border: 3px solid #000;
+    border-radius: 5%;
+    padding: 5%;;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-group
+{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+.btn-login
+{
+
+    border: 3px solid #000;
+    border-radius: 100vmax;
+    cursor: pointer;
+    width: 60%;
+    position: relative;
+    left: 15%;
+}
+.signup-link
+{
+    text-align: center;
+    margin-top: 1em;
+}
+
+h3
+{
+    margin: 2% 0%;
+}

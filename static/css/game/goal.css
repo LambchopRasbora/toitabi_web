@@ -153,6 +153,65 @@ main {
     display:flex; align-items:center; gap:.4em;
   }
 
+
+  
+/* 選択中のサムネ */
+.focused{
+  border-color:#fff;              /* 白枠で選択中を強調 */
+  box-shadow:0 0 0 2px #000 inset;/* 黒の内枠で視認性UP */
+}
+
+.main-image
+{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width:100%;
+  
+}
+
+.preview-grid
+{
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+
+  width: 100%;
+}
+
+.preview-image
+{
+  width: 100%;
+  height: 80px;
+  object-fit: cover; /* アスペクト比を保ちつつ、画像を枠に合わせてトリミング */
+}
+
+.content-field
+{
+  width: 100%;
+
+  padding : 10px;
+  margin-bottom: 20px;
+
+  gap: 2px;
+
+  border: #000 solid 2px;
+
+  border-radius: 30px;
+}
+
+.hint-field
+{
+  padding-left: 30px;
+}
+
+.tag
+{
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 10px;;
+}
+
+
   .hidden{ display:none; }
 
   #get-overlay{
@@ -182,6 +241,8 @@ main {
     margin-top: 12px;
     opacity: 0;
   }
+
+
 
   @keyframes characterFade{
   from{

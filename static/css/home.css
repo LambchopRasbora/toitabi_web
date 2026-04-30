@@ -20,7 +20,6 @@
   transition: transform .06s ease, box-shadow .06s ease;
 }
 
-
 .thumb{
   position: relative;
   overflow:hidden; 
@@ -61,7 +60,6 @@
 
 .theme-label{
   position: relative;
-  z-index: 1; 
   background: #fff;
   color:#000;
   padding:24px 28px;
@@ -80,35 +78,15 @@
   letter-spacing:0.1em;
 }
 
+.thumb-img
+{
+  object-fit: cover;
+  height: 100%;
+}
+
 #totyu{
   background-image: url("/static/asset/images//totyuicon.png");
 }
-/* ページ下の帰属表記（小さめ） */
-.map-attrib{
-  font-size:12px; text-align:center; color:#666;
-  margin:12px 0 0;
-}
-.map-attrib a{ color:inherit; }
-
-.label{
-  position: relative;
-  z-index: 1; /* ← labelを背面に */
-  background:var(--pill);
-  color:#fff;
-  margin-left:-40px;           /* 円と pill を“合体”させる */
-  padding:24px 28px;
-  border-radius:999px;
-  min-height:76px;
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  width:100%;
-  /* ドット感のあるフォントに寄せる: ピクセル風が入っていれば上書き */
-  font-family: "Press Start 2P", "DotGothic16", "M PLUS 1 Code", system-ui, monospace;
-  font-size:22px;
-  letter-spacing:0.1em;
-}
-
 
 .continue-btn{
   display: inline-flex;
@@ -131,29 +109,27 @@
       background-position:center;
       flex:0 0 auto;
       box-shadow:0 1px 0 rgba(0,0,0,.04) inset;
+      object-fit: cover;
 }
 
-/* 中に入れる画像 */
-.icon-circle img{
-  width: 100%;     /* アイコンの大きさ（調整可） */
-  height: auto;
-  object-fit: contain;
-}
-
-/* 右側の黒いピル状ラベル */
-.continue-btn .label{
+.label-container{
   position: relative;
   z-index: 1; /* ← labelを背面に */
   background:var(--pill);
   color:#fff;
-  margin-left:-40px;           /* 円と pill を“合体”させる */
-  padding:24px 28px;
-  border-radius:999px;
+  margin-left:-60px;           /* 円と pill を“合体”させる */
+  border-radius:100vmax;
   min-height:76px;
   display:flex;
   align-items:center;
   justify-content:flex-end;
   width:100%;
+}
+
+/* 右側の黒いピル状ラベル */
+.label{
+  margin-right: 20px;
+  color:#fff;
   /* ドット感のあるフォントに寄せる: ピクセル風が入っていれば上書き */
   font-family: "Press Start 2P", "DotGothic16", "M PLUS 1 Code", system-ui, monospace;
   font-size:22px;

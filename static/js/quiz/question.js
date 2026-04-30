@@ -1,7 +1,7 @@
  
  import { post } from "../common/serverRequest.js";
  import { menuInitialize}from "../common/menu.js";
- import { mapInitialize } from "../common/map/mapInitialize.js"
+ import { locateInitialize, mapInitialize, polygonInitialize } from "../common/map/mapInitialize.js"
 
 // —— サムネ→メイン切替 —— //
 const main = document.getElementById('mainPhoto');
@@ -9,6 +9,7 @@ const thumbs = document.getElementById('thumbs');
 const distanceindicator=document.getElementById('distance');
 const thumbbutton=thumbs.children;
 const descriptionText=document.getElementById('description');
+const authorText=document.getElementById('author');
 
 const currentSpot=response.spotDto;
 const images=currentSpot.images;
@@ -35,8 +36,7 @@ thumbs.addEventListener('click', (e) => {
   btn.classList.add('is-active');
 }, {passive:true});
 
-//説明テキストの追加
-if(currentSpot.description)descriptionText.textContent=currentSpot.description;
+
 
 // —— 現在地マップ（Leaflet） —— //
 //マップオブジェクトの作成
@@ -44,8 +44,7 @@ const mapElement = document.getElementById("map");
 const map = mapInitialize(mapElement);
 
 //位置情報初期設定
-let lc=L.control.locate({ position: "topright" ,setView: "never",keepCurrentZoomLevel: true}).addTo(map);
-lc.start();
+const lc=locateInitialize(map);
 
 navigator.geolocation.getCurrentPosition(
   (pos) => {
@@ -76,7 +75,7 @@ const watchId= navigator.geolocation.watchPosition(
   { enableHighAccuracy:true, timeout:10000, maximumAge:5000 });
 
 //サーバー通信のインターバル
-const fetchTime=20000;
+const fetchTime=10000;
 //latestLocationを用いてサーバーからヒントを返してもらう関数
 function fetchLocation()
 {
@@ -105,20 +104,46 @@ function fetchLocation()
   .then((json)=>{
     const dis= json.distance;
     distanceindicator.textContent='あと'+dis+'m';
-    setTimeout(()=>{
-    fetchLocation();
-    },fetchTime);
+    setTimeout(fetchLocation,fetchTime);
   })
   .catch((err)=>{
     console.error("ヒントの取得に失敗しました", err);
-    setTimeout(()=>{
-    fetchLocation();
-    },fetchTime);
+    setTimeout(fetchLocation,fetchTime);
   })
 }
 
-//初期設定
-fetchLocation();
+//latestLocationを用いてサーバーからヒントを返してもらう関数
+function getHint()
+{
+  fetch('/api/hints/dirdis', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      session_id:response.session_id,
+      question_id: response.question_number,
+      spotId: response.spotDto.spotId, 
+      latitude: latestLocation.coords.latitude,
+      longitude: latestLocation.coords.longitude
+    })
+  })
+  .then((res)=>{
+    return res.json();
+    })
+  .then((json)=>{
+    console.log(json);
+  })
+  .catch((err)=>{
+    console.error("ヒントの取得に失敗しました", err);
+    setTimeout(fetchLocation,fetchTime);
+  })
+}
+
+function createHintMarker(map,lat,lng,dir,width,rad)
+{
+  const start=dir-width*0.5;
+  const stop=dir+width*0.5;
+  
+}
 
 //POST用関数
 function postQuestion(isskip)
@@ -154,10 +179,26 @@ function postQuestion(isskip)
 //ドキュメントが読み込まれた際のイベント
 document.addEventListener('DOMContentLoaded',()=>{
 
+  //説明テキストの追加
+  if(currentSpot.description)descriptionText.textContent=currentSpot.description;
+  //投稿者の追加
+  if(currentSpot.author)authorText.textContent="投稿者："+currentSpot.author.name;
+
+  const area=response.area;
+  if(area)polygonInitialize(area.area,map);
+
+
   const skip_btn=document.querySelector('.skip-btn');
   const post_btn=document.querySelector('.post-btn');
   if(skip_btn) skip_btn.addEventListener('click',()=>{postQuestion(true)});
   if(post_btn) post_btn.addEventListener('click',()=>{postQuestion(false)});
+
+  //ヒント取得関数を開始する
+  fetchLocation();
+
+  //ヒント取得関数をボタンに紐づける
+  const hintBtn=document.getElementById('hint-btn');
+  if(hintBtn) hintBtn.addEventListener('click',getHint);
 
   menuInitialize();
 });

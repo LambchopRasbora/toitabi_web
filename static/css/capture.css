@@ -24,9 +24,9 @@
 
 /* アイコン画像を大きく中央に */
 .camera-icon{
-  width: 80%;
-  height: auto;
+  width: 60%;
   display: block;
+  margin: 5px;
 }
 
 /* ===== アイコン付きボタン ===== */
@@ -39,6 +39,7 @@
   aspect-ratio: 3/2;
   gap: 4px;           /* アイコンと文字の間隔 */
   padding: 5px 10px;
+
 
   border: #000 2px solid;
   border-radius: 10px;
@@ -58,7 +59,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   max-width: 430px;
-  margin: 0 auto 16px;
+  margin: 20px auto 16px;
 }
 .preview-grid img {
   width: 100%;

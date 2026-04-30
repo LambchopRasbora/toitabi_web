@@ -12,106 +12,55 @@
   <title>トイタビ – キャラクター一覧</title>
   <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
-  <link rel="stylesheet" href="../../static/css/home.css" th:href="@{/css/home.css}">
+  <link rel="stylesheet" href="../../static/css/me/characterindex.css" th:href="@{/css/me/characterindex.css}">
 </head>
 
-
 <body>
+  <div class="screen">
   <!--Thymeleaf の値を JavaScript内で使えるようにして、Thymeleaf の値を JavaScript内で使えるようにする-->
   <script th:inline ="javascript">
-    const data =/*[[${data}]]*/{}
+    const charas =/*[[${charas}]]*/{}
   </script>
+  
   <script type="module" src="../../static/js/me/characterindex.js" th:src="@{/js/me/characterindex.js}"></script>
-  <!--CSSレイアウト制御用の画面全体を囲うコンテナ-->
-  <div class="screen">
-    <!-- Header -->
-    <header class="app-header">
-      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
-      <p class="lead">手に入れたキャラクターの一覧</p>
-      <button class = "menu-btn"id ="menu-btn">
-        <p>メニュー</p>
-        <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
-      </button>
-    </header>
-    <!--メニューの画面-->
-    <!--メニューの画面-->
-    <nav id="side-menu" class="side-menu">
-      <div class ="menu-header">
-        <h1 class="menu-title">メニュー</h1>
-        <!--ログイン情報-->
-        <button class="user-info-btn" sec:authorize="isAuthenticated()" onclick="location.href='/mypage'">
-          <span class="username"
-                sec:authentication="name">
-          </span>
+  <!--Header-->
+  <div th:replace="~{common/layout :: header-nav('手に入れたキャラクター')}"></div>
+  <!-- Main Content -->
+  <main class ="content">
+    <!--レイアウト用のラッパー-->
+    <div class="container">
+      <h2 class="section-title">キャラクター一覧</h2>
+      <div class = "character-container">
+        <!--キャラクターのカードを繰り返し表示-->
+        <button class="character-card" data-charaId="${character.charaId}"  th:each="character : ${charas}">
+          <img class="character-image" th:src="@{${character.lowImageUri}}" alt="キャラクター画像">
+          <h3 class="character-name" th:text="${character.name}">キャラクター名</h3>
         </button>
-        <!-- 未ログイン -->
-        <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
-          <span class="username">ログイン</span>
-        </button>
-      </div>
-      <!--メニュー項目 -->
-      <ul>
-        <li><button class = "menu-content-btn" onclick="location.href='/'">
-          <img class src ="../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-          <p>ホーム画面へ戻る</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
-          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
-          <p>My図鑑</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
-          <img class src ="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-          <p>投稿したトイスポット</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/terms'">
-          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
-          <p>利用規約</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/privacy'">
-          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
-          <p>プライバシーポリシー</p>
-        </button></li>
-      </ul>
-      <button class="menu-close-btn">閉じる</button>
-    </nav>
-
-    <!-- Main Content -->
-    <main class ="content">
-     <!--レイアウト用のラッパー-->
-     <div class="container">
-        <h2 class="section-title">キャラクター一覧</h2>
-        <div class = "charactor-container">
-          <!--キャラクターのカードを繰り返し表示-->
-          <div class="charactor-card" th:each="charactor : ${charactors}">
-            <img class="charactor-image" th:src="@{${charactor.lowimageUrl}}" alt="キャラクター画像">
-            <h3 class="charactor-name" th:text="${charactor.name}">キャラクター名</h3>
-          </div>
-        </div>
-      </div>
-    </main>
-    <!-- Footer -->
-    <footer class="app-footer">
-      <!-- Bottom actions -->
-      <div class="bottom-actions">
-        <!--投稿画面へ遷移-->
-        <button class="action-btn" type="button" onclick= "location.href='/'" >
-          <!--ボタンのラベル-->
-          <div class="caption">ホームへ戻る</div>
-          <!--ホームアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
-        </button>
-      </div> 
-    </footer>
-    <div id ="character-detail" class ="hidden">
-      <div class="detail-container">
-        <h2 class="detail-title">キャラクターの名前</h2>
-        <img class="detail-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}" alt="キャラクター画像">
-        <p class="detail-description">キャラクターの説明文がここに入ります。キャラクターの特徴や背景などを詳しく説明します。</p>
-        <button class="detail-close-btn">閉じる</button>
       </div>
     </div>
-  
-  <!-- Leaflet JSライブラリ -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  </main>
+  <!-- Footer -->
+  <footer class="app-footer">
+    <!-- Bottom actions -->
+    <div class="bottom-actions">
+      <!--投稿画面へ遷移-->
+      <button class="action-btn" type="button" onclick= "location.href='/'" >
+        <!--ボタンのラベル-->
+        <div class="caption">ホームへ戻る</div>
+        <!--ホームアイコン-->
+        <img class = "icon-img" src = "../../static/asset/images/icon/homeicon.png" th:src="@{/asset/images/icon/homeicon.png}"/>
+      </button>
+    </div> 
+  </footer>
+  <div id ="character-detail" class ="hidden">
+    <div class="detail-container">
+      <h2 class="detail-title">キャラクターの名前</h2>
+      <img class="detail-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}" alt="キャラクター画像">
+      <p class="detail-description">キャラクターの説明文がここに入ります。キャラクターの特徴や背景などを詳しく説明します。</p>
+      <button class="detail-close-btn">閉じる</button>
+    </div>
+
+  </div>  
+  </div>
 </body>
 </html>

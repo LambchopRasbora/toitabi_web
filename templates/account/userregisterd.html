@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>アカウント仮登録完了</title>
-        <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
-        <link rel="stylesheet" href="../../static/css/account/userregisterd.css" th:href="@{/css/account/userregisterd.css}">
-    </head>
-    <body>
-        <header class="app-header">
-            <div class = "header-logo">
-                 <img src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
-                 <p class="lead">アカウントの仮登録が完了しました</p>
-            </div>
-        </header>
-        <main class ="content">
-            <div class="container">
-                <!-- キャラクター吹き出し（左向き） -->
-                <section class="ch-stack">
-                    <div class="ch-balloon">
-                        <p class="ch-text">
-                        アカウントの仮登録が正常に完了しました。
-                        sozoro708@gmail.comからのメールを確認し、本登録を完了させてください。
-                        </p>
-                    </div>
+<head>
+<!-- CSRF -->
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 
-                    <img
-                    class="ch-avatar"
-                    src="../../static/asset/images/character/256/256-01.png"
-                    th:src="@{/asset/images/character/256/256-01.png}"
-                    alt="トイタビキャラクター"
-                    />
-                </section>
-
-            </div>
-        </main> 
-    </body>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>アカウント仮登録完了</title>
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/account/userregisterd.css" th:href="@{/css/account/userregisterd.css}">
+</head>
+<body>
+  <!--CSSレイアウト制御用の画面全体を囲うコンテナ-->
+  <div class="screen">
+    <!-- Header -->
+    <div th:replace="~{common/layout :: header-nav('ログイン')}"></div>
+    <main class ="content">
+      <div class="container">
+        <!-- キャラクター吹き出し（左向き） -->
+        <section class="ch-stack">
+          <div class="ch-balloon">
+              <p class="ch-text">
+              アカウントの仮登録が正常に完了しました。<br>
+              sozoro708@gmail.comからのメールを確認し、本登録を完了させてください。<br>
+              かなり高確率で迷惑メールフォルダに入っています。
+              </p>
+          </div>
+          <img
+          class="ch-avatar"
+          src="../../static/asset/images/character/256/256-01.png"
+          th:src="@{/asset/images/character/256/256-01.png}"
+          alt="トイタビキャラクター"
+          />
+        </section>
+      </div>
+    </main> 
+  </div>
+<script type="module" src="../../static/js/account/signup.js" th:src="@{/js/account/signup.js}"></script>
+</body>
+</html>

@@ -14,10 +14,8 @@
   <script src="../../static/js/navigate/capturenavidev.js" th:src="@{/js/navigate/capturenavipro.js}"></script>
 </head>
 <body>
+  <div th:replace="~{common/layout :: header-nav('投稿失敗...')}"></div>
   <main class="screen">
-    <!-- Header -->
-    <img class = "header-logo" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
-       <p class="lead">投稿に失敗しました</p>
 
   <div>
     <p th:text="'timestamp: ' + ${timestamp}"></p>

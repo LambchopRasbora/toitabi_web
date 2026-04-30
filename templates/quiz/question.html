@@ -26,6 +26,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
   <!--現在地取得用JS-->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
+  
+  <script src="https://unpkg.com/leaflet-semicircle"></script>
 </head>
 
 <!--ページ本体開始 背景色をCSS変数 --ink に設定-->
@@ -39,131 +41,91 @@
     </script> 
 
     <!-- Header -->
-    <header class="app-header">
-      <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
-      <p class="lead">トイスポットを探せ!</p>
-      <button class = "menu-btn"id ="menu-btn">
-        <p>メニュー</p>
-        <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
-      </button>
-    </header>
+    <div th:replace="~{common/layout :: header-nav('ログイン')}"></div>
 
-<!--メニューの画面-->
-    <nav id="side-menu" class="side-menu">
-      <div class ="menu-header">
-        <h1 class="menu-title">メニュー</h1>
-        <!--ログイン情報-->
-        <button class="user-info-btn" sec:authorize="isAuthenticated()" onclick="location.href='/mypage'">
-          <span class="username"
-                sec:authentication="name">
-          </span>
+    <!-- 中央スクロール領域 -->
+    <main class="content" id="scrollArea">
+      <!--中央寄せ・余白調整用-->
+      <div class = "container">
+        <!-- 写真4枚 -->
+        <section id="gallerySection" class="gallery card">
+          <!--メイン写真-->
+          <div class="main-photo">
+            <!--選択された写真を表示（JSで差し替え）-->
+            <img id="mainPhoto" src="" alt="spot main">
+          </div>
+
+          <!--サムネイル一覧-->
+          <div class="thumbs" id="thumbs">
+            <button class="thumb is-active" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+              <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+            </button>
+            <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+              <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+            </button>
+            <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+              <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+            </button>
+            <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+              <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+            </button>
+          </div>
+        </section>
+        <!--ヒント-->
+        <section id ="discription-section" class="hint-section">
+          <!-- 必要なら下に説明や距離表示など -->
+          <div>
+            <p id="author"> </p> 
+          </div>
+          <div>
+            <!--スポット説明文（JSで挿入）-->
+            <p id="description"></p>
+          </div>
+          <div>
+            <!--残り距離表示（JSで更新）-->
+            <p id="distance">あと100m</p>
+          </div>
+          <div>
+            <p id="tags">タグ</p>
+          </div>
+        </section>
+        <section id="hint-section" class="hint-section card">
+          <!--ヒント表示エリア-->
+          <button id="hint-btn">
+            <p>ヒントの取得</p>
+          </button>
+        </section>
+        <!-- 現在地マップ -->
+        <section id="mapSection" class="map-wrap card">
+          <!--Leafletが地図を描画するDOM-->
+          <div id="map"></div>
+          <!--注意書き-->
+          <div class="map-caption">現在地を表示中（位置情報の許可が必要です）</div>
+        </section>
+      </div>
+    </main>
+
+    <!--footer-->
+    <footer class="app-footer">
+      <!-- Bottom actions -->
+      <div class="bottom-actions">
+        <!--メニュー表示ボタン-->
+        <button class="action-btn menu-btn" type="button" >
+          <!--text-->
+          <div class ="caption">メニュー</div>
+          <!--icon-->
+          <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
         </button>
-        <!-- 未ログイン -->
-        <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
-          <span class="username">ログイン</span>
+
+        <!--スポット確定ボタン-->
+        <button class="action-btn post-btn" type="button">
+          <!--text-->
+          <div class="caption">トイスポット確定</div>
+          <!--icon-->
+          <img class = "icon-img" src = "../../static/asset/images/icon/icon_guess.png" th:src="@{/asset/images/icon/icon_guess.png}"/>
         </button>
       </div>
-      <!--メニュー項目 -->
-      <ul>
-        <li><button class = "menu-content-btn" onclick="location.href='/'">
-          <img class src ="../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-          <p>ホーム画面へ戻る</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
-          <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
-          <p>My図鑑</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
-          <img class src ="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-          <p>投稿したトイスポット</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/terms'">
-          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
-          <p>利用規約</p>
-        </button></li>
-        <li><button class = "menu-content-btn" onclick="location.href='/privacy'">
-          <img class src ="../../static/asset/images/icon/icon_chara.png" th:src="@{/asset/images/icon/icon_chara.png}"/>
-          <p>プライバシーポリシー</p>
-        </button></li>
-      </ul>
-      <button class="menu-close-btn">閉じる</button>
-    </nav>
-
-  <!-- 中央スクロール領域 -->
-  <main class="content" id="scrollArea">
-    <!--中央寄せ・余白調整用-->
-    <div class = "container">
-      <!-- 写真4枚 -->
-      <section id="gallerySection" class="gallery card">
-        <!--メイン写真-->
-        <div class="main-photo">
-          <!--選択された写真を表示（JSで差し替え）-->
-          <img id="mainPhoto" src="" alt="spot main">
-        </div>
-
-        <!--サムネイル一覧-->
-        <div class="thumbs" id="thumbs">
-          <button class="thumb is-active" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
-            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
-          </button>
-          <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
-            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
-          </button>
-          <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
-            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
-          </button>
-          <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
-            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
-          </button>
-        </div>
-      </section>
-      <!--ヒント-->
-      <section id ="hintSection" class="hintSection">
-        <!-- 必要なら下に説明や距離表示など -->
-        <div>
-          <!--スポット説明文（JSで挿入）-->
-          <p id="description"></p>
-        </div>
-        <div>
-          <!--残り距離表示（JSで更新）-->
-          <p id="distance">あと100m</p>
-        </div>
-        <div>
-          <p id="tags">タグ</p>
-        </div>
-      </section>
-
-      <!-- 現在地マップ -->
-      <section id="mapSection" class="map-wrap card" style="padding:12px">
-        <!--Leafletが地図を描画するDOM-->
-        <div id="map"></div>
-        <!--注意書き-->
-        <div class="map-caption">現在地を表示中（位置情報の許可が必要です）</div>
-      </section>
-    </div>
-  </main>
-
-  <!--footer-->
-  <footer class="app-footer">
-    <!-- Bottom actions -->
-    <div class="bottom-actions">
-      <!--メニュー表示ボタン-->
-      <button class="action-btn menu-btn" type="button" >
-        <!--text-->
-        <div class ="caption">メニュー</div>
-        <!--icon-->
-        <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
-      </button>
-
-      <!--スポット確定ボタン-->
-      <button class="action-btn post-btn" type="button">
-        <!--text-->
-        <div class="caption">トイスポット確定</div>
-        <!--icon-->
-        <img class = "icon-img" src = "../../static/asset/images/icon/icon_guess.png" th:src="@{/asset/images/icon/icon_guess.png}"/>
-      </button>
-    </div>
-  </footer>
+    </footer>
   </div>
 
   <!-- ローディングオーバーレイ -->

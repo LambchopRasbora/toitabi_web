@@ -1,6 +1,7 @@
 import { mapIcons } from "../common/map/mapicons.js";
 import {menuInitialize} from "../common/menu.js";
 import { snsShare } from "../common/snsShare.js";
+import { mapInitialize,locateInitialize, polygonInitialize } from "../common/map/mapInitialize.js";
 
 function initGoalPage({distanceMeters, questions,answers}) 
 {
@@ -24,39 +25,15 @@ function initGoalPage({distanceMeters, questions,answers})
     }));
 
   // マップ初期化（3スポットの中心あたりにズーム）
-  const centerLat =
-    spots.reduce((sum, s) => sum + s.latlng[0], 0) / spots.length;
-  const centerLng =
-    spots.reduce((sum, s) => sum + s.latlng[1], 0) / spots.length;
+  const centerLat =spots.reduce((sum, s) => sum + s.latlng[0], 0) / spots.length;
+  const centerLng =spots.reduce((sum, s) => sum + s.latlng[1], 0) / spots.length;
 
 
-  const map = L.map("result-map", {
-    zoomControl: false
-  }).setView([centerLat, centerLng], 16);
+  const mapElement = document.getElementById("result-map");
+  const map = mapInitialize(mapElement);
+  map.setView([centerLat, centerLng], 13);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap contributors"
-  }).addTo(map);
-
-  //位置情報初期設定
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const {latitude, longitude} = pos.coords;
-      map.setView([latitude, longitude], 17);
-      //現在地を表示するマーカーの初期化
-      var lc = L.control
-        .locate({
-          position: "topright"
-        })
-        .addTo(map);
-      lc.start();
-    },
-    () => {
-      // 失敗時は表示せずassertを出す
-      console.console("現在地の取得に失敗しました")
-    },
-    { enableHighAccuracy:false, timeout:5000, maximumAge:5000 }
-  );
+  const lc = locateInitialize(map);
 
   // --- ポップアップ要素を取得 ---
   const popupEl = document.getElementById('spot-popup');
@@ -87,7 +64,7 @@ function initGoalPage({distanceMeters, questions,answers})
   }
 
   //mapのスポットアイコン
-  const spotIcon = mapIcons.spot;
+  const spotIcon = mapIcons.trueSpot;
 
   //各スポットをタッチしたときに表示するようにする
   spots.forEach(spot => {
@@ -118,6 +95,10 @@ document.addEventListener("DOMContentLoaded",()=>{
     questions: response.questions,
     answers: response.answers
   });
+
+  //エリアの設定
+  const area=response.area;
+  if(area)polygonInitialize(area.area,map);
 
   //メニューの作成
   menuInitialize();

@@ -113,6 +113,21 @@ export async function post(path, params, method='post')
   }
 }
 
+export async function fetchPresignedURL(imagedescriptions)
+{
+  if(imagedescriptions.length<1)return [];
+    const url="/api/spotpost/uploadurl";
+    const presignedURLPromises = fetch(url,{method:'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+        "images":imagedescriptions
+    })})
+    .catch(err=>{throw new Error('アップロードURLの取得に失敗しました'+err.message);});
+    return await(await presignedURLPromises).json();
+}
+
 /**
  * 画像ファイルを presigned URL に PUT アップロードする
  * @param {string} uploadUrl - Presigned PUT URL

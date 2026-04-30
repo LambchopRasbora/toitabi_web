@@ -2,7 +2,7 @@ import { mapIcons } from "../common/map/mapicons.js";
 import {menuInitialize} from "../common/menu.js";
 import { post } from "../common/serverRequest.js";
 import { snsShare } from "../common/snsShare.js";
-import { mapInitialize } from "../common/map/mapInitialize.js";
+import { mapInitialize,locateInitialize, polygonInitialize } from "../common/map/mapInitialize.js";
 
 let map;
 let bounds;
@@ -19,14 +19,13 @@ function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
   map = mapInitialize(mapElement);
 
   //現在地マーカーの設置
-  let lc = L.control.locate({ position: "topright" ,setView: "never",keepCurrentZoomLevel: true}).addTo(map);
-  lc.start();
+  const lc = locateInitialize(map);
 
   const confirmMarker = L.marker(userLatLng, { icon: mapIcons.userConfirm }).addTo(map).bindTooltip("あなたの確定位置");
   const trueMarker    = L.marker(spotLatLng, { icon: mapIcons.trueSpot }).addTo(map).bindTooltip("正解のスポット");
 
   // ライン&両者が入る範囲にフィット
-  const line = L.polyline([userLatLng, spotLatLng], { weight: 4, opacity: 0.6 }).addTo(map);
+  const line = L.polyline([userLatLng, spotLatLng], { weight: 6, opacity: 0.6 }).addTo(map);
   bounds=line.getBounds().pad(0.3);
 
   // ざっくり距離（地図上）を表示（任意）
@@ -45,6 +44,7 @@ function hiddengetOverlay()
     const getoverlay=document.getElementById("get-overlay");
     getoverlay.classList.add("hidden");
 }
+
 function showMain()
 {
     const app=document.getElementsByClassName("app")[0];
@@ -64,7 +64,48 @@ function onclickNext()
   post(postURL,params);
 }
 
+function initSpotField(spotFieldElement, spot)
+{
+  // プレビュー画像とメイン画像の要素を取得
+  const previewimageElements = spotFieldElement.querySelectorAll('.preview-image');
+  const mainImageElement = spotFieldElement.querySelector('.main-image');
+
+  //フォーカス変更をそれぞれのサブ画像に設定
+  previewimageElements.forEach((el, index) => {
+    el.addEventListener('click', () => setCurrentImgId(index, previewimageElements, mainImageElement));
+    el.src=spot.images[index] || '/asset/images/default/NoImage.jpg';
+  });
+
+  setCurrentImgId(0, previewimageElements, mainImageElement);
+
+  //説明文の設定
+  const descriptionElement=spotFieldElement.querySelector('.description');
+  descriptionElement.textContent=spot.description?? '';
+
+  //タグの設定
+  const tagContainer=spotFieldElement.querySelector('.tag-field');
+
+  spot.tags.forEach(tag=>{
+    const tagElement=document.createElement('p');
+    tagElement.classList.add('tag');
+    tagElement.textContent='#' + tag.name;
+    tagContainer.appendChild(tagElement);
+  });
+}
+
+let currentImgId=0;
+
+function setCurrentImgId(id, previewimageElements, mainImageElement) 
+{
+  currentImgId = id;
+  previewimageElements.forEach((el, index) => {
+    el.classList.toggle('focused', index === currentImgId);
+  });
+  mainImageElement.src = previewimageElements[currentImgId].src;
+}
+
 document.addEventListener("DOMContentLoaded",()=>{
+
 
     initGoalPage({
       minutes: 32,                     
@@ -89,13 +130,10 @@ document.addEventListener("DOMContentLoaded",()=>{
     const messageText=document.getElementsByClassName("message-text")[0];
     if(obtainedChara)
     {
-      overlay_title.textContent="キャラクターをゲット！";
-
-      characterimg.src=obtainedChara.lowImagePath;
+      characterimg.src=obtainedChara.lowImageUri?? "/asset/images/default/NoImage.jpg";
       characterimg.addEventListener("animationend",showMessage);
-
+      overlay_title.textContent="キャラクターをゲット！";
       messageTitle.textContent=obtainedChara.name;
-
       messageText.textContent=obtainedChara.description;
     }
     else
@@ -106,10 +144,17 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
     const get_close_btn=document.getElementsByClassName("get-close-btn")[0];
       get_close_btn.addEventListener("click",()=>{
-          console.log("close btn clicked");
           hiddengetOverlay();
           showMain();
       });
+
+    //Spotのセット
+    const spotElement=document.getElementById('spot-info-section');  
+    initSpotField(spotElement,response.spotDto);
+
+    //Areaのmapを設定
+    const area=response.area;
+    if(area)polygonInitialize(area.area,map);
     
     //次の問題へボタンのイベントリスナーを設定
     const next_btn=document.getElementsByClassName("next-btn")[0];
