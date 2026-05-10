@@ -9,6 +9,7 @@ d<!doctype html>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>トイタビ – ポスト完了</title>
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
 
   <!-- Leaflet CSS / JS（CDN）, 地図表示用CSS-->
   <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -33,7 +34,7 @@ d<!doctype html>
 
     <main class="content">
       <h3>トイスポットの投稿完了</h3>
-      <div class="content-field">
+      <div class="content-field c-card">
         <img class="main-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
         <div class="preview-grid">
           <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
@@ -43,14 +44,18 @@ d<!doctype html>
         </div>
       </div>
 
-      <div class="content-field hint-field">
+      <div class ="content-field">
+        <div class="author-field"></div>
+      </div>
+
+      <div class="content-field hint-field c-card">
         <p>説明文</p>
         <span class="description">説明文が表示されます。</span>
         <p>タグ</p>
         <div class="tag-field"></div>
       </div>
 
-      <div class ="content-field">
+      <div class ="content-field c-card">
         <div id="map" class="map"></div>
       </div>
     </main>
@@ -58,7 +63,7 @@ d<!doctype html>
     <!-- Bottom actions -->
     <footer class="app-footer">
       <div class="bottom-actions">
-        <button class="action-btn"  type="button" onclick="location.href='/capture'">
+        <button class="action-btn"  type="button" onclick="location.href='/spotpost/capture'">
           <div class ="caption">続けて投稿 </div>
           <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
         </button>

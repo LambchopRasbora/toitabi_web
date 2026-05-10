@@ -12,6 +12,7 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 
   <title>マイページ</title>
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
   <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
 
@@ -28,9 +29,10 @@
 
     <!-- Main Content -->
     <main class ="content">
-      <h3>マイページ</h3>
-      <p>ユーザ名</p> <p  id="username-field">ここにアカウント名を表示</p>
-      <p>メールアドレス</p> <p id="email-field">ここにメールアドレスを表示</p>
+      <h1>マイページ</h1>
+      <h3>ユーザ名</h3> <p  id="username-field">ここにアカウント名を表示</p>
+      <h3>メールアドレス</h3> <p id="email-field">ここにメールアドレスを表示</p>
+      <h3>獲得点数</h3><p id="point-field">獲得した点数(現在工事中)</p>
       <ul>
         <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
         <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
@@ -41,7 +43,9 @@
         <p>投稿したトイスポット</p>
       </button></li>
       </ul>
-      <a href="/logout">ログアウト</a>
+      <form action="/logout" th:action="@{/logout}" method="POST">
+       <button href="/logout">ログアウト</button>
+      </form>
     </main>
     
     <!-- Footer -->

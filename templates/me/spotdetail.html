@@ -8,7 +8,8 @@
   <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
 
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>トイタビ – ポスト完了</title>
+  <title>トイタビ – スポット詳細</title>
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
 
   <!-- Leaflet CSS / JS（CDN）, 地図表示用CSS-->
   <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -26,10 +27,10 @@
   </script>
   <div class ="screen">
     <!-- Header -->
-    <div th:replace="~{common/layout :: header-nav('ログイン')}"></div>
+    <div th:replace="~{common/layout :: header-nav('スポット詳細')}"></div>
 
     <main class="content">
-      <div class="content-field">
+      <div class="content-field c-card">
         <img class="main-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
         <div class="preview-grid">
           <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
@@ -38,18 +39,23 @@
           <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
         </div>
       </div>
-      <div class="content-field hint-field">
+      <div class="content-field hint-field c-card">
         <p>説明文</p>
         <span class="description">説明文が表示されます。</span>
         <p>タグ</p>
         <div class="tag-field"></div>
       </div>
-      <div class ="content-field">
+      <div class ="content-field c-card">
         <div id="map" class="map"></div>
       </div>
-      <button class = "content-field edit-btn">
-        <p>編集</p>
-      </button>
+      <div class ="button-field">
+        <button class = "edit-btn capsule-btn">
+          <p>編集</p>
+        </button>
+        <button class = "delete-btn capsule-btn" onclick="return confirm('本当にこのスポットを削除してもよろしいですか？');">
+          <p>削除</p>
+        </button>
+      </div>
     </main>
 
     <!-- Bottom actions -->

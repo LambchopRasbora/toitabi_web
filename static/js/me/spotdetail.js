@@ -1,6 +1,7 @@
 import { mapIcons } from "../common/map/mapicons.js";
 import { mapInitialize } from "../common/map/mapInitialize.js";
 import { menuInitialize } from "../common/menu.js";
+import {post} from "../common/serverRequest.js"
 
 
 function setCurrentImgId(id, previewimageElements, mainImageElement) 
@@ -13,6 +14,18 @@ function setCurrentImgId(id, previewimageElements, mainImageElement)
 
 
 document.addEventListener('DOMContentLoaded', function() {
+
+
+  const editBtn=document.getElementsByClassName('edit-btn')[0];
+  editBtn.addEventListener('click',()=>{location.href='/me/spotedit?spotId='+spot.spotId;});
+
+  const deleteBtn=document.getElementsByClassName('delete-btn')[0];
+  deleteBtn.addEventListener('click',()=>{
+
+    post('/me/deletespot',{spotId:spot.spotId});
+  });
+
+
   // プレビュー画像とメイン画像の要素を取得
   const previewimageElements = document.querySelectorAll('.preview-image');
   const mainImageElement = document.getElementsByClassName('main-image')[0];
@@ -45,10 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const mapElement=document.getElementById('map');
   const map=mapInitialize(mapElement);
   map.setView([spot.latitude, spot.longitude], 15);
-  L.marker([spot.latitude, spot.longitude],{icon:mapIcons.postedSpot}).addTo(map);
-
-  const editBtn=document.getElementsByClassName('edit-btn')[0];
-  editBtn.addEventListener('click',()=>{location.href='/me/spotedit?spotId='+spot.spotId;});
+  L.marker([spot.latitude, spot.longitude],{icon:mapIcons.postedSpotIcon}).addTo(map);
 
   menuInitialize();
 });

@@ -1,13 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment = "head-common">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <!-- CSRF -->
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+
+  <!--全ページ共通のCSS-->
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <!--ローディング画面用CSS-->
+  <link rel="stylesheet" href="../../static/css/loading.css" th:href="@{/css/loading.css}">
+
+  <!--LeafletのCDNに 事前接続 して読み込みを高速化-->
+  <link rel="preconnect" href="https://unpkg.com" />
+  <!-- Leaflet CSS / JS（CDN）, 地図表示用CSS-->
+  <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <!--LeafletのJavaScript本体-->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- LeafletLocate CSS / JS（CDN）, 現在地ボタンのCSS-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
+  <!--現在地取得用JS-->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
+  <!--leafletの扇形表示プラグイン-->
+  <script src="https://unpkg.com/leaflet-semicircle"></script>
+  <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+
+  <!--jscookieのライブラリを読み込む-->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+</th:block>
+
 <div th:fragment = "header-nav(title)">
     <!-- Header -->
     <header class="app-header">
       <img class = "header-logo-img" src="..\..\static\asset\images\logo.png" th:src="@{/asset/images/logo.png}"/>
       <p class="lead" th:text="${title}">ヘッダーのタイトル</p>
-      <button class = "menu-btn"id ="menu-btn">
+      <button class = "menu-btn capule-btn"id ="menu-btn">
         <p>メニュー</p>
-        <img class = "icon-img" src="..\..\static\asset\images\menulogo.png" th:src="@{/asset/images/menulogo.png}"/>
+        <img class = "icon-img" src="..\..\static\asset\images\icon\icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
       </button>
     </header>
     <!--メニューの画面-->
@@ -15,11 +50,11 @@
       <div class ="menu-header">
         <h1 class="menu-title">メニュー</h1>
         <!--ログイン情報-->
-        <button class="user-info-btn" sec:authorize="isAuthenticated()" onclick="location.href='/me/mypage'">
-          <span class="username" sec:authentication="name"></span>
+        <button class="user-info-btn capsule-btn" sec:authorize="isAuthenticated()" onclick="location.href='/me/mypage'">
+          <span class="username" th:text="${#authentication.principal.user.username}"></span>
         </button>
         <!-- 未ログイン -->
-        <button class="user-info-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
+        <button class="user-info-btn capsule-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
           <span class="username">ログイン</span>
         </button>
       </div>
@@ -71,4 +106,11 @@
     </button>
   </div> 
   </footer>
+
+  <!--loading Screen-->
+  <!-- ローディングオーバーレイ -->
+  <div id="loadingOverlay" th:fragment = "loading(text)">
+    <!--回転アニメーション-->
+    <div class="spinner"></div>
+  </div>
 </html>

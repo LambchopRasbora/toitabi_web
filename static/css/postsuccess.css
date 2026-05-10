@@ -63,8 +63,17 @@
   width: 100%;
   height: 300px;
 }
+.button-field{
+  display: flex;
+  gap: 20px;
+}
 
 .edit-btn
+{
+  width: 40%;
+}
+
+.delete-btn
 {
   width: 40%;
 }

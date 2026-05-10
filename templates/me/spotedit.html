@@ -9,7 +9,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>トイタビ – トイスポット編集</title>
-
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
 
   <!-- Leaflet CSS / JS（CDN）, 地図表示用CSS-->
   <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -57,18 +57,18 @@
         <span>画像を選択した状態で画像をとるとその画像が変更されます</span>
 
         <div class="form-fields">
-          <div class="field">
+          <div class="field c-card">
             <span class="label">説明文</span>
             <textarea id="caption" rows="3" placeholder="どんな場所か、ひとこと説明を書いてください（お気に入りの理由・あなたのエピソードなど、任意）"></textarea>
           </div>
 
           <!--位置情報を添付する-->
-          <div class="field">
+          <div class="field c-card">
             <div id="mapFrame" class="map" src="" title="地図"></div>
             <span id="locStatus" class="muted">地図を長押しで位置を設定</span>
           </div>
 
-          <div class="field">
+          <div class="field c-card">
             <span class="label">タグ</span>
             <div class ="grid tag-area"></div>
             <template id="tag-template">
@@ -82,6 +82,11 @@
               <button class="tag-add-btn" id="addTagBtn" type="button">新しいタグを追加</button>
             </div>
           </div>
+
+          <div class = "c-card hidden-field">
+              <input type="checkbox" id="isHiddenCheckbox"/>
+              <label for="isHiddenCheckbox">このスポットを非公開にする</label>
+            </div>
 
           <div class="actions">
             <button type="button" id="submitBtn" class="icon-btn" disabled>

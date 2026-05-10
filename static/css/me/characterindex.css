@@ -1,13 +1,38 @@
 
 .character-container
 {
+    position: relative;
     border: 4px solid #000000;
+    overflow-x: auto;
+    overflow-y: hidden;
+    
+}
+.character-back
+{
+    height: 400px;
+}
+.chara-button{
+    position: absolute;
+    background: transparent;
+    border: none;
+}
+.chara-img{
+    width: 100%;
 }
 
-.character-image
+
+#character-detail
 {
     width: 100%;
-    aspect-ratio: 1/1;
+    background-color: #fff;
+}
+
+.detail-image{
+    width: 100%;
+}
+
+.overlay{
+    z-index: 9999;
 }
 
 .hidden

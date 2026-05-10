@@ -116,11 +116,6 @@ main {
     padding:18px 16px 24px;
   }
 
-  .card{
-    background:#0f0f0f; border-radius:var(--radius);
-    border:1px solid #222;
-    box-shadow: 0 2px 10px rgba(0,0,0,.3);
-  }
 
   /* —— 写真ギャラリー —— */
   .gallery{ display:flex; flex-direction:column; gap:12px; }
@@ -190,13 +185,8 @@ main {
   width: 100%;
 
   padding : 10px;
-  margin-bottom: 20px;
 
   gap: 2px;
-
-  border: #000 solid 2px;
-
-  border-radius: 30px;
 }
 
 .hint-field
@@ -211,38 +201,55 @@ main {
   margin-left: 10px;;
 }
 
+.hidden{ display:none; }
 
-  .hidden{ display:none; }
+#get-overlay{
+  width: var(--screen-width);
+}
 
-  #get-overlay{
-    width: var(--screen-width);
+.character-area-container{
+  display: flex;
+  flex:  content;
+  justify-content: center;
+
+  height: 380px;
+}
+
+.character-back{
+  z-index: 1;
+  position: absolute;
+  animation: backrotate 2s linear infinite;
+  height: 320px;
+  margin-top: 20px;
+}
+
+.character-img
+{
+  position: absolute;
+
+  z-index: 2;
+  height: 300px;
+  opacity: 0;
+  animation:characterFade 1.5s ease forwards;
+}
+
+.message-area-container{
+  background: #222;
+  color: #fff;
+  padding: 12px;
+  border-radius: var(--radius);
+  margin-top: 12px;
+  opacity: 0;
+}
+
+@keyframes backrotate{
+  from{
+    rotate: 0deg;
   }
-
-  .character-area-container{
-    border: #0f0f0f solid 1px;
-    display: flex;
-    flex:  content;
-    justify-content: center;
+  to{
+    rotate: 360deg;
   }
-
-  .character-img
-  {
-    width: 80%;
-    opacity: 0;
-    animation:characterFade 1.5s ease forwards;
-  }
-  
-  .message-area-container{
-    border: #0f0f0f solid 1px;
-    background: #222;
-    color: #fff;
-    padding: 12px;
-    border-radius: var(--radius);
-    margin-top: 12px;
-    opacity: 0;
-  }
-
-
+}
 
   @keyframes characterFade{
   from{

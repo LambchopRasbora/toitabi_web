@@ -1,5 +1,7 @@
 import { post } from "../common/serverRequest.js";
 import { menuInitialize}from "../common/menu.js"
+import { mapInitialize } from "../common/map/mapInitialize.js";
+import { localizeDrawJP } from "../common/map/mapDraw.js";
 
 //areasを取得
 const buttonareas=document.getElementsByClassName("buttonareas")[0];
@@ -13,12 +15,22 @@ const themecardtemplate=document.getElementById("theme-card-template");
 const themeCache=new Map();
 
 
+let latestLocation=null;
+let latestGeoJson=null;
+//latestLocationに常に現在地を代入
+const watchId= navigator.geolocation.watchPosition(
+  (pos)=>{ latestLocation = pos;},
+  (err)=>{
+    latestLocation=null;
+    console.error("位置情報に関するエラー"+err);
+  },
+  { enableHighAccuracy:false, timeout:10000, maximumAge:5000 });
+
 //クイズをテーマでスタートさせる関数
 function quizStartWithTheme({id,number})
 {
   const params={
     "themeId":id,
-    "zoneId":null,
     "totalQuestionNumber":number
   };
   post("/game/quizStart",params);
@@ -26,6 +38,11 @@ function quizStartWithTheme({id,number})
 
 function quizStartTemporary({polygon,number})
 {
+  if(!polygon)
+  {
+    alert("ポリゴンを描画してください");
+    return;
+  }
   const params={
     "polygon":polygon,
     "totalQuestionNumber":number
@@ -75,7 +92,19 @@ async function togglethemeList(areaId,container)
   container.classList.add("open");
   return;
 }
+//ダイアログの初期化設定
+function initializeDialog(dialog,map)
+{
+  dialog.showModal();
+  if(latestLocation)
+  {
+    map.setView([latestLocation.coords.latitude,latestLocation.coords.longitude],17);
+    map.invalidateSize();
+  }
+  
+}
 
+//初期化設定
 document.addEventListener('DOMContentLoaded',()=>
 {
   const continue_btn=document.getElementById('continue-btn');
@@ -109,6 +138,45 @@ document.addEventListener('DOMContentLoaded',()=>
       buttonareas.appendChild(fragment);
     });
   }
+
+  //エリア作成のボタンにダイアログ表示の設定
+  const create_area_btn=document.getElementById("create-area-btn");
+  const dialog=document.getElementById("create-area-dialog");
+
+  const create_map_element=document.getElementById("create-map");
+  const createAreaMap=mapInitialize(create_map_element);
+
+  const drawnItems=new L.FeatureGroup();
+  createAreaMap.addLayer(drawnItems);
+  localizeDrawJP();
+
+  const drawControl=new L.Control.Draw({
+    edit:{featureGroup:drawnItems},
+    draw:{
+      polygon:true,
+      polyline:false,
+      rectangle:false,
+      circle:false,
+      marker:false,
+      circlemarker:false
+    }
+  });
+  createAreaMap.addControl(drawControl);
+  createAreaMap.on(L.Draw.Event.CREATED,function (e){
+    const layer=e.layer;
+    drawnItems.clearLayers();
+    drawnItems.addLayer(layer);
+
+    latestGeoJson=layer.toGeoJSON();
+  });
+
+  const submitCreateArea=document.getElementById("create-map-confirm");
+  submitCreateArea.addEventListener('click',()=>{quizStartTemporary({polygon:JSON.stringify(latestGeoJson.geometry),number:3});});
+  
+  const cancelCreateArea=document.getElementById("create-map-cancel");
+  cancelCreateArea.addEventListener('click',()=>{dialog.close();})
+
+  create_area_btn.addEventListener('click',()=>{initializeDialog(dialog,createAreaMap)});
 
   //menuの初期化
   menuInitialize();

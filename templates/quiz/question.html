@@ -7,6 +7,8 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
   
   <title>トイタビ – プレイ中</title>
   <!--全ページ共通のCSS-->
@@ -41,68 +43,73 @@
     </script> 
 
     <!-- Header -->
-    <div th:replace="~{common/layout :: header-nav('ログイン')}"></div>
+    <div th:replace="~{common/layout :: header-nav('トイスポットを探せ')}"></div>
 
     <!-- 中央スクロール領域 -->
     <main class="content" id="scrollArea">
-      <!--中央寄せ・余白調整用-->
-      <div class = "container">
-        <!-- 写真4枚 -->
-        <section id="gallerySection" class="gallery card">
-          <!--メイン写真-->
-          <div class="main-photo">
-            <!--選択された写真を表示（JSで差し替え）-->
-            <img id="mainPhoto" src="" alt="spot main">
-          </div>
+      <!-- 写真4枚 -->
+      <section id="gallerySection" class="gallery c-card">
+        <!--メイン写真-->
+        <div class="main-photo">
+          <!--選択された写真を表示（JSで差し替え）-->
+          <img id="mainPhoto" src="" alt="spot main">
+        </div>
 
-          <!--サムネイル一覧-->
-          <div class="thumbs" id="thumbs">
-            <button class="thumb is-active" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
-              <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
-            </button>
-            <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
-              <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
-            </button>
-            <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
-              <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
-            </button>
-            <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
-              <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
-            </button>
-          </div>
-        </section>
-        <!--ヒント-->
-        <section id ="discription-section" class="hint-section">
-          <!-- 必要なら下に説明や距離表示など -->
-          <div>
-            <p id="author"> </p> 
-          </div>
-          <div>
-            <!--スポット説明文（JSで挿入）-->
-            <p id="description"></p>
-          </div>
-          <div>
-            <!--残り距離表示（JSで更新）-->
-            <p id="distance">あと100m</p>
-          </div>
-          <div>
-            <p id="tags">タグ</p>
-          </div>
-        </section>
-        <section id="hint-section" class="hint-section card">
-          <!--ヒント表示エリア-->
-          <button id="hint-btn">
-            <p>ヒントの取得</p>
+        <!--サムネイル一覧-->
+        <div class="thumbs" id="thumbs">
+          <button class="thumb is-active" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
           </button>
-        </section>
-        <!-- 現在地マップ -->
-        <section id="mapSection" class="map-wrap card">
-          <!--Leafletが地図を描画するDOM-->
-          <div id="map"></div>
-          <!--注意書き-->
-          <div class="map-caption">現在地を表示中（位置情報の許可が必要です）</div>
-        </section>
-      </div>
+          <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+          </button>
+          <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+          </button>
+          <button class="thumb" data-src="" th:data-src="@{\asset\images\default\NoImage.jpg}">
+            <img src="..\..\static\asset\images\default\NoImage.jpg" th:src="@{\asset\images\default\NoImage.jpg}" alt="">
+          </button>
+        </div>
+      </section>
+      <!--ヒント-->
+      <section id ="discription-section" class="hint-section c-card">
+        <!-- 必要なら下に説明や距離表示など -->
+        <div>
+          <p id="author"> </p> 
+        </div>
+        <div>
+          <!--スポット説明文（JSで挿入）-->
+          <p id="description"></p>
+        </div>
+        <div>
+          <!--残り距離表示（JSで更新）-->
+          <p id="distance">あと100m</p>
+        </div>
+        <div>
+          <p id="tags">タグ</p>
+        </div>
+      </section>
+      <section id="hint-section" class="hint-section c-card">
+        <!--ヒント表示エリア-->
+        <button id="hint-btn" class="capsule-btn">
+          <p>ヒントの取得</p>
+        </button>
+      </section>
+      <!-- 現在地マップ -->
+      <section id="mapSection" class="map-wrap c-card">
+        <!--Leafletが地図を描画するDOM-->
+        <div id="map"></div>
+        <!--注意書き-->
+        <div class="map-caption">現在地を表示中（位置情報の許可が必要です）</div>
+      </section>
+      <section id="answer-user" class ="c-card">
+        <span class="label">解答中のユーザー</span>
+        <span class="username" sec:authorize="isAuthenticated()" th:text="${#authentication.principal.user.username}"></span>
+        <!--未ログイン時-->
+        <button class="user-info-btn capsule-btn" sec:authorize="isAnonymous()"onclick="location.href='/login'">
+          <span class="username">ログイン</span>
+        </button>
+      </section>
     </main>
 
     <!--footer-->

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>トイタビ – 削除完了</title>
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
+
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/postsuccess.css" th:href="@{/css/postsuccess.css}">
+
+  <style>
+    /* 削除完了専用の微調整（必要に応じてCSSファイルへ移動してください） */
+    .delete-message-area {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .delete-icon {
+        width:80%;
+      margin-bottom: 20px;
+      opacity: 0.6;
+    }
+    .success-text {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .sub-text {
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class ="screen">
+    <div th:replace="~{common/layout :: header-nav('スポット削除')}"></div>
+
+    <main class="content">
+      <div class="content-field c-card delete-message-area">
+        <img class="delete-icon" src="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}" style="filter: grayscale(1);"/>
+        
+        <p class="success-text">投稿を削除しました</p>
+        <p class="sub-text">指定されたスポット情報は正常に消去されました。</p>
+      </div>
+
+      <div class="content-field">
+        <button class="capsule-btn"  onclick="location.href='/me/spotindex'">
+          <p>一覧へ戻る</p>
+        </button>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <div class="bottom-actions">
+        <button class="action-btn" type="button" onclick="location.href='/me/spotindex'">
+          <div class ="caption">一覧に戻る</div>
+          <img class="icon-img" src="../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+        </button>
+
+        <button class="action-btn" type="button" onclick="location.href='/'">
+          <div class="caption">ホームに戻る</div>
+          <img class="icon-img" src="../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+        </button>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

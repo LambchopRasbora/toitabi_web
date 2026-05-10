@@ -72,7 +72,7 @@ function showError(message)
 }
 
 //スポットのポストを行う
-async function postSpot(captionEl)
+async function postSpot(captionEl,isHiddenCheckbox)
 {
   //filesからnull/undefinedを除外してFileオブジェクトだけにする
   files=files.filter(f=>f instanceof File);
@@ -138,6 +138,7 @@ async function postSpot(captionEl)
       tags.push(tagElement.dataset.tagName);
     }
   }
+  
 
   //スポットのフォーム作成
   let params={
@@ -145,7 +146,8 @@ async function postSpot(captionEl)
     "longitude":latestLocation.longitude,
     "description":captionEl.value,
     "images":presignedURLData.images.map(img=>img.publicAccessUri),
-    "tags":tags
+    "tags":tags,
+    "hidden":isHiddenCheckbox.checked
   }
   //画像のアップロード完了まで待つ
   const responses= await Promise.all(promises);
@@ -169,7 +171,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   const map=mapInitialize(mapFrame);
 
-  const marker=L.marker([34.985458, 135.757756],{icon:mapIcons.postedSpot}).bindTooltip('現在地').addTo(map);
+  const marker=L.marker([34.985458, 135.757756],{icon:mapIcons.postedSpotIcon}).bindTooltip('現在地').addTo(map);
 
   //現在地を取得
   navigator.geolocation.getCurrentPosition(
@@ -193,6 +195,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const formArea   = document.getElementById('formArea');
   const previewGrid = document.getElementById('previewGrid');
   const captionEl  = document.getElementById('caption');
+  const hiddenEl=document.getElementById('isHiddenCheckbox');
   const submitBtn  = document.getElementById('submitBtn');
   const retakeBtn  = document.getElementById('retakeBtn');
 
@@ -295,13 +298,14 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 
 
+
   // 撮り直しボタンの設定
   retakeBtn.addEventListener('click', () => {resetImages(fileInput, previewGrid, formArea, submitBtn);});
 
   // 投稿ボタンの設定
   submitBtn.addEventListener('click', async () => 
   {
-    await postSpot(captionEl);
+    await postSpot(captionEl, hiddenEl);
   });
   //メニューの初期化
   menuInitialize();

@@ -64,7 +64,7 @@ function initGoalPage({distanceMeters, questions,answers})
   }
 
   //mapのスポットアイコン
-  const spotIcon = mapIcons.trueSpot;
+  const spotIcon = mapIcons.trueSpotIcon;
 
   //各スポットをタッチしたときに表示するようにする
   spots.forEach(spot => {

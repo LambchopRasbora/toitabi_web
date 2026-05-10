@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const mapElement=document.getElementById('map');
   const map=mapInitialize(mapElement);
   map.setView([spot.latitude, spot.longitude], 15);
-  L.marker([spot.latitude, spot.longitude],{icon:mapIcons.postedSpot}).addTo(map);
+  L.marker([spot.latitude, spot.longitude],{icon:mapIcons.postedSpotIcon}).addTo(map);
 
   menuInitialize();
 });

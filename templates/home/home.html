@@ -3,31 +3,17 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-  <!-- CSRF -->
-  <meta name="_csrf" th:content="${_csrf.token}" />
-  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
-  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <th:block th:replace="~{common/layout :: head-common}"></th:block>
 
   <title>トイタビ – エリア選択</title>
+  <meta name="description" content="街の隠れた名所へ出かけるお散歩クイズサイト
+  お散歩、解答してキャラクターをゲットしよう!">
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
+  
   <!--CSSファイルを読み込む-->
-  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <link rel="stylesheet" href="../../static/css/home.css" th:href="@{/css/home.css}">
 
-  <!--Leaflet（地図表示ライブラリ）の CSS をCDNから読み込み-->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <!--Leafletの JavaScript本体-->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- LeafletLocate CSS / JS（CDN）, 現在地ボタンのCSS-->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
-  <!--現在地取得用JS-->
-  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
-
-  <!--jscookieのライブラリを読み込む-->
-  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-  
 </head>
 
 
@@ -50,9 +36,15 @@
         <button id="continue-btn" class="continue-btn area-card">
           <!--アイコンを丸く囲う-->
           <img class="icon-circle" src="../../static/asset/images/icon/totyuicon.png" th:src="@{/asset/images/icon/totyuicon.png}"/>
-
           <div class="label-container">
             <span class="label">途中から</span>
+          </div>
+        </button>
+        <button id="create-area-btn" class="create-area-btn area-card">
+          <!--アイコンを丸く囲う-->
+          <img class="icon-circle" src="../../static/asset/images/icon/icon_guess.png" th:src="@{/asset/images/icon/icon_guess.png}"/>
+          <div class="label-container">
+            <span class="label">エリアを作成</span>
           </div>
         </button>
         <!--ここにエリアやゾーンが入る-->
@@ -81,8 +73,25 @@
           </button>
         </template>
       </div>
+      <div class= "description-field field">
+        <p class ="app-description">
+          このWEBサイトは街の隠れた名所へ出かけるお散歩クイズサイト<br>
+          出題されるクイズはユーザーが投稿したもの!!<br>
+          地元民ならではの場所が見つかるかも？
+        </p>
+      </div>
     </main>
     
+    <!--自分でエリアを作成するときのダイアログ-->
+    <dialog class ="field" id="create-area-dialog">
+      <div id="create-map" style="width:100%;height:400px;"></div>
+      <p>左上の五角形を押してエリアを作成</p>
+      <div class="button-area">
+        <button id="create-map-confirm">作成</button>
+        <button id="create-map-cancel">戻る</button>
+      </div>
+    </dialog>
+
     <!-- Footer -->
     <footer class="app-footer">
       <!-- Bottom actions -->
@@ -92,7 +101,7 @@
           <!--ボタンのラベル-->
           <div class ="caption">メニュー</div>
           <!--メニューアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/menulogo.png" th:src="@{asset/images/menulogo.png}"/>
+          <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{asset/images/icon/icon_menu.png}"/>
         </button>
 
         <!--投稿画面へ遷移-->

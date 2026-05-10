@@ -1,7 +1,29 @@
  
- import { post } from "../common/serverRequest.js";
- import { menuInitialize}from "../common/menu.js";
- import { locateInitialize, mapInitialize, polygonInitialize } from "../common/map/mapInitialize.js"
+import { post } from "../common/serverRequest.js";
+import { menuInitialize}from "../common/menu.js";
+import { locateInitialize, mapInitialize, polygonInitialize } from "../common/map/mapInitialize.js"
+import { mapIcons } from "../common/map/mapicons.js";
+
+// —— 現在地マップ（Leaflet） —— //
+//マップオブジェクトの作成
+const mapElement = document.getElementById("map");
+const map = mapInitialize(mapElement);
+
+//位置情報初期設定
+const lc=locateInitialize(map);
+
+navigator.geolocation.getCurrentPosition(
+  (pos) => {
+    const {latitude, longitude} = pos.coords;
+    map.setView([latitude, longitude], 17);
+  },
+  () => {
+    // 失敗時は表示せずassertを出す
+    alert("現在地の取得に失敗しました")
+  },
+  { enableHighAccuracy:false, timeout:20000, maximumAge:20000 }
+);
+
 
 // —— サムネ→メイン切替 —— //
 const main = document.getElementById('mainPhoto');
@@ -38,25 +60,7 @@ thumbs.addEventListener('click', (e) => {
 
 
 
-// —— 現在地マップ（Leaflet） —— //
-//マップオブジェクトの作成
-const mapElement = document.getElementById("map");
-const map = mapInitialize(mapElement);
 
-//位置情報初期設定
-const lc=locateInitialize(map);
-
-navigator.geolocation.getCurrentPosition(
-  (pos) => {
-    const {latitude, longitude} = pos.coords;
-    map.setView([latitude, longitude], 17);
-  },
-  () => {
-    // 失敗時は表示せずassertを出す
-    alert("現在地の取得に失敗しました")
-  },
-  { enableHighAccuracy:false, timeout:20000, maximumAge:5000 }
-);
 
 //最新の現在地(この変数が変更される)
 let latestLocation=null;
@@ -115,6 +119,8 @@ function fetchLocation()
 //latestLocationを用いてサーバーからヒントを返してもらう関数
 function getHint()
 {
+  const askedLat=latestLocation.coords.latitude;
+  const askedLng=latestLocation.coords.longitude
   fetch('/api/hints/dirdis', {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -122,15 +128,21 @@ function getHint()
       session_id:response.session_id,
       question_id: response.question_number,
       spotId: response.spotDto.spotId, 
-      latitude: latestLocation.coords.latitude,
-      longitude: latestLocation.coords.longitude
+      latitude: askedLat,
+      longitude: askedLng
     })
   })
   .then((res)=>{
     return res.json();
     })
   .then((json)=>{
-    console.log(json);
+    const width=45;
+    const randomDistanceWidth=500;
+
+    const randomdis=Math.random()*randomDistanceWidth+json.distance;
+    const randomdir=Math.random()*width-width*0.5+json.direction;
+
+    createHintMarker(map,askedLat,askedLng,randomdir,width,randomdis);
   })
   .catch((err)=>{
     console.error("ヒントの取得に失敗しました", err);
@@ -142,7 +154,25 @@ function createHintMarker(map,lat,lng,dir,width,rad)
 {
   const start=dir-width*0.5;
   const stop=dir+width*0.5;
-  
+  const radar=L.semiCircle([lat,lng],{
+    radius:rad,
+    startAngle:start,
+    stopAngle:stop,
+    color: '#3388ff',
+    fillColor: '#3388ff',
+    opacity:0,
+    fillOpacity: 0.3
+  }).addTo(map);
+
+  const marker=L.marker([lat,lng],{ 
+    icon:mapIcons.locationIcon,
+    title:"ヒント地点"
+  }).addTo(map);
+
+  return {
+    areaCircle:radar,
+    hintPoint:marker
+  };
 }
 
 //POST用関数
@@ -158,7 +188,6 @@ function postQuestion(isskip)
         "answerDto.isSkip": isskip,
         "answerDto.point": 0
       }
-      console.log(params);
       post("./answerSave",params);
     };
   // 位置情報の取得に失敗したときのコールバック
@@ -182,7 +211,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   //説明テキストの追加
   if(currentSpot.description)descriptionText.textContent=currentSpot.description;
   //投稿者の追加
-  if(currentSpot.author)authorText.textContent="投稿者："+currentSpot.author.name;
+  const authorString=currentSpot.author??"問い人知らず";
+  if(currentSpot.author)authorText.textContent="投稿者："+authorString;
 
   const area=response.area;
   if(area)polygonInitialize(area.area,map);
@@ -192,9 +222,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   const post_btn=document.querySelector('.post-btn');
   if(skip_btn) skip_btn.addEventListener('click',()=>{postQuestion(true)});
   if(post_btn) post_btn.addEventListener('click',()=>{postQuestion(false)});
-
-  //ヒント取得関数を開始する
-  fetchLocation();
 
   //ヒント取得関数をボタンに紐づける
   const hintBtn=document.getElementById('hint-btn');

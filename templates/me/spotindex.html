@@ -2,14 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8" />
-	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <!-- CSRF -->
   <meta name="_csrf" th:content="${_csrf.token}" />
   <meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   
   <title>投稿したトイスポット</title>
-
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
   <!--Leaflet（地図表示ライブラリ）の CSS をCDNから読み込み-->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <!--Leafletの JavaScript本体-->
@@ -20,45 +21,58 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
 
 	<link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}" />
+  
   <link rel="stylesheet" href="../../static/css/me/spotindex.css" th:href="@{/css/me/spotindex.css}" />
-	<script type="module"  th:src="@{/js/me/spotindex.js}"></script>
+	<script type="module" src="../../static/js/me/spotindex.js" th:src="@{/js/me/spotindex.js}"></script>
 </head>
-<body>
-  <div class="screen">
-    <!-- Header -->
-    <div th:replace="~{common/layout :: header-nav('投稿したトイスポット')}"></div>
-    
-    <script th:inline="javascript">
-      const spots = /*[[${spots}]]*/ {};
-    </script>
-    
-    <main>
-      <div class ="map-container">
-        <div id="map" class ="map" title="Map" ></div>
-      </div>
-    </main>
-    
-    <!-- Footer -->
-    <footer class="app-footer">
-      <!-- Bottom actions(この画面にはなし) -->
-      <div class="bottom-actions">
-        <!--設定画面へ遷移するボタン-->
-        <button class="action-btn" type="button" onclick= "location.href='/'" >
-          <!--ボタンのラベル-->
-          <div class ="caption">ホームへ戻る</div>
-          <!--メニューアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
+<body class="screen">
+  <!-- Header -->
+  <div th:replace="~{common/layout :: header-nav('投稿したトイスポット')}"></div>
+  
+  <script th:inline="javascript">
+    const spots = /*[[${spots}]]*/ {};
+  </script>
+  
+  <main class ="content">
+    <h1>投稿したスポット一覧</h1>
+    <div class ="map-container c-card">
+      <div id="map" class ="map" title="Map" ></div>
+    </div>
+    <div id="spot-detail-container" class ="c-card">
+      
+    </div>
+    <template id="spot-detail-template">
+      <button class="spot-card">
+        <img class ="spot-main-img" src="../../static/asset/images/default/NoImage.jpg"/>
+        <div class= "content-card">
+          <p class= "description">説明文</p>
+          <p class= "tag">タグ</p>
+        </div>
+      </button>
+    </div>
+    </template>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="app-footer">
+    <!-- Bottom actions(この画面にはなし) -->
+    <div class="bottom-actions">
+      <!--設定画面へ遷移するボタン-->
+      <button class="action-btn" type="button" onclick= "location.href='/'" >
+        <!--ボタンのラベル-->
+        <div class ="caption">ホームへ戻る</div>
+        <!--メニューアイコン-->
+        <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+      </button>
 
-        <!--投稿画面へ遷移-->
-        <button class="action-btn" type="button" onclick= "location.href='/spotpost/capture'" >
-          <!--ボタンのラベル-->
-          <div class="caption">トイスポットを投稿</div>
-          <!--投稿用アイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-        </button>
-      </div> 
-    </footer>
-<div>
+      <!--投稿画面へ遷移-->
+      <button class="action-btn" type="button" onclick= "location.href='/spotpost/capture'" >
+        <!--ボタンのラベル-->
+        <div class="caption">トイスポットを投稿</div>
+        <!--投稿用アイコン-->
+        <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+      </button>
+    </div> 
+  </footer>
 </body>
 </html>

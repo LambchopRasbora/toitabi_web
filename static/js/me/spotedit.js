@@ -85,7 +85,7 @@ function showError(message)
 }
 
 //スポットのポストを行う
-async function postSpot(captionEl)
+async function postSpot(captionEl,hiddenEl)
 {
     if(images.filter(img=>img.status!='NONE').length<1)
     {
@@ -143,7 +143,8 @@ async function postSpot(captionEl)
     "longitude":latestLocation.longitude,
     "description":captionEl.value,
     "images":images.filter(img=>img.status!=='NONE').map(img=>img.src),
-    "tags": tags
+    "tags": tags,
+    "hidden": hiddenEl.checked
   }
   //ポストを行う
   try{
@@ -172,7 +173,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   const map=mapInitialize(mapFrame);
 
-  const marker=L.marker([34.985458, 135.757756],{icon:mapIcons.postedSpot}).bindTooltip('現在地').addTo(map);
+  const marker=L.marker([34.985458, 135.757756],{icon:mapIcons.postedSpotIcon}).bindTooltip('現在地').addTo(map);
     setlatestLocation(latestLocation.latitude,latestLocation.longitude,marker,locStatus);
     map.setView([latestLocation.latitude, latestLocation.longitude], 13);
 
@@ -185,12 +186,15 @@ document.addEventListener('DOMContentLoaded',()=>{
   const fileInput  = document.getElementById('fileInput');
   const formArea   = document.getElementById('formArea');
   const previewGrid = document.getElementById('previewGrid');
-    const imageEls=previewGrid.children;
-    Array.from(imageEls).forEach((e,i)=>e.onclick=()=>setcurrentForcusImgId(i,previewGrid))
-    images.forEach((img,index)=>{imageEls[index].src=img.src;});
+  const imageEls=previewGrid.children;
+  Array.from(imageEls).forEach((e,i)=>e.onclick=()=>setcurrentForcusImgId(i,previewGrid))
+  images.forEach((img,index)=>{imageEls[index].src=img.src;});
 
   const captionEl  = document.getElementById('caption');
   captionEl.value=editSpot.description;
+  
+  const hiddenEl=document.getElementById('isHiddenCheckbox');
+  hiddenEl.checked=editSpot.hidden;
   const submitBtn  = document.getElementById('submitBtn');
   const retakeBtn  = document.getElementById('retakeBtn');
 
@@ -266,7 +270,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   // 投稿ボタンの設定
   submitBtn.addEventListener('click', async () => 
   {
-    await postSpot(captionEl);
+    await postSpot(captionEl, hiddenEl);
   });
   submitBtn.disabled = (images.filter(img => img.status !== 'NONE').length < 1);
   //メニューの初期化

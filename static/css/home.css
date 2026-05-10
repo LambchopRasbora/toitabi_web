@@ -84,19 +84,6 @@
   height: 100%;
 }
 
-#totyu{
-  background-image: url("/static/asset/images//totyuicon.png");
-}
-
-.continue-btn{
-  display: inline-flex;
-  align-items: center;
-  border: none;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-}
-
 /* 左の丸枠（虫眼鏡の枠部分） */
 .icon-circle{
       position: relative;
@@ -134,4 +121,14 @@
   font-family: "Press Start 2P", "DotGothic16", "M PLUS 1 Code", system-ui, monospace;
   font-size:22px;
   letter-spacing:0.1em;
+}
+
+.field{
+  margin-top: 10px;
+  border:3px solid #000 ;
+  border-radius: 5%;
+}
+
+.app-description{
+  margin: 5%;
 }

@@ -8,4 +8,10 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e){
         if(!form.reportValidity()) e.preventDefault();
     });
+
+    const errMsg=document.getElementById('err-msg');
+    const param=new URLSearchParams(window.location.search);
+    if(param.has('error')) {
+        errMsg.textContent = 'メールアドレスまたはパスワードが間違っています。';
+    }
 });

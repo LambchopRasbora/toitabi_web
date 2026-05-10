@@ -70,6 +70,12 @@
 			<div id="tag-list" aria-live="polite"></div>
 			<!-- Hidden inputs for tags will be appended here by JS (name="tags") -->
 
+			<div class = "c-card hidden-field">
+              <input type="checkbox" id="isHiddenCheckbox" th:field="*{hidden}"/>
+              <label for="isHiddenCheckbox">このスポットを非公開にする</label>
+            </div>
+
+
 		<div class="postingformsubmit">
 			<input type="submit" value="投稿">
 		</div>

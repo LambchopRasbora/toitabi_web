@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if(error)
     {
+        const errorArea=document.getElementById("error-message");
+        errorArea.textContent = error;
         alert(error);
     }
 });

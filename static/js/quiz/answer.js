@@ -21,8 +21,8 @@ function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
   //現在地マーカーの設置
   const lc = locateInitialize(map);
 
-  const confirmMarker = L.marker(userLatLng, { icon: mapIcons.userConfirm }).addTo(map).bindTooltip("あなたの確定位置");
-  const trueMarker    = L.marker(spotLatLng, { icon: mapIcons.trueSpot }).addTo(map).bindTooltip("正解のスポット");
+  const confirmMarker = L.marker(userLatLng, { icon: mapIcons.userConfirmIcon }).addTo(map).bindTooltip("あなたの確定位置");
+  const trueMarker    = L.marker(spotLatLng, { icon: mapIcons.trueSpotIcon }).addTo(map).bindTooltip("正解のスポット");
 
   // ライン&両者が入る範囲にフィット
   const line = L.polyline([userLatLng, spotLatLng], { weight: 6, opacity: 0.6 }).addTo(map);
@@ -43,11 +43,13 @@ function hiddengetOverlay()
 {
     const getoverlay=document.getElementById("get-overlay");
     getoverlay.classList.add("hidden");
+    const falseoverlay=document.getElementById("false-overlay");
+    falseoverlay.classList.add("hidden");
 }
 
 function showMain()
 {
-    const app=document.getElementsByClassName("app")[0];
+    const app=document.getElementsByClassName("screen")[0];
     app.classList.remove("hidden");
 
     //地図サイズの再設定
@@ -106,30 +108,41 @@ function setCurrentImgId(id, previewimageElements, mainImageElement)
 
 document.addEventListener("DOMContentLoaded",()=>{
 
-
     initGoalPage({
       minutes: 32,                     
-      distanceMeters: response.answerDto.distance_meter,           
-      score: response.answerDto.point,
-      userLatLng: [response.answerDto.answerLat, response.answerDto.answerLng], 
-      spotLatLng: [response.spotDto.latitude, response.spotDto.longitude] 
+      distanceMeters: response.answerDto.distance_meter??999,           
+      score: response.answerDto.point??0,
+      userLatLng: [response.answerDto.answerLat??34, response.answerDto.answerLng??135], 
+      spotLatLng: [response.spotDto.latitude??34, response.spotDto.longitude??135] 
     });
 
     const shareBtn = document.getElementById("shareBtn");
-    shareBtn?.addEventListener("click", async () => {
-      await snsShare(response.answerDto.point, "かかった時間は未実装", response.answerDto.distance_meter);
-    });
+    if(response)
+    {
+      shareBtn?.addEventListener("click", async () => {
+        await snsShare(response.answerDto.point, "かかった時間は未実装", response.answerDto.distance_meter);
+      });
+    }
+    
 
     //キャラクターの表示
     const obtainedChara=response.obtainedChara;
     
-    //キャラクター表示用の要素を取得
-    const overlay_title=document.getElementsByClassName("character-title")[0];
-    const characterimg = document.getElementsByClassName("character-img")[0];
-    const messageTitle=document.getElementsByClassName("message-title")[0];
-    const messageText=document.getElementsByClassName("message-text")[0];
+    const getoverlay=document.getElementById("get-overlay");
+    const falseoverlay=document.getElementById("false-overlay");
+    const focusoverlay=obtainedChara?getoverlay:falseoverlay;
+    
+    console.log(obtainedChara);
     if(obtainedChara)
     {
+      falseoverlay.classList.add("hidden");
+      
+      //キャラクター表示用の要素を取得
+      const overlay_title=document.getElementsByClassName("character-title")[0];
+      const backimage=document.getElementsByClassName("character-back")[0];
+      const characterimg = document.getElementsByClassName("character-img")[0];
+      const messageTitle=document.getElementsByClassName("message-title")[0];
+      const messageText=document.getElementsByClassName("message-text")[0];
       characterimg.src=obtainedChara.lowImageUri?? "/asset/images/default/NoImage.jpg";
       characterimg.addEventListener("animationend",showMessage);
       overlay_title.textContent="キャラクターをゲット！";
@@ -138,11 +151,9 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
     else
     {
-        overlay_title.textContent="キャラクターゲット失敗...";
-        messageTitle.textContent="ゲット失敗...";
-        messageText.textContent="";
+      getoverlay.classList.add("hidden");
     }
-    const get_close_btn=document.getElementsByClassName("get-close-btn")[0];
+    const get_close_btn=focusoverlay.getElementsByClassName("get-close-btn")[0];
       get_close_btn.addEventListener("click",()=>{
           hiddengetOverlay();
           showMain();

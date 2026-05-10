@@ -8,9 +8,12 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+
   <title>アカウント仮登録完了</title>
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
+  
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
-  <link rel="stylesheet" href="../../static/css/account/userregisterd.css" th:href="@{/css/account/userregisterd.css}">
+  <link rel="stylesheet" href="../../static/css/account/accountcommon.css" th:href="@{/css/account/accountcommon.css}">
 </head>
 <body>
   <!--CSSレイアウト制御用の画面全体を囲うコンテナ-->
@@ -20,20 +23,19 @@
     <main class ="content">
       <div class="container">
         <!-- キャラクター吹き出し（左向き） -->
-        <section class="ch-stack">
+        <section class="c-card">
           <div class="ch-balloon">
-              <p class="ch-text">
+            <h3>アカウント仮登録完了</h3>
+            <p class="ch-text">
               アカウントの仮登録が正常に完了しました。<br>
-              sozoro708@gmail.comからのメールを確認し、本登録を完了させてください。<br>
+              sozoro708@gmail.com<br>
+              からのメールを確認し、本登録を完了させてください。<br>
               かなり高確率で迷惑メールフォルダに入っています。
-              </p>
+            </p>
+            <a href="/">ホームへ</a>
           </div>
           <img
-          class="ch-avatar"
-          src="../../static/asset/images/character/256/256-01.png"
-          th:src="@{/asset/images/character/256/256-01.png}"
-          alt="トイタビキャラクター"
-          />
+          class="ch-avatar" src="../../static/asset/images/character/256/256-01.png" th:src="@{/asset/images/character/256/256-01.png}" alt="トイタビキャラクター"/>
         </section>
       </div>
     </main> 
