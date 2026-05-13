@@ -1,5 +1,5 @@
  
-import { post } from "../common/serverRequest.js";
+import { post, postApi } from "../common/serverRequest.js";
 import { menuInitialize}from "../common/menu.js";
 import { locateInitialize, mapInitialize, polygonInitialize } from "../common/map/mapInitialize.js"
 import { mapIcons } from "../common/map/mapicons.js";
@@ -78,60 +78,21 @@ const watchId= navigator.geolocation.watchPosition(
   },
   { enableHighAccuracy:true, timeout:10000, maximumAge:5000 });
 
-//サーバー通信のインターバル
-const fetchTime=10000;
-//latestLocationを用いてサーバーからヒントを返してもらう関数
-function fetchLocation()
-{
- if(!latestLocation)
-  {
-    console.log("現在地が取得できていません");
-    setTimeout(()=>{
-      fetchLocation();
-    },fetchTime);
-    return;
-  } 
-  fetch('/api/hints/location', {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      session_id:response.session_id,
-      question_id: response.question_number,
-      spotId: response.spotDto.spotId, 
-      latitude: latestLocation.coords.latitude,
-      longitude: latestLocation.coords.longitude
-    })
-  })
-  .then((res)=>{
-    return res.json();
-    })
-  .then((json)=>{
-    const dis= json.distance;
-    distanceindicator.textContent='あと'+dis+'m';
-    setTimeout(fetchLocation,fetchTime);
-  })
-  .catch((err)=>{
-    console.error("ヒントの取得に失敗しました", err);
-    setTimeout(fetchLocation,fetchTime);
-  })
-}
-
 //latestLocationを用いてサーバーからヒントを返してもらう関数
 function getHint()
 {
   const askedLat=latestLocation.coords.latitude;
-  const askedLng=latestLocation.coords.longitude
-  fetch('/api/hints/dirdis', {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      session_id:response.session_id,
-      question_id: response.question_number,
-      spotId: response.spotDto.spotId, 
-      latitude: askedLat,
-      longitude: askedLng
-    })
-  })
+  const askedLng=latestLocation.coords.longitude;
+
+  const params={
+    session_id:response.session_id,
+    question_id: response.question_number,
+    spotId: response.spotDto.spotId, 
+    latitude: askedLat,
+    longitude: askedLng
+  };
+
+  postApi('/api/hints/dirdis',params)
   .then((res)=>{
     return res.json();
     })
@@ -146,8 +107,7 @@ function getHint()
   })
   .catch((err)=>{
     console.error("ヒントの取得に失敗しました", err);
-    setTimeout(fetchLocation,fetchTime);
-  })
+  });
 }
 
 function createHintMarker(map,lat,lng,dir,width,rad)

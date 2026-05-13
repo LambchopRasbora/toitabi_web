@@ -159,7 +159,7 @@ async function postSpot(captionEl,isHiddenCheckbox)
   }
 
   //ポストを行う
-  post('./confirm',params,);
+  post('./confirm',params,()=>{showError("投稿に失敗しました。もう一度時間をおいてやり直してください。");});
 }
 
 //初期化管理(ページのすべてが読み込まれた後に実行)

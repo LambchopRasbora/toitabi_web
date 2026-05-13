@@ -14,6 +14,10 @@
   <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/home.css" th:href="@{/css/home.css}">
 
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
 </head>
 
 
@@ -73,7 +77,7 @@
           </button>
         </template>
       </div>
-      <div class= "description-field field">
+      <div class= "description-field field c-card">
         <p class ="app-description">
           このWEBサイトは街の隠れた名所へ出かけるお散歩クイズサイト<br>
           出題されるクイズはユーザーが投稿したもの!!<br>
@@ -95,22 +99,25 @@
     <!-- Footer -->
     <footer class="app-footer">
       <!-- Bottom actions -->
-      <div class="bottom-actions">
-        <!--設定画面へ遷移するボタン-->
-        <button class="action-btn menu-btn" type="button">
-          <!--ボタンのラベル-->
-          <div class ="caption">メニュー</div>
-          <!--メニューアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{asset/images/icon/icon_menu.png}"/>
-        </button>
-
-        <!--投稿画面へ遷移-->
-        <button class="action-btn" type="button" onclick= "location.href='/spotpost/capture'" >
-          <!--ボタンのラベル-->
-          <div class="caption">トイスポットを投稿</div>
-          <!--投稿用アイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-        </button>
+      <div class="bottom-actions" style= "grid-template-columns:1fr 2fr">
+        <div class="footer-button-container">
+          <!--設定画面へ遷移するボタン-->
+          <button class="action-btn menu-btn c-card" type="button">
+            <!--ボタンのラベル-->
+            <div class ="caption">メニュー</div>
+            <!--メニューアイコン-->
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{asset/images/icon/icon_menu.png}"/>
+          </button>
+        </div>
+        <div class="footer-button-container">
+          <!--投稿画面へ遷移-->
+          <button class="action-btn c-card" type="button" onclick= "location.href='/spotpost/capture'" >
+            <!--ボタンのラベル-->
+            <div class="caption">トイスポットを投稿</div>
+            <!--投稿用アイコン-->
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+          </button>
+        </div>
       </div> 
     </footer>
     <!-- homeの制御スクリプト -->

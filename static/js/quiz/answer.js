@@ -31,6 +31,7 @@ function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
   // ざっくり距離（地図上）を表示（任意）
   const meters = map.distance(userLatLng, spotLatLng);
   line.bindTooltip(`誤差 約 ${meters < 1000 ? Math.round(meters) + "m" : (meters/1000).toFixed(2) + "km"}`, { sticky: true });
+
 }
 
 function showMessage()

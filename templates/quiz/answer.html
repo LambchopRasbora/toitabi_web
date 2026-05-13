@@ -57,7 +57,7 @@
   <script type="module" src="../../static/js/quiz/answer.js" th:src="@{/js/quiz/answer.js}"></script>
   
   <!--画面全体を包むコンテナ（レイアウト管理用）-->
-  <div class="screen hidden">
+  <div class="screen">
     <!-- 固定ヘッダー -->
     <div th:replace="~{common/layout :: header-nav('結果!!')}"></div>
 
@@ -135,27 +135,35 @@
     <!-- 固定フッター -->
     <footer class="app-footer">
       <!--ボタンを横並びにする領域-->
-      <div class="bottom-actions">
-        <!--次のスポットへボタン-->
-        <button class="action-btn next-btn" type="button" onclick=""> 
-          <!--ボタンのテキスト-->
-          <div class ="caption">次のスポットへ </div>
-          <!--次へ進むアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/nextspoticon.png" th:src="@{/asset/images/nextspoticon.png}"/>
-        </button>
-        
+      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
+        <div class ="footer-button-container">
+          <button class="action-btn sns-btn c-card" type="button" onclick=""> 
+            <!--ボタンのテキスト-->
+            <div class ="caption">SNSシェア</div>
+            <!--次へ進むアイコン-->
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_share.png" th:src="@{/asset/images/icon/icon_share.png}"/>
+          </button>
+          <button class="action-btn home-btn c-card" type="button" onclick="location.href='/'"> 
+            <!--ボタンのテキスト-->
+            <div class ="caption">ホームに戻る</div>
+            <!--次へ進むアイコン-->
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          </button>
+        </div>
         <!--ホームに戻るボタン-->
-        <button class="action-btn home-btn" type="button" onclick="location.href='/'"> 
-          <!--ボタンのテキスト-->
-          <div class="caption">ホームに戻る</div>
-          <!--ホームアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
+        <div class ="footer-button-container">
+          <button class="action-btn next-btn  c-card" type="button" onclick=""> 
+            <!--ボタンのテキスト-->
+            <div class="caption">次のスポットへ</div>
+            <!--ホームアイコン-->
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_visit.png" th:src="@{/asset/images/icon/icon_visit.png}"/>
+          </button>
+        </div>
       </div>
     </footer>
   </div>
   
-  <div class="screen">
+  <div class="screen  hidden">
     <!--キャラクターゲット時のコンテンツ-->
     <div id="get-overlay" class ="overlay character-overlay-area">
       <div class ="character-title-container">
