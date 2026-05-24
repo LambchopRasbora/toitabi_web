@@ -83,6 +83,7 @@ body{
   margin-top: 5px;
   line-height:1.6;
   font-size: var(--button-font-size);
+  white-space: pre-wrap;
 }
 #menu-btn
 {

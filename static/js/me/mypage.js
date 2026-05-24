@@ -8,5 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
     usernameField.textContent=user.username;
     emailField.textContent=user.email;
 
+    const pointEl=document.getElementById('point-field');
+
+    pointEl.textContent=point||'000';
+
     menuInitialize();
 });

@@ -32,19 +32,20 @@ document.addEventListener('DOMContentLoaded',()=>{
     closeBtn.addEventListener('click',hideCharacterDetail);
     const charaPositions=characterPositions;
 
-    const charaContainer=document.getElementsByClassName("character-container")[0];
+    const charaContainer=document.getElementsByClassName("character-stage")[0];
 
     const charaTemplate=document.getElementById("character-index-button");
 
     charas.forEach(chara=>{
         const position=charaPositions.find(({charaId})=>charaId===chara.charaId);
+        if(!position)return;
         const fragment = charaTemplate.content.cloneNode(true);
         const container= fragment.querySelector(".chara-button");
         container.addEventListener('click',()=>{showCharacterDetail(chara);});
         fragment.querySelector(".chara-img").src=chara.lowImageUri;
-        container.style.width=`${position.width}px`;
-        container.style.left=`${position.x}px`;
-        container.style.top=`${position.y}px`;
+        container.style.height=`${position.height}%`;
+        container.style.left=`${position.x}%`;
+        container.style.top=`${position.y}%`;
 
         charaContainer.appendChild(fragment);
 

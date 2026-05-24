@@ -26,6 +26,11 @@ const watchId= navigator.geolocation.watchPosition(
   },
   { enableHighAccuracy:false, timeout:10000, maximumAge:5000 });
 
+function errorCallback(err)
+{
+  console.log(err);
+}
+
 //クイズをテーマでスタートさせる関数
 function quizStartWithTheme({id,number})
 {
@@ -33,7 +38,7 @@ function quizStartWithTheme({id,number})
     "themeId":id,
     "totalQuestionNumber":number
   };
-  post("/game/quizStart",params);
+  post("/game/quizStart",params,errorCallback);
 }
 
 function quizStartTemporary({polygon,number})
@@ -47,7 +52,7 @@ function quizStartTemporary({polygon,number})
     "polygon":polygon,
     "totalQuestionNumber":number
   };
-  post("/game/quizStartTemporary",params);
+  post("/game/quizStartTemporary",params,errorCallback);
 }
 
 //quizを途中から行う関数
@@ -56,7 +61,7 @@ function quizCotinue({session_id})
   const params={
     "session_id":session_id
   };
-  post("/game/quizResume",params);
+  post("/game/quizResume",params,errorCallback);
 }
 
 //テーマカードを作成する関数

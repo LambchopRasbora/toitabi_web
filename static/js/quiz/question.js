@@ -3,6 +3,8 @@ import { post, postApi } from "../common/serverRequest.js";
 import { menuInitialize}from "../common/menu.js";
 import { locateInitialize, mapInitialize, polygonInitialize } from "../common/map/mapInitialize.js"
 import { mapIcons } from "../common/map/mapicons.js";
+import SpotDescriptionCard from "../components/spot-description-card.js";
+import PhotoGallery from "../components/photo-gallery.js";
 
 // —— 現在地マップ（Leaflet） —— //
 //マップオブジェクトの作成
@@ -12,55 +14,20 @@ const map = mapInitialize(mapElement);
 //位置情報初期設定
 const lc=locateInitialize(map);
 
+const fetchTime=5000;
+
 navigator.geolocation.getCurrentPosition(
   (pos) => {
     const {latitude, longitude} = pos.coords;
     map.setView([latitude, longitude], 17);
   },
   () => {
-    // 失敗時は表示せずassertを出す
     alert("現在地の取得に失敗しました")
   },
-  { enableHighAccuracy:false, timeout:20000, maximumAge:20000 }
+  { enableHighAccuracy:false, timeout:20000, maximumAge:fetchTime}
 );
 
-
-// —— サムネ→メイン切替 —— //
-const main = document.getElementById('mainPhoto');
-const thumbs = document.getElementById('thumbs');
-const distanceindicator=document.getElementById('distance');
-const thumbbutton=thumbs.children;
-const descriptionText=document.getElementById('description');
-const authorText=document.getElementById('author');
-
 const currentSpot=response.spotDto;
-const images=currentSpot.images;
-
-//画像のデータ埋め込み
-for(let i =0;i<images.length;i++)
-{
-  if(i>=thumbbutton.length)break;
-  const btn=thumbbutton[i];
-  btn.dataset.src=images[i];
-  btn.children[0].src=images[i];
-}
-main.src=thumbbutton[0].dataset.src;
-
-//thumbのクリック時イベント
-thumbs.addEventListener('click', (e) => {
-  const btn = e.target.closest('.thumb');
-  if(!btn) return;
-  const src = btn.dataset.src;
-  if(!src) return;
-  main.src = src;
-  // active 表示
-  thumbs.querySelectorAll('.thumb').forEach(b => b.classList.remove('is-active'));
-  btn.classList.add('is-active');
-}, {passive:true});
-
-
-
-
 
 //最新の現在地(この変数が変更される)
 let latestLocation=null;
@@ -76,7 +43,7 @@ const watchId= navigator.geolocation.watchPosition(
     latestLocation=null;
     console.error("位置情報に関するエラー"+err);
   },
-  { enableHighAccuracy:true, timeout:10000, maximumAge:5000 });
+  { enableHighAccuracy:true, timeout:10000, maximumAge:fetchTime});
 
 //latestLocationを用いてサーバーからヒントを返してもらう関数
 function getHint()
@@ -162,24 +129,32 @@ function postQuestion(isskip)
 
   //送信前に現在地が最新であるか確認し、最新でなければ再取得する
   if(Date.now()-lastsent<fetchTime) postCallback(latestLocation);
-  else navigator.geolocation.getCurrentPosition(postCallback,errorCallback, { enableHighAccuracy:true, timeout:20000, maximumAge:5000 });
+  else navigator.geolocation.getCurrentPosition(postCallback,errorCallback, { enableHighAccuracy:true, timeout:20000, maximumAge:fetchTime });
 }
 
 //ドキュメントが読み込まれた際のイベント
 document.addEventListener('DOMContentLoaded',()=>{
 
-  //説明テキストの追加
-  if(currentSpot.description)descriptionText.textContent=currentSpot.description;
-  //投稿者の追加
-  const authorString=currentSpot.author??"問い人知らず";
-  if(currentSpot.author)authorText.textContent="投稿者："+authorString;
+  const {createApp}=Vue;
+  createApp({
+    data(){
+      return {
+        spotPhotos:response.spotDto.images,
+        spottags:response.spotDto.tags,
+      }
+    },
+    components:{
+      'spot-description-card': SpotDescriptionCard,
+      'photo-gallery':PhotoGallery
+    }
+  }).mount('#scrollArea');
 
   const area=response.area;
   if(area)polygonInitialize(area.area,map);
 
 
   const skip_btn=document.querySelector('.skip-btn');
-  const post_btn=document.querySelector('.post-btn');
+  const post_btn=document.querySelector('.next-btn');
   if(skip_btn) skip_btn.addEventListener('click',()=>{postQuestion(true)});
   if(post_btn) post_btn.addEventListener('click',()=>{postQuestion(false)});
 

@@ -26,7 +26,8 @@
   />
 
   <!--共通CSSを読み込む-->
-  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}"/>
+  <link rek ="stylesheet" href="../../static/css/common/spotcomponent.css" th:href="@{/css/common/spotcomponent.css}">
   <!--ゴール画面専用のCSSを読み込む-->
   <link rel="stylesheet" href="../../static/css/game/goal.css" th:href="@{/css/game/goal.css}">
   <!--Leafletの JavaScript本体 をCDNから読み込む-->
@@ -40,6 +41,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
   <!--現在地取得・追跡を行う LeafletプラグインのJS を読み込む-->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
@@ -57,7 +60,7 @@
   <script type="module" src="../../static/js/quiz/answer.js" th:src="@{/js/quiz/answer.js}"></script>
   
   <!--画面全体を包むコンテナ（レイアウト管理用）-->
-  <div class="screen">
+  <div class="screen hidden">
     <!-- 固定ヘッダー -->
     <div th:replace="~{common/layout :: header-nav('結果!!')}"></div>
 
@@ -113,49 +116,39 @@
       </section>
 
       <section id ="spot-info-section">
-        <div class="content-field image-field c-card">
-          <img class="main-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <div class="preview-grid">
-            <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-            <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-            <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-            <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          </div>
-        </div>
+       <photo-gallery :photos="spotPhotos"></photo-gallery>
 
-        <div class="content-field hint-field c-card">
-          <h3>説明文</h3>
-          <span class="description">説明文が表示されます。</span>
-          <h3>タグ</h3>
-          <div class="tag-field"></div>
-        </div>
+       <spot-description-card 
+      description="説明なし" th:descritpion="${response.spotDto.description}"
+       author="問人知らず" th:author="${response.spotDto.author}" 
+       :tags="spottags">
+      </spot-description-card>
+      </section>
+
+      <section class="content-field detail-character-field c-card">
+        <h3>ゲットしたキャラクター</h3>
+        <img class ="detail-character-img" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}" alt="キャラクター画像">
+        <h3 class="detail-character-name">キャラクターの名前</h3>
+        <p class="detail-character-text">キャラクターの説明</p>
       </section>
     </main>
 
     <!-- 固定フッター -->
     <footer class="app-footer">
-      <!--ボタンを横並びにする領域-->
       <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
         <div class ="footer-button-container">
           <button class="action-btn sns-btn c-card" type="button" onclick=""> 
-            <!--ボタンのテキスト-->
             <div class ="caption">SNSシェア</div>
-            <!--次へ進むアイコン-->
             <img class = "icon-img" src = "../../static/asset/images/icon/icon_share.png" th:src="@{/asset/images/icon/icon_share.png}"/>
           </button>
           <button class="action-btn home-btn c-card" type="button" onclick="location.href='/'"> 
-            <!--ボタンのテキスト-->
             <div class ="caption">ホームに戻る</div>
-            <!--次へ進むアイコン-->
             <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
           </button>
         </div>
-        <!--ホームに戻るボタン-->
         <div class ="footer-button-container">
-          <button class="action-btn next-btn  c-card" type="button" onclick=""> 
-            <!--ボタンのテキスト-->
+          <button class="action-btn next-btn  c-card" type="button" onclick="">
             <div class="caption">次のスポットへ</div>
-            <!--ホームアイコン-->
             <img class = "icon-img" src = "../../static/asset/images/icon/icon_visit.png" th:src="@{/asset/images/icon/icon_visit.png}"/>
           </button>
         </div>
@@ -163,7 +156,7 @@
     </footer>
   </div>
   
-  <div class="screen  hidden">
+  <div class="screen">
     <!--キャラクターゲット時のコンテンツ-->
     <div id="get-overlay" class ="overlay character-overlay-area">
       <div class ="character-title-container">

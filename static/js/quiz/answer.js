@@ -3,6 +3,8 @@ import {menuInitialize} from "../common/menu.js";
 import { post } from "../common/serverRequest.js";
 import { snsShare } from "../common/snsShare.js";
 import { mapInitialize,locateInitialize, polygonInitialize } from "../common/map/mapInitialize.js";
+import PhotoGallery from "../components/photo-gallery.js";
+import SpotDescriptionCard from "../components/spot-description-card.js";
 
 let map;
 let bounds;
@@ -67,47 +69,22 @@ function onclickNext()
   post(postURL,params);
 }
 
-function initSpotField(spotFieldElement, spot)
-{
-  // プレビュー画像とメイン画像の要素を取得
-  const previewimageElements = spotFieldElement.querySelectorAll('.preview-image');
-  const mainImageElement = spotFieldElement.querySelector('.main-image');
-
-  //フォーカス変更をそれぞれのサブ画像に設定
-  previewimageElements.forEach((el, index) => {
-    el.addEventListener('click', () => setCurrentImgId(index, previewimageElements, mainImageElement));
-    el.src=spot.images[index] || '/asset/images/default/NoImage.jpg';
-  });
-
-  setCurrentImgId(0, previewimageElements, mainImageElement);
-
-  //説明文の設定
-  const descriptionElement=spotFieldElement.querySelector('.description');
-  descriptionElement.textContent=spot.description?? '';
-
-  //タグの設定
-  const tagContainer=spotFieldElement.querySelector('.tag-field');
-
-  spot.tags.forEach(tag=>{
-    const tagElement=document.createElement('p');
-    tagElement.classList.add('tag');
-    tagElement.textContent='#' + tag.name;
-    tagContainer.appendChild(tagElement);
-  });
-}
-
-let currentImgId=0;
-
-function setCurrentImgId(id, previewimageElements, mainImageElement) 
-{
-  currentImgId = id;
-  previewimageElements.forEach((el, index) => {
-    el.classList.toggle('focused', index === currentImgId);
-  });
-  mainImageElement.src = previewimageElements[currentImgId].src;
-}
 
 document.addEventListener("DOMContentLoaded",()=>{
+
+  const {createApp}=Vue;
+  createApp({
+    data(){
+      return {
+        spotPhotos:response.spotDto.images,
+        spottags:response.spotDto.tags,
+      }
+    },
+    components:{
+      'photo-gallery':PhotoGallery,
+      'spot-description-card':SpotDescriptionCard
+    }
+  }).mount('#scrollArea');
 
     initGoalPage({
       minutes: 32,                     
@@ -133,7 +110,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     const falseoverlay=document.getElementById("false-overlay");
     const focusoverlay=obtainedChara?getoverlay:falseoverlay;
     
-    console.log(obtainedChara);
     if(obtainedChara)
     {
       falseoverlay.classList.add("hidden");
@@ -160,13 +136,24 @@ document.addEventListener("DOMContentLoaded",()=>{
           showMain();
       });
 
-    //Spotのセット
-    const spotElement=document.getElementById('spot-info-section');  
-    initSpotField(spotElement,response.spotDto);
 
     //Areaのmapを設定
     const area=response.area;
     if(area)polygonInitialize(area.area,map);
+
+    //通常表示部にキャラ情報を表示
+    const detailCharacterContainer=document.getElementsByClassName("detail-character-field")[0];
+    console.log(detailCharacterContainer);
+    if(obtainedChara)
+    {
+      detailCharacterContainer.querySelector(".detail-character-img").src=obtainedChara?.lowImageUri?? "/asset/images/default/NoImage.jpg";
+      detailCharacterContainer.querySelector(".detail-character-name").textContent=obtainedChara?.name?? "キャラクターなし";
+      detailCharacterContainer.querySelector(".detail-character-text").textContent=obtainedChara?.description?? "今回のスポットではキャラクターをゲットできませんでした。";
+    }
+    else
+    {
+      detailCharacterContainer.remove();
+    }
     
     //次の問題へボタンのイベントリスナーを設定
     const next_btn=document.getElementsByClassName("next-btn")[0];

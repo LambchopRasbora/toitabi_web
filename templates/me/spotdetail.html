@@ -18,6 +18,10 @@
 
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <link rel="stylesheet" href="../../static/css/postsuccess.css" th:href="@{/css/postsuccess.css}">
+  <link rel ="stylesheet" href="../../static/css/common/spotcomponent.css" th:href="@{/css/common/spotcomponent.css}">
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 
   <script type="module" src="../../static/js/me/spotdetail.js" th:src="@{/js/me/spotdetail.js}"></script>
 </head>
@@ -25,25 +29,22 @@
   <script th:inline="javascript">
     const spot =/*[[${spot}]]*/{};
   </script>
-  <div class ="screen">
+  <div class ="screen" id="spot-detail-screen">
     <!-- Header -->
     <div th:replace="~{common/layout :: header-nav('スポット詳細')}"></div>
 
     <main class="content">
-      <div class="content-field c-card">
-        <img class="main-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-        <div class="preview-grid">
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-        </div>
-      </div>
+      <photo-gallery :photos="spotPhotos"></photo-gallery>
+
       <div class="content-field hint-field c-card">
         <p>説明文</p>
         <span class="description">説明文が表示されます。</span>
         <p>タグ</p>
         <div class="tag-field"></div>
+      </div>
+      <div class ="content-field c-card">
+        <p>投稿者</p>
+        <div class="author-field"></div>
       </div>
       <div class ="content-field c-card">
         <div id="map" class="map"></div>
@@ -58,18 +59,22 @@
       </div>
     </main>
 
-    <!-- Bottom actions -->
-    <footer class="app-footer">
-      <div class="bottom-actions">
-        <button class="action-btn"  type="button" onclick="location.href='/me/spotindex'">
-          <div class ="caption">一覧に戻る </div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-        </button>
 
-        <button class="action-btn" type="button" onclick="location.href='/'">
-          <div class="caption">ホームに戻る</div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
+    <!-- 固定フッター -->
+    <footer class="app-footer">
+      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
+        <div class ="footer-button-container">
+          <button class="action-btn home-btn c-card" type="button" onclick="location.href='/'"> 
+            <div class ="caption">ホームに戻る</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          </button>
+        </div>
+        <div class ="footer-button-container">
+          <button class="action-btn next-btn  c-card" type="button" onclick="location.href='/me/spotindex'">
+            <div class="caption">一覧へ戻る</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+          </button>
+        </div>
       </div>
     </footer>
   </div>

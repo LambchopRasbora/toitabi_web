@@ -93,15 +93,19 @@
     </main>
     <!-- Bottom actions -->
     <footer class="app-footer">
-      <div class="bottom-actions">
-        <button class="action-btn menu-btn"  type="button" >
-          <div class ="caption">メニュー </div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
-        </button>
-        <button class="action-btn" type="button" onclick="location.href='/'">
-          <div class="caption">ホームに戻る</div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
+      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
+        <div class ="footer-button-container">
+          <button class="action-btn menu-btn c-card" type="button" onclick=""> 
+            <div class ="caption">メニュー</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
+          </button>
+        </div>
+        <div class ="footer-button-container">
+          <button class="action-btn home-btn  c-card" type="button" onclick="location.href='/'">
+            <div class="caption">ホームへ戻る</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          </button>
+        </div>
       </div>
     </footer>
     <!-- ローディングオーバーレイ -->

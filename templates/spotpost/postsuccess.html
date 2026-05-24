@@ -15,8 +15,10 @@ d<!doctype html>
   <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <!--LeafletのJavaScript本体-->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/common/spotcomponent.css" th:href="@{/css/common/spotcomponent.css}">
   <link rel="stylesheet" href="../../static/css/postsuccess.css" th:href="@{/css/postsuccess.css}">
 
   <script type="module" src="../../static/js/capture/postsuccess.js" th:src="@{/js/capture/postsuccess.js}"></script>
@@ -32,28 +34,16 @@ d<!doctype html>
     <!-- Header -->
     <div th:replace="~{common/layout :: header-nav('投稿完了!')}"></div>
 
-    <main class="content">
+    <main class="content" id="spot-detail-screen">
       <h3>トイスポットの投稿完了</h3>
-      <div class="content-field c-card">
-        <img class="main-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-        <div class="preview-grid">
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-        </div>
-      </div>
+      
+      <photo-gallery :photos="spotPhotos"></photo-gallery>
 
-      <div class ="content-field">
-        <div class="author-field"></div>
-      </div>
-
-      <div class="content-field hint-field c-card">
-        <p>説明文</p>
-        <span class="description">説明文が表示されます。</span>
-        <p>タグ</p>
-        <div class="tag-field"></div>
-      </div>
+      <spot-description-card 
+      :description="spot.description"
+       :author="spot.author" 
+       :tags="spot.tags">
+      </spot-description-card>
 
       <div class ="content-field c-card">
         <div id="map" class="map"></div>
@@ -61,16 +51,21 @@ d<!doctype html>
     </main>
 
     <!-- Bottom actions -->
+
     <footer class="app-footer">
-      <div class="bottom-actions">
-        <button class="action-btn"  type="button" onclick="location.href='/spotpost/capture'">
-          <div class ="caption">続けて投稿 </div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-        </button>
-        <button class="action-btn" type="button" onclick="location.href='/'">
-          <div class="caption">ホームに戻る</div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
+      <div class="bottom-actions" style="grid-template-columns:1fr 1fr;">
+        <div class ="footer-button-container">
+          <button class="action-btn menu-btn c-card" type="button" onclick="location.href='/spotpost/capture'"> 
+            <div class ="caption">続けて投稿</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+          </button>
+        </div>
+        <div class ="footer-button-container">
+          <button class="action-btn home-btn  c-card" type="button" onclick="location.href='/'">
+            <div class="caption">ホームへ戻る</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          </button>
+        </div>
       </div>
     </footer>
   </div>

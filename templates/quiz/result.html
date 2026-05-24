@@ -118,20 +118,24 @@
 
     <!-- 固定フッター -->
     <footer class="app-footer">
-    <!-- Bottom actions -->
-    <div class="bottom-actions">
-      <!--SNS共有ボタン-->
-      <button class="action-btn" type="button" id="shareBtn">
-        <div class ="caption">SNSでシェア </div>
-        <img class = "icon-img" src = "../../static/asset/images/shareicon.png" th:src="@{/asset/images/menulogo.png}"/>
-      </button>
-
-      <!--ホーム画面へ戻る-->
-      <button class="action-btn" type="button" onclick="location.href='/'">
-        <div class="caption">ホームに戻る</div>
-        <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-      </button>
-    </div>
+      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
+        <div class ="footer-button-container">
+          <button class="action-btn share-btn c-card" type="button" onclick=""> 
+            <div class ="caption">SNSシェア</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_share.png" th:src="@{/asset/images/icon/icon_share.png}"/>
+          </button>
+          <button class="action-btn home-btn c-card" type="button" onclick="location.href='/'"> 
+            <div class ="caption">ホームに戻る</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          </button>
+        </div>
+        <div class ="footer-button-container">
+          <button class="action-btn next-btn  c-card" type="button" onclick="location.href='/me/characterindex'">
+            <div class="caption">My図鑑</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
+          </button>
+        </div>
+      </div>
     </footer>
   </div>
   

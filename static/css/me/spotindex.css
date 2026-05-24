@@ -7,37 +7,50 @@
 .spot-marker{
     background: transparent;
     border: none;
+
+
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .spot-marker-image
 {
+    
     width: 60px;
     /*jsのimgHeightをここに合わせる*/
     height: 50px;
     border-radius: 5%;
-    background-color: #fff;
-    border: 2px solid white;
+    background-color: #000;
+    border: 3px solid #000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     object-fit: cover;
+
+    overflow: hidden;
+    top:0;
+    left:0;
+
 }
 
 .marker-image {
-    width: 100% !important;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .spot-marker::after {
     content: '';
     position: absolute;
-    bottom: -10px; /* jsのarrowHeightをここに合わせる */
-    left: 50%;
+    left: 30px;
     transform: translateX(-50%);
     
     /* 三角形の作成（ボーダーを利用） */
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-top: 10px solid white; 
+    border-top: 10px solid #000; 
     
     width: 0;
     height: 0;
+    margin-bottom: 0px;
 }
 
 .spot-card{

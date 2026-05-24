@@ -2,19 +2,24 @@ import { mapIcons } from "../common/map/mapicons.js";
 import { mapInitialize } from "../common/map/mapInitialize.js";
 import { menuInitialize } from "../common/menu.js";
 import {post} from "../common/serverRequest.js"
+import PhotoGallery from "../components/photo-gallery.js";
 
-
-function setCurrentImgId(id, previewimageElements, mainImageElement) 
-{
-  previewimageElements.forEach((el, index) => {
-    el.classList.toggle('focused', index === id);
-  });
-  mainImageElement.src = previewimageElements[id].src;
-}
 
 
 document.addEventListener('DOMContentLoaded', function() {
 
+  const {createApp}=Vue;
+  createApp({
+    data(){
+      return {
+        spotPhotos:spot.images,
+        spottags:spot.tags,
+      }
+    },
+    components:{
+      'photo-gallery':PhotoGallery
+    }
+  }).mount('#spot-detail-screen');
 
   const editBtn=document.getElementsByClassName('edit-btn')[0];
   editBtn.addEventListener('click',()=>{location.href='/me/spotedit?spotId='+spot.spotId;});
@@ -24,21 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     post('/me/deletespot',{spotId:spot.spotId});
   });
-
-
-  // プレビュー画像とメイン画像の要素を取得
-  const previewimageElements = document.querySelectorAll('.preview-image');
-  const mainImageElement = document.getElementsByClassName('main-image')[0];
-
-  //フォーカス変更をそれぞれのサブ画像に設定
-  previewimageElements.forEach((el, index) => {
-    el.addEventListener('click', () => setCurrentImgId(index, previewimageElements, mainImageElement));
-    el.src=spot.images[index] || '/asset/images/default/NoImage.jpg';
-  });
-
-  
-
-  setCurrentImgId(0, previewimageElements, mainImageElement);
 
   //説明文の設定
   const descriptionElement=document.getElementsByClassName('description')[0];
@@ -59,6 +49,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const map=mapInitialize(mapElement);
   map.setView([spot.latitude, spot.longitude], 15);
   L.marker([spot.latitude, spot.longitude],{icon:mapIcons.postedSpotIcon}).addTo(map);
+
+  //投稿者の設定
+  const authorElement=document.querySelector('.author-field');
+  authorElement.textContent=spot.author||'問人知らず';
 
   menuInitialize();
 });

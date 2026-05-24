@@ -201,6 +201,11 @@ main {
   margin-left: 10px;;
 }
 
+.detail-character-img
+{
+  height: 300px;
+}
+
 .hidden{ display:none; }
 
 #get-overlay{

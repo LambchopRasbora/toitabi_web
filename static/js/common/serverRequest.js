@@ -15,7 +15,7 @@ export function GetListparamURL(url,list)
     return `${url}?${param.toString()}`;
 }
 
-export async function post(path, params, errorCallback=()=>{}, method='post') 
+export async function post(path, params, errorCallback=(err)=>{alert("送信に失敗しました",err);}, method='post') 
 {
   var formData = new FormData();
   
@@ -49,23 +49,30 @@ export async function post(path, params, errorCallback=()=>{}, method='post')
 
   formData.append(csrfParam, csrfToken);
 
-  //送信
-  const response= await fetch(path,{
-    method: method.toUpperCase(),
-    body:formData
-  });
+  try{
+    //送信
+    const response= await fetch(path,{
+      method: method.toUpperCase(),
+      body:formData
+    });
 
-  //遷移処理
-  if (response.redirected) {
-    // サーバーがリダイレクトした場合
-    window.location.href = response.url;
-  } else if (response.ok) {
-    // 正常終了（リダイレクトなし）
-    window.location.href = "/success";
-  } else {
-    // エラー
-    alert("送信に失敗しました");
-    errorCallback();
+    //遷移処理
+    if (response.redirected) {
+      // サーバーがリダイレクトした場合
+      window.location.href = response.url;
+    } else if (response.ok) {
+      // 正常終了（リダイレクトなし）
+      window.location.href = "/success";
+    } else {
+      // エラー
+      console.error("POSTリクエスト送信失敗",response.statusText)
+      errorCallback();
+    }
+  }
+  catch(err)
+  {
+      console.error("POSTリクエスト送信失敗",err)
+      errorCallback(err);
   }
 }
 

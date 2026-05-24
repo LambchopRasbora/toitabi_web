@@ -10,7 +10,9 @@
 
   <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
   
-  <title>トイタビ – プレイ中</title>
+  <title>トイタビ – 単独スポット問題</title>
+  <meta name="description" content="街の隠れた名所へ出かけるお散歩クイズサイト、トイタビ。
+  お散歩、解答してキャラクターをゲットしよう!">
   <!--全ページ共通のCSS-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <!--ローディング画面用CSS-->
@@ -41,7 +43,7 @@
     <!--Thymeleafの値をJS内で使えるようにする-->
     <!--サーバーから渡された response をJS変数に代入-->
     <script th:inline="javascript">
-      let response =/*[[${response}]]*/
+      let spot =/*[[${spot}]]*/
     </script> 
 
     <!-- Header -->
@@ -49,21 +51,15 @@
 
     <!-- 中央スクロール領域 -->
     <main class="content" id="scrollArea">
-
+      
       <photo-gallery :photos="spotPhotos"></photo-gallery>
-
+      
       <spot-description-card 
-      description="説明なし" th:descritpion="${response.spotDto.description}"
-       author="問人知らず" th:author="${response.spotDto.author}" 
+      description="説明なし" th:descritpion="${spot.description}"
+       author="問人知らず" th:author="${spot.author}" 
        :tags="spottags">
       </spot-description-card>
 
-      <section id="hint-section" class="hint-section c-card">
-        <!--ヒント表示エリア-->
-        <button id="hint-btn" class="capsule-btn">
-          <p>ヒントの取得</p>
-        </button>
-      </section>
       <!-- 現在地マップ -->
       <section id="mapSection" class="map-wrap c-card">
         <!--Leafletが地図を描画するDOM-->
@@ -86,15 +82,15 @@
     <footer class="app-footer">
       <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
         <div class ="footer-button-container">
-          <button class="action-btn home-btn c-card" type="button" onclick="location.href='/'"> 
-            <div class ="caption">ホームに戻る</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          <button class="action-btn home-btn c-card" type="button" onclick="location.href='/spotpost/capture'"> 
+            <div class ="caption">スポットの投稿</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
           </button>
         </div>
         <div class ="footer-button-container">
-          <button class="action-btn next-btn  c-card" type="button" onclick="">
-            <div class="caption">スポット確定!!</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_visit.png" th:src="@{/asset/images/icon/icon_visit.png}"/>
+          <button class="action-btn next-btn  c-card" type="button" onclick="location.href='/'">
+            <div class="caption">ホームへ戻る</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
           </button>
         </div>
       </div>
@@ -108,6 +104,6 @@
   </div>
 
   <!-- Question制御用スクリプト -->
-  <script type="module" src="../../static/js/quiz/question.js" th:src="@{/js/quiz/question.js}"></script>
+  <script type="module" src="../../static/js/index/spot.js" th:src="@{/js/index/spot.js}"></script>
 </body>
 </html>
