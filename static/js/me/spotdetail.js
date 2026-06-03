@@ -3,6 +3,7 @@ import { mapInitialize } from "../common/map/mapInitialize.js";
 import { menuInitialize } from "../common/menu.js";
 import {post} from "../common/serverRequest.js"
 import PhotoGallery from "../components/photo-gallery.js";
+import ToitabiFooter from ".../components/toitabi-footer.js";
 
 
 
@@ -21,13 +22,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }).mount('#spot-detail-screen');
 
+  createApp({
+    data(){
+      return {
+        leftContents:[
+          {
+            caption:"ホームへ戻る",
+            class:"home-btn",
+            icon:"/asset/images/icon/icon_home.png",
+            onClick:()=>{location.href='/';}
+          }],
+        rightContents:[
+          {
+            caption:"スポット一覧に戻る",
+            class:"spot-btn",
+            icon:"/asset/images/icon/icon_post.png",
+            onClick:()=>{location.href='/me/spotindex';}
+          }]
+      }
+    },
+    components:{
+      'toitabi-footer':ToitabiFooter
+    }
+  }).mount('#footer');
+
   const editBtn=document.getElementsByClassName('edit-btn')[0];
   editBtn.addEventListener('click',()=>{location.href='/me/spotedit?spotId='+spot.spotId;});
 
   const deleteBtn=document.getElementsByClassName('delete-btn')[0];
   deleteBtn.addEventListener('click',()=>{
-
-    post('/me/deletespot',{spotId:spot.spotId});
+    if(confirm('スポットを本当に削除しますか？')) {
+      post('/me/deletespot',{spotId:spot.spotId});
+    }
   });
 
   //説明文の設定

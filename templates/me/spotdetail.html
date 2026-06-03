@@ -29,11 +29,11 @@
   <script th:inline="javascript">
     const spot =/*[[${spot}]]*/{};
   </script>
-  <div class ="screen" id="spot-detail-screen">
+  <div class ="screen">
     <!-- Header -->
     <div th:replace="~{common/layout :: header-nav('スポット詳細')}"></div>
 
-    <main class="content">
+    <main class="content" id="spot-detail-screen">
       <photo-gallery :photos="spotPhotos"></photo-gallery>
 
       <div class="content-field hint-field c-card">
@@ -61,22 +61,12 @@
 
 
     <!-- 固定フッター -->
-    <footer class="app-footer">
-      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
-        <div class ="footer-button-container">
-          <button class="action-btn home-btn c-card" type="button" onclick="location.href='/'"> 
-            <div class ="caption">ホームに戻る</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-          </button>
-        </div>
-        <div class ="footer-button-container">
-          <button class="action-btn next-btn  c-card" type="button" onclick="location.href='/me/spotindex'">
-            <div class="caption">一覧へ戻る</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-          </button>
-        </div>
-      </div>
-    </footer>
+    <div id="footer">
+      <toitabi-footer :ratio="'1fr 1fr'"
+        :leftcontents="leftContents"
+        :rightcontents="rightContents">
+      </toitabi-footer> 
+    <div>
   </div>
 </body>
 </html>

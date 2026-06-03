@@ -1,4 +1,4 @@
-d<!doctype html>
+<!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
@@ -40,9 +40,9 @@ d<!doctype html>
       <photo-gallery :photos="spotPhotos"></photo-gallery>
 
       <spot-description-card 
-      :description="spot.description"
-       :author="spot.author" 
-       :tags="spot.tags">
+       description="説明なし" th:descritpion="${spot.description}"
+       author="問人知らず" th:author="${spot.author}" 
+       :tags="spottags">
       </spot-description-card>
 
       <div class ="content-field c-card">
@@ -52,22 +52,11 @@ d<!doctype html>
 
     <!-- Bottom actions -->
 
-    <footer class="app-footer">
-      <div class="bottom-actions" style="grid-template-columns:1fr 1fr;">
-        <div class ="footer-button-container">
-          <button class="action-btn menu-btn c-card" type="button" onclick="location.href='/spotpost/capture'"> 
-            <div class ="caption">続けて投稿</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-          </button>
-        </div>
-        <div class ="footer-button-container">
-          <button class="action-btn home-btn  c-card" type="button" onclick="location.href='/'">
-            <div class="caption">ホームへ戻る</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-          </button>
-        </div>
-      </div>
-    </footer>
+    <!-- Footer -->
+    <toitabi-footer :ratio="'1fr 1fr'"
+     :leftcontents="leftContents"
+     :rightcontents="rightContents">
+    </toitabi-footer>
   </div>
 </body>
 </html>

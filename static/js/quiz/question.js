@@ -5,6 +5,7 @@ import { locateInitialize, mapInitialize, polygonInitialize } from "../common/ma
 import { mapIcons } from "../common/map/mapicons.js";
 import SpotDescriptionCard from "../components/spot-description-card.js";
 import PhotoGallery from "../components/photo-gallery.js";
+import ToitabiFooter from "../components/toitabi-footer.js";
 
 // —— 現在地マップ（Leaflet） —— //
 //マップオブジェクトの作成
@@ -147,7 +148,31 @@ document.addEventListener('DOMContentLoaded',()=>{
       'spot-description-card': SpotDescriptionCard,
       'photo-gallery':PhotoGallery
     }
-  }).mount('#scrollArea');
+  }).mount('#spot-info');
+
+  createApp({
+    data(){
+      return {
+        leftContents:[
+          {
+            caption:"ホームへ戻る",
+            class:"home-btn",
+            icon:"/asset/images/icon/icon_home.png",
+            onClick:()=>{location.href='/';}
+          }],
+        rightContents:[
+          {
+            caption:"スポットを確定!!",
+            class:"spot-btn",
+            icon:"/asset/images/icon/icon_visit.png",
+            onClick:()=>{postQuestion(false)}
+          }]
+      }
+    },
+    components:{
+      'toitabi-footer':ToitabiFooter
+    }
+  }).mount('#footer');
 
   const area=response.area;
   if(area)polygonInitialize(area.area,map);

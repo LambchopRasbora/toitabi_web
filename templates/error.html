@@ -7,16 +7,21 @@
 
 
 <body>
-  <div th:text="'timestamp: ' + ${timestamp}"></div>
-  <div th:text="'status: ' + ${status}"></div>
-  <div th:text="'error: ' + ${error}"></div>
-  <div th:text="'exception: ' + ${exception}"></div>
-  <div th:text="'message: ' + ${message}"></div>
-  <div th:text="'errors: ' + ${errors}"></div>
-  <div th:text="'trace: ' + ${trace}"></div>
-  <div th:text="'path: ' + ${path}"></div>
-  <div>エラーページです</div>
-  <a href='/'>ホームへ戻る</a>
+  <!-- Header-->
+  <div th:replace="~{common/layout :: header-nav('エラーページ')}"></div>
+
+  <div>
+    <h1>エラーが発生しました。</h1>
+    <div th:text="'timestamp: ' + ${timestamp}"></div>
+    <div th:text="'status: ' + ${status}"></div>
+    <div th:text="'error: ' + ${error}"></div>
+    <div th:text="'exception: ' + ${exception}"></div>
+    <div th:text="'message: ' + ${message}"></div>
+    <div th:text="'errors: ' + ${errors}"></div>
+    <div th:text="'trace: ' + ${trace}"></div>
+    <div th:text="'path: ' + ${path}"></div>
+    <a href='/'>ホームへ戻る</a>
+  </div>
 
   <footer class="app-footer">
       <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">

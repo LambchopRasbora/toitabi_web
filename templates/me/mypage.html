@@ -15,6 +15,9 @@
   <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
   <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/me/mypage.css" th:href="@{/css/me/mypage.css}">
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
   <script type ="module" src="../../static/js/me/mypage.js" th:src="@{/js/me/mypage.js}"></script>
 </head>
@@ -30,9 +33,11 @@
     <!-- Main Content -->
     <main class ="content">
       <h1>マイページ</h1>
+      <div class="c-card">
       <h3>ユーザ名</h3> <p  id="username-field">ここにアカウント名を表示</p>
       <h3>メールアドレス</h3> <p id="email-field">ここにメールアドレスを表示</p>
-      <h3>獲得点数</h3><p id="point-field">獲得した点数(現在工事中)</p>
+      <h3>獲得点数</h3><p id="point-field" th:text="${point}">獲得した点数(現在工事中)</p>
+      </div>
       <ul>
         <li><button class = "menu-content-btn" onclick="location.href='/me/characterindex'">
         <img class src ="../../static/asset/images/icon/icon_library.png" th:src="@{/asset/images/icon/icon_library.png}"/>
@@ -44,30 +49,16 @@
       </button></li>
       </ul>
       <form action="/logout" th:action="@{/logout}" method="POST">
-       <button href="/logout">ログアウト</button>
+       <button class="capsule-btn" href="/logout">ログアウト</button>
       </form>
     </main>
     
     <!-- Footer -->
-    <footer class="app-footer">
-      <!-- Bottom actions -->
-      <div class="bottom-actions">
-        <!--設定画面へ遷移するボタン-->
-        <button class="action-btn menu-btn" type="button" onclick= "location.href='/'" >
-          <!--ボタンのラベル-->
-          <div class ="caption">ホームへ戻る</div>
-          <!--メニューアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
-
-        <!--投稿画面へ遷移-->
-        <button class="action-btn" type="button" onclick= "location.href='/spotpost/capture'" >
-          <!--ボタンのラベル-->
-          <div class="caption">トイスポットを投稿</div>
-          <!--投稿用アイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-        </button>
-      </div> 
-    </footer>
+    <div id="footer">
+      <toitabi-footer :ratio="'1fr 1fr'"
+        :leftcontents="leftContents"
+        :rightcontents="rightContents">
+      </toitabi-footer> 
+    </div>
 </body>
 </html>

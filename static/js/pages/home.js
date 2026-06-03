@@ -2,6 +2,7 @@ import { post } from "../common/serverRequest.js";
 import { menuInitialize}from "../common/menu.js"
 import { mapInitialize } from "../common/map/mapInitialize.js";
 import { localizeDrawJP } from "../common/map/mapDraw.js";
+import ToitabiFooter from "../components/toitabi-footer.js"
 
 //areasを取得
 const buttonareas=document.getElementsByClassName("buttonareas")[0];
@@ -100,6 +101,7 @@ async function togglethemeList(areaId,container)
 //ダイアログの初期化設定
 function initializeDialog(dialog,map)
 {
+  console.log("initializeDialog");
   dialog.showModal();
   if(latestLocation)
   {
@@ -112,6 +114,63 @@ function initializeDialog(dialog,map)
 //初期化設定
 document.addEventListener('DOMContentLoaded',()=>
 {
+  const {createApp}=Vue;
+  createApp({
+    data(){
+      const rawdatas=typeof data !== 'undefined' ? data.areas : [];
+      const preparedAreas=rawdatas.map(area=>({
+        ...area,
+        isOpen:false,
+        themes:[]
+      }));
+
+      return {
+        areas: preparedAreas,
+        leftContents:[{
+          caption:"メニュー",
+          class:"menu-btn",
+          icon:"/asset/images/icon/icon_menu.png",
+        }],
+        rightContents:[{
+          caption:"トイスポット投稿",
+          class:"post-btn",
+          icon:"/asset/images/icon/icon_post.png",
+          onClick: ()=>{location.href='/spotpost/capture';}
+        }]
+      }
+    },
+    components:{
+      'toitabi-footer':ToitabiFooter
+    },
+    methods:{
+      async handleAreaClick(area, event) {
+        console.log("Area clicked:", area);
+        if(area.themes.length > 0) {
+          area.isOpen = !area.isOpen;
+          return;
+        }
+
+        try{
+        const res= await fetch(`/api/theme/findbyareaid?areaId=${area.areaId}`);
+        if(!res.ok)throw new Error('Failed to fetch themes');
+        
+        const data=await res.json();
+
+        area.themes=data;
+        area.isOpen=true;
+        }catch(error){
+          console.error("テーマの取得に失敗:", error);
+          alert("テーマの取得に失敗しました。時間をおいて再度お試しください。");
+        }
+      },
+      handleThemeClick(themeId,event)
+      {
+        console.log("themeBtn clicked:", themeId);
+        quizStartWithTheme({id: themeId, number: 3});
+      }
+    }
+  }).mount('#home-screen');
+
   const continue_btn=document.getElementById('continue-btn');
   //保存されているlocalsessionがあれば途中からを表示
   if(continue_btn)
@@ -125,23 +184,6 @@ document.addEventListener('DOMContentLoaded',()=>
     {
       continue_btn.remove();
     }
-  }
-
-  //areasがあればエリアカードを作成
-  if(areas)
-  {
-    areas.forEach(area=>{
-      //area-card部分作成
-      const fragment=areacardtemplate.content.cloneNode(true);
-      const area_card=fragment.querySelector(".area-card");
-      const theme_list=fragment.querySelector(".theme-list");
-      area_card.addEventListener('click',()=>{togglethemeList(area.areaId, theme_list)});
-      const img=area_card.querySelector("img");
-      img.src=area.thumbnailUri;
-      const label=area_card.querySelector(".label");
-      label.textContent=area.areaname;
-      buttonareas.appendChild(fragment);
-    });
   }
 
   //エリア作成のボタンにダイアログ表示の設定

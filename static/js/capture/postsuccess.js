@@ -3,6 +3,7 @@ import { mapInitialize } from "../common/map/mapInitialize.js";
 import { menuInitialize } from "../common/menu.js";
 import PhotoGallery from "../components/photo-gallery.js";
 import SpotDescriptionCard from "../components/spot-description-card.js";
+import ToitabiFooter from "../components/toitabi-footer.js";
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -12,11 +13,24 @@ document.addEventListener('DOMContentLoaded', function() {
       return {
         spotPhotos:spot.images,
         spottags:spot.tags,
+        leftContents:[{
+          caption:"続けて投稿",
+          class:"post-btn",
+          icon:"/asset/images/icon/icon_post.png",
+          onClick: ()=>{location.href='/spotpost/capture';}
+        }],
+        rightContents:[{
+          caption:"ホームへ戻る",
+          class:"home-btn",
+          icon:"/asset/images/icon/icon_home.png",
+          onClick: ()=>{location.href='/';}
+        }]
       }
     },
     components:{
       'photo-gallery':PhotoGallery,
-      'spot-description-card':SpotDescriptionCard
+      'spot-description-card':SpotDescriptionCard,
+      'toitabi-footer':ToitabiFooter
     }
   }).mount('#spot-detail-screen');
 

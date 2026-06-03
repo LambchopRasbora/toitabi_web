@@ -18,17 +18,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
-
+<!--Thymeleaf の値を JavaScript内で使えるようにして、Thymeleaf の値を JavaScript内で使えるようにする-->
+<script th:inline ="javascript">
+  const data =/*[[${data}]]*/{}
+</script>
 <body>
-  <!--Thymeleaf の値を JavaScript内で使えるようにして、Thymeleaf の値を JavaScript内で使えるようにする-->
-  <script th:inline ="javascript">
-    const data =/*[[${data}]]*/{}
-  </script>
-
   <!--CSSレイアウト制御用の画面全体を囲うコンテナ-->
-  <div class="screen">
+  <div id="home-screen" class="screen">
     <!-- Header-->
     <div th:replace="~{common/layout :: header-nav('トイタビに出かけよう!\nホーム画面')}"></div>
 
@@ -52,30 +52,22 @@
           </div>
         </button>
         <!--ここにエリアやゾーンが入る-->
-        <!--エリアカードのテンプレート-->
-        <template id="area-card-template">
-          <div class="area-card-caontainer">
-            <button class="area-card">
-              <!--アイコンを丸く囲う-->
-              <img class="icon-circle" src="../../static/asset/images/icon/totyuicon.png" th:src="@{/asset/images/icon/totyuicon.png}"/>
 
-              <div class="label-container">
-                <span class="label">途中から</span>
-              </div>
-            </button>
-            <div class="theme-list">
-              <!--テーマカードが入る-->
+        <div v-for="area in areas" :key="area.areaId" class="area-card-caontainer">
+          <button class="area-card" @click="handleAreaClick(area,$event)">
+            <!--アイコンを丸く囲う-->
+            <img class="icon-circle" src="../../static/asset/images/icon/totyuicon.png" :src="area.thumbnailUri"/>
+
+            <div class="label-container">
+              <span class="label">{{area.areaname}}</span>
             </div>
-          </div>
-        </template>
-
-        <!--テーマのテンプレート-->
-        <template id="theme-card-template">
-          <button class="theme-card">
-            <!--ボタンの文字-->
-            <span class="theme-label">途中から</span>
           </button>
-        </template>
+          <div class="theme-list" :class="{open: area.isOpen}">
+          <button class="theme-card" v-for="theme in area.themes" :key="theme.themeId" @click="handleThemeClick(theme.themeId,$event)">
+            <span class="theme-label">{{theme.name}}</span>
+          </button>
+          </div>
+        </div>
       </div>
       <div class= "description-field field c-card">
         <p class ="app-description">
@@ -97,31 +89,12 @@
     </dialog>
 
     <!-- Footer -->
-    <footer class="app-footer">
-      <!-- Bottom actions -->
-      <div class="bottom-actions" style= "grid-template-columns:1fr 2fr">
-        <div class="footer-button-container">
-          <!--設定画面へ遷移するボタン-->
-          <button class="action-btn menu-btn c-card" type="button">
-            <!--ボタンのラベル-->
-            <div class ="caption">メニュー</div>
-            <!--メニューアイコン-->
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{asset/images/icon/icon_menu.png}"/>
-          </button>
-        </div>
-        <div class="footer-button-container">
-          <!--投稿画面へ遷移-->
-          <button class="action-btn c-card" type="button" onclick= "location.href='/spotpost/capture'" >
-            <!--ボタンのラベル-->
-            <div class="caption">トイスポットを投稿</div>
-            <!--投稿用アイコン-->
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-          </button>
-        </div>
-      </div> 
-    </footer>
-    <!-- homeの制御スクリプト -->
-    <script type ="module" src="../../static/js/pages/home.js" th:src="@{/js/pages/home.js}"></script>
+    <toitabi-footer :ratio="'1fr 2fr'"
+     :leftcontents="leftContents"
+     :rightcontents="rightContents">
+    </toitabi-footer>
   </div>
 </body>
+<!-- homeの制御スクリプト -->
+<script type ="module" src="../../static/js/pages/home.js" th:src="@{/js/pages/home.js}"></script>
 </html>

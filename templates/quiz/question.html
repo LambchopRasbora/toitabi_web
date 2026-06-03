@@ -34,30 +34,32 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
-<!--ページ本体開始 背景色をCSS変数 --ink に設定-->
-<body style="background-color:var(--ink);">
-  <!--画面全体のレイアウト管理用-->
-  <div class="screen">
-    <!--Thymeleafの値をJS内で使えるようにする-->
+<!--Thymeleafの値をJS内で使えるようにする-->
     <!--サーバーから渡された response をJS変数に代入-->
     <script th:inline="javascript">
       let response =/*[[${response}]]*/
-    </script> 
+    </script>
+<!--ページ本体開始 背景色をCSS変数 --ink に設定-->
+<body style="background-color:var(--ink);" >
+  <!--画面全体のレイアウト管理用-->
+  <div class="screen">
+     
 
     <!-- Header -->
     <div th:replace="~{common/layout :: header-nav('トイスポットを探せ')}"></div>
 
     <!-- 中央スクロール領域 -->
-    <main class="content" id="scrollArea">
+    <main class="content" >
+      <div id="spot-info">
+        <photo-gallery :photos="spotPhotos"></photo-gallery>
 
-      <photo-gallery :photos="spotPhotos"></photo-gallery>
+        <spot-description-card
+        description="説明なし" th:descritpion="${response.spotDto.description}"
+        author="問人知らず" th:author="${response.spotDto.author}" 
+        :tags="spottags">
+        </spot-description-card>
 
-      <spot-description-card 
-      description="説明なし" th:descritpion="${response.spotDto.description}"
-       author="問人知らず" th:author="${response.spotDto.author}" 
-       :tags="spottags">
-      </spot-description-card>
-
+      </div>
       <section id="hint-section" class="hint-section c-card">
         <!--ヒント表示エリア-->
         <button id="hint-btn" class="capsule-btn">
@@ -65,7 +67,7 @@
         </button>
       </section>
       <!-- 現在地マップ -->
-      <section id="mapSection" class="map-wrap c-card">
+      <section id="mapSection" class="map-wrap c-card" v-pre>
         <!--Leafletが地図を描画するDOM-->
         <div id="map"></div>
         <!--注意書き-->
@@ -82,23 +84,12 @@
     </main>
 
     <!--footer-->
-    <!-- 固定フッター -->
-    <footer class="app-footer">
-      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
-        <div class ="footer-button-container">
-          <button class="action-btn home-btn c-card" type="button" onclick="location.href='/'"> 
-            <div class ="caption">ホームに戻る</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-          </button>
-        </div>
-        <div class ="footer-button-container">
-          <button class="action-btn next-btn  c-card" type="button" onclick="">
-            <div class="caption">スポット確定!!</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_visit.png" th:src="@{/asset/images/icon/icon_visit.png}"/>
-          </button>
-        </div>
-      </div>
-    </footer>
+    <div id="footer">
+      <toitabi-footer :ratio="'1fr 2fr'"
+        :leftcontents="leftContents"
+        :rightcontents="rightContents">
+      </toitabi-footer> 
+    </div>
   </div>
 
   <!-- ローディングオーバーレイ -->
