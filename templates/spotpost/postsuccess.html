@@ -26,9 +26,7 @@
 
 <body>
   <script th:inline="javascript">
-    
     const spot =/*[[${spot}]]*/{};
-
   </script>
   <div class ="screen">
     <!-- Header -->
@@ -40,7 +38,7 @@
       <photo-gallery :photos="spotPhotos"></photo-gallery>
 
       <spot-description-card 
-       description="説明なし" th:descritpion="${spot.description}"
+       description="説明なし" th:description="${spot.description}"
        author="問人知らず" th:author="${spot.author}" 
        :tags="spottags">
       </spot-description-card>
@@ -50,13 +48,13 @@
       </div>
     </main>
 
-    <!-- Bottom actions -->
-
     <!-- Footer -->
-    <toitabi-footer :ratio="'1fr 1fr'"
-     :leftcontents="leftContents"
-     :rightcontents="rightContents">
-    </toitabi-footer>
+     <div id="footer">
+      <toitabi-footer :ratio="'1fr 1fr'"
+      :leftcontents="leftContents"
+      :rightcontents="rightContents">
+      </toitabi-footer>
+     </div>
   </div>
 </body>
 </html>

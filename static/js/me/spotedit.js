@@ -3,6 +3,7 @@ import {menuInitialize} from '../common/menu.js';
 import { mapIcons } from "../common/map/mapicons.js";
 import { resizeImage } from '../common/imageResize.js';
 import { mapInitialize } from '../common/map/mapInitialize.js';
+import ToitabiFooter from '../components/toitabi-footer.js';
 
 
 let images=[
@@ -167,6 +168,44 @@ document.addEventListener('DOMContentLoaded',()=>{
     latestLocation={latitude:editSpot.latitude,longitude:editSpot.longitude};
     editSpot.images.forEach((img, index)=>{images[index]={id:index,src:img,status:'STAY'};});
 
+  const {createApp}=Vue;
+  createApp({
+     methods:{
+      async submitBtn(){
+        const captionEl  = document.getElementById('caption');
+        const hiddenEl=document.getElementById('isHiddenCheckbox');
+        await postSpot(captionEl,hiddenEl);
+      }
+    },
+    data(){
+      const spotId=spot.spotId;
+      return {
+        leftContents:[
+          {
+            caption:"詳細へ戻る",
+            class:"home-btn",
+            icon:"/asset/images/icon/icon_library.png",
+            onClick:()=>{location.href='/me/spotdetail?spotId=' + spotId;}
+          }],
+        rightContents:[
+          {
+            caption:"投稿する",
+            class:"spot-btn",
+            icon:"/asset/images/icon/icon_post.png",
+            onClick:async ()=>{
+              const captionEl  = document.getElementById('caption');
+              const hiddenEl=document.getElementById('isHiddenCheckbox');
+              await postSpot(captionEl,hiddenEl);
+            }
+          }]
+      }
+    },
+    components:{
+      'toitabi-footer':ToitabiFooter
+    }
+  }).mount('#footer');
+
+
   //地図関係の初期化
   const mapFrame=document.getElementById('mapFrame');
   const locStatus  = document.getElementById('locStatus');
@@ -273,6 +312,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     await postSpot(captionEl, hiddenEl);
   });
   submitBtn.disabled = (images.filter(img => img.status !== 'NONE').length < 1);
+
   //メニューの初期化
   menuInitialize();
 });

@@ -56,7 +56,7 @@
         <div v-for="area in areas" :key="area.areaId" class="area-card-caontainer">
           <button class="area-card" @click="handleAreaClick(area,$event)">
             <!--アイコンを丸く囲う-->
-            <img class="icon-circle" src="../../static/asset/images/icon/totyuicon.png" :src="area.thumbnailUri"/>
+            <img class="icon-circle" :src="area.thumbnailUri"/>
 
             <div class="label-container">
               <span class="label">{{area.areaname}}</span>
@@ -75,6 +75,18 @@
           出題されるクイズはユーザーが投稿したもの!!<br>
           地元民ならではの場所が見つかるかも？
         </p>
+      </div>
+      <div class="c-card">
+        <p>
+          アカウント登録は
+        </p>
+        <a href="/signup">
+          こちら!!
+        </a>
+        <p>
+          スポット投稿は
+        </p>
+        <a href="/spotpost/capture">こちら!!</a>
       </div>
     </main>
     

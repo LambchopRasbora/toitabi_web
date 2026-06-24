@@ -130,7 +130,11 @@ function postQuestion(isskip)
 
   //送信前に現在地が最新であるか確認し、最新でなければ再取得する
   if(Date.now()-lastsent<fetchTime) postCallback(latestLocation);
-  else navigator.geolocation.getCurrentPosition(postCallback,errorCallback, { enableHighAccuracy:true, timeout:20000, maximumAge:fetchTime });
+  else 
+  {
+      console.log(lastsent);
+      navigator.geolocation.getCurrentPosition(postCallback,errorCallback, { enableHighAccuracy:true, timeout:20000, maximumAge:fetchTime });
+  }
 }
 
 //ドキュメントが読み込まれた際のイベント

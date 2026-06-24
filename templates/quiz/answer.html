@@ -50,10 +50,7 @@
   <!--サーバー側の response オブジェクトをJavaScriptの response 変数として受け取る-->
   <script th:inline="javascript">
     let response =/*[[${response}]]*/; 
-    
-    
-    //let response ={"session_id":"732f3717-0a13-4dab-bb72-4ec5543d9fad","answer_id":3,"answerDto":{"answerLat":34.995287302385655,"answerLng":135.7583492775325,"distance_meter":27,"point":91,"skip":false},"obtainedChara":{"charaId":7,"name":"\u4FE1\u53F7\u6A5F\u30D6\u30E9\u30B6\u30FC\u30BA\uFF08\u9752\uFF09","description":"\u9032\u3093\u3067\u3082\u3044\u3044\u3088\u3068\u5E83\u3044\u5EA6\u91CF\u3067\u901A\u884C\u4EBA\u3092\u901A\u3059\u4E09\u5144\u5F1F\u3067\u4E00\u756A\u306E\u4EBA\u6C17\u8005","lowImageUri":"https:\/\/chara.toitabi.net\/256-07.png","highImageUri":"https:\/\/chara.toitabi.net\/1080-07.png"},"spotDto":{"spotId":28,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":0,"images":["https:\/\/localtestspot.toitabi.net\/134a2125-9d20.jpg","https:\/\/localtestspot.toitabi.net\/640ad15d-715c.jpg","https:\/\/localtestspot.toitabi.net\/cbb4df7e-9814.jpg","https:\/\/localtestspot.toitabi.net\/41ef996e-a006.jpg"],"tags":[],"description":"","latitude":34.995303516318394,"longitude":135.75805033980902},"getCharaDto":null,"finish":true,"onlyView":true}; 
-    
+  
    </script>
   <!--外部 JavaScript の読み込み-->
   <!--回答データの処理や結果表示用JS-->
@@ -134,26 +131,13 @@
     </main>
 
     <!-- 固定フッター -->
-    <footer class="app-footer">
-      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
-        <div class ="footer-button-container">
-          <button class="action-btn sns-btn c-card" type="button" onclick=""> 
-            <div class ="caption">SNSシェア</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_share.png" th:src="@{/asset/images/icon/icon_share.png}"/>
-          </button>
-          <button class="action-btn home-btn c-card" type="button" onclick="location.href='/'"> 
-            <div class ="caption">ホームに戻る</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-          </button>
-        </div>
-        <div class ="footer-button-container">
-          <button class="action-btn next-btn  c-card" type="button" onclick="">
-            <div class="caption">次のスポットへ</div>
-            <img class = "icon-img" src = "../../static/asset/images/icon/icon_visit.png" th:src="@{/asset/images/icon/icon_visit.png}"/>
-          </button>
-        </div>
-      </div>
-    </footer>
+    <!--footer-->
+    <div id="footer">
+      <toitabi-footer :ratio="'1fr 2fr'"
+        :leftcontents="leftContents"
+        :rightcontents="rightContents">
+      </toitabi-footer> 
+    </div>
   </div>
   
   <div class="screen">
@@ -183,7 +167,7 @@
         <h1 class="character-title">キャラクターゲット失敗</h1>
       </div>
       <div class ="character-area-container c-card">
-        <img class ="false-img" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}" alt="キャラクター画像">
+        <img class ="false-img" src="../../static/asset/images/default/NoCharacter.jpg" th:src="@{/asset/images/default/NoCharacter.jpg}" alt="キャラクター画像">
       </div>
       <div class = "message-area-container c-card">
         <h2 class="message-title">キャラクターゲット失敗</h2>

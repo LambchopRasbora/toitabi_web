@@ -5,15 +5,18 @@ import { snsShare } from "../common/snsShare.js";
 import { mapInitialize,locateInitialize, polygonInitialize } from "../common/map/mapInitialize.js";
 import PhotoGallery from "../components/photo-gallery.js";
 import SpotDescriptionCard from "../components/spot-description-card.js";
+import ToitabiFooter from "../components/toitabi-footer.js";
 
 let map;
 let bounds;
 
-function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
+function initGoalPage({minutes,score,distanceMeters,userLatLng, spotLatLng }) {
   // 数値表示
   const km = distanceMeters >= 1000? (distanceMeters / 1000).toFixed(1) + " km": Math.round(distanceMeters) + " m";
   
   document.getElementById("distValue").textContent = km;
+  console.log(minutes);
+  document.getElementById("timeValue").textContent = minutes + "分";
   document.getElementById("scoreValue").textContent = score;
 
   // 地図
@@ -72,6 +75,12 @@ function onclickNext()
 
 document.addEventListener("DOMContentLoaded",()=>{
 
+  const score=response.answerDto.point??0;
+  const distanceMeters=response.answerDto.distance_meter??999;
+  const km = distanceMeters >= 1000? (distanceMeters / 1000).toFixed(1) + " km": Math.round(distanceMeters) + " m";
+
+  const durationMinutes=response.answerDto.durationMinutes;
+
   const {createApp}=Vue;
   createApp({
     data(){
@@ -86,10 +95,43 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   }).mount('#scrollArea');
 
+  createApp({
+    data(){
+      return {
+        leftContents:[
+          {
+            caption:"SNSシェア",
+            class:"sns-btn",
+            icon:"/asset/images/icon/icon_share.png",
+            onClick:()=>{
+              console.log("snsShareStart");
+              snsShare(score,"???",km);
+            }
+          },
+          {
+            caption:"ホームへ戻る",
+            class:"home-btn",
+            icon:"/asset/images/icon/icon_home.png",
+            onClick:()=>{location.href='/';}
+          }],
+        rightContents:[
+          {
+            caption:"次へ",
+            class:"next-btn",
+            icon:"/asset/images/icon/icon_visit.png",
+            onClick:()=>{onclickNext();}
+          }]
+      }
+    },
+    components:{
+      'toitabi-footer':ToitabiFooter
+    }
+  }).mount('#footer');
+  
     initGoalPage({
-      minutes: 32,                     
-      distanceMeters: response.answerDto.distance_meter??999,           
-      score: response.answerDto.point??0,
+      minutes: durationMinutes,                     
+      distanceMeters: distanceMeters,           
+      score: score,
       userLatLng: [response.answerDto.answerLat??34, response.answerDto.answerLng??135], 
       spotLatLng: [response.spotDto.latitude??34, response.spotDto.longitude??135] 
     });
@@ -98,7 +140,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(response)
     {
       shareBtn?.addEventListener("click", async () => {
-        await snsShare(response.answerDto.point, "かかった時間は未実装", response.answerDto.distance_meter);
+        await snsShare(response.answerDto.point, durationMinutes, response.answerDto.distance_meter);
       });
     }
     

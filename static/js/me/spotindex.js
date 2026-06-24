@@ -1,6 +1,8 @@
 import { mapIcons } from "../common/map/mapicons.js";
 import { mapInitialize } from "../common/map/mapInitialize.js";
 import { menuInitialize } from "../common/menu.js";
+import SpotReviewCard from "../components/spot_review_card.js";
+import ToitabiFooter from "../components/toitabi-footer.js"
 
 function putSpotButton(spotId)
 {
@@ -30,46 +32,59 @@ function initSpotMarker(map,spot)
     return marker;
 }
 
-function initSpotDetail(template,parent,spot)
-{
-    const imgs=spot.images??["/asset/images/default/NoImage.jpg"];
-    const description=spot.description??"説明なし";
-    const tags=spot.tags??[];
-
-    let tag_string="";
-
-    tags.forEach(t=>tag_string+=(" #"+t.name));
-
-    const fragment=template.content.cloneNode(true);
-
-    fragment.querySelector(".description").textContent=description;
-    fragment.querySelector(".spot-main-img").src=imgs[0];
-    fragment.querySelector(".tag").textContent=tag_string;
-
-    fragment.querySelector(".spot-card").addEventListener("click",()=>{putSpotButton(spot.spotId);});
-
-    parent.appendChild(fragment);
-}
 
 document.addEventListener('DOMContentLoaded',()=>
 {
     const mapContainer = document.getElementById('map');
     const map=mapInitialize(mapContainer);
-    const spotDetailCard=document.getElementById("spot-detail-container");
-    const spotDetailTemplate=document.getElementById("spot-detail-template");
 
-    spots.forEach(spot => {
-        initSpotMarker(map,spot); 
-        initSpotDetail(spotDetailTemplate,spotDetailCard,spot);
-    });
-    if(spots.length<=0)
+    
+    if(spots.length>=0)
     {
-        initSpotDetail(spotDetailTemplate,spotDetailCard,{
-            images:[],
-            description:"投稿されたスポットはありません",
-            tags:[]
+      spots.forEach(spot => {
+            initSpotMarker(map,spot); 
         });
     }
+
+    const {createApp}=Vue;
+
+    createApp({
+        data(){
+          return {
+            spots:spots
+          }
+        },
+        methods:{
+            putSpotButton
+        },
+        components:{
+          'spot-review-card':SpotReviewCard
+        }
+      }).mount('#spot-detail-container');
+
+     createApp({
+        data(){
+          return {
+            leftContents:[
+              {
+                caption:"ホームへ戻る",
+                class:"home-btn",
+                icon:"/asset/images/icon/icon_home.png",
+                onClick:()=>{location.href='/';}
+              }],
+            rightContents:[
+              {
+                caption:"スポット投稿",
+                class:"spot-btn",
+                icon:"/asset/images/icon/icon_post.png",
+                onClick:()=>{location.href='/spotpost/capture';}
+              }]
+          }
+        },
+        components:{
+          'toitabi-footer':ToitabiFooter
+        }
+      }).mount('#footer');
 
     menuInitialize();
 });

@@ -33,18 +33,16 @@
     <!-- Header -->
     <div th:replace="~{common/layout :: header-nav('スポット詳細')}"></div>
 
-    <main class="content" id="spot-detail-screen">
-      <photo-gallery :photos="spotPhotos"></photo-gallery>
+    <main class="content">
+      <div id="spot-detail-screen">
+        <photo-gallery :photos="spotPhotos"></photo-gallery>
 
-      <div class="content-field hint-field c-card">
-        <p>説明文</p>
-        <span class="description">説明文が表示されます。</span>
-        <p>タグ</p>
-        <div class="tag-field"></div>
-      </div>
-      <div class ="content-field c-card">
-        <p>投稿者</p>
-        <div class="author-field"></div>
+        <spot-description-card 
+        description="説明なし" th:description="${spot.description}"
+        author="問人知らず" th:author="${spot.author}" 
+        :tags="spottags">
+        </spot-description-card>
+
       </div>
       <div class ="content-field c-card">
         <div id="map" class="map"></div>

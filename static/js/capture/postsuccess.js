@@ -12,6 +12,19 @@ document.addEventListener('DOMContentLoaded', function() {
     data(){
       return {
         spotPhotos:spot.images,
+        spottags:spot.tags
+      }
+    },
+    components:{
+      'photo-gallery':PhotoGallery,
+      'spot-description-card':SpotDescriptionCard
+    }
+  }).mount('#spot-detail-screen');
+
+  createApp({
+    data(){
+      return {
+        spotPhotos:spot.images,
         spottags:spot.tags,
         leftContents:[{
           caption:"続けて投稿",
@@ -28,11 +41,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
     components:{
-      'photo-gallery':PhotoGallery,
-      'spot-description-card':SpotDescriptionCard,
       'toitabi-footer':ToitabiFooter
     }
-  }).mount('#spot-detail-screen');
+  }).mount('#footer');
 
   //場所を示すマップとマーカーの設定
   const mapElement=document.getElementById('map');

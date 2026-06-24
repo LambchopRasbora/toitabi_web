@@ -2,21 +2,79 @@ import { mapIcons } from "../common/map/mapicons.js";
 import {menuInitialize} from "../common/menu.js";
 import { snsShare } from "../common/snsShare.js";
 import { mapInitialize,locateInitialize, polygonInitialize } from "../common/map/mapInitialize.js";
+import ToitabiFooter from "../components/toitabi-footer.js";
+import SpotReviewCard from "../components/spot_review_card.js";
 
-function initGoalPage({distanceMeters, questions,answers}) 
-{
-  //合計距離合計時間の表示
+//ドキュメントが読み込まれたときに実行する関数
+document.addEventListener("DOMContentLoaded",()=>{
+
+  const questions=response.questions;
+  const answers=response.answers;
+
+  
+  const distanceMeters=answers.reduce((sum,item)=>sum+item.distance_meter,0);
+  const minutes=answers.reduce((sum,item)=>sum+item.durationMinutes,0);;
+
+ //合計距離合計時間の表示
   const km = distanceMeters >= 1000
     ? (distanceMeters / 1000).toFixed(1) + " km"
     : Math.round(distanceMeters) + " m";
-  document.getElementById("distValue").textContent = km;
 
   const score = answers.reduce((accumulator, answer)=> accumulator+answer.point,0);
 
+  const {createApp}=Vue;
+  createApp({
+    data(){
+      return{
+        spots:questions
+      }
+    },
+    components:{
+      'spot-review-card':SpotReviewCard
+    }
+  }).mount('#spot-cards');
+
+  createApp({
+    data(){
+      return {
+        leftContents:[
+          {
+            caption:"SNSシェア",
+            class:"sns-btn",
+            icon:"/asset/images/icon/icon_share.png",
+            onClick:()=>{
+              console.log("snsShareStart");
+              snsShare(score,minutes,km);
+            }
+          },
+          {
+            caption:"ホームへ戻る",
+            class:"home-btn",
+            icon:"/asset/images/icon/icon_home.png",
+            onClick:()=>{location.href='/';}
+          }],
+        rightContents:[
+          {
+            caption:"My図鑑を見る",
+            class:"library-btn",
+            icon:"/asset/images/icon/icon_library.png",
+            onClick:()=>{location.href='/me/characterindex';}
+          }]
+      }
+    },
+    components:{
+      'toitabi-footer':ToitabiFooter
+    }
+  }).mount('#footer');
+
+  
+
+  document.getElementById("distValue").textContent = km;
+  document.getElementById("timeValue").textContent = minutes + "分";
   document.getElementById("scoreValue").textContent = score;
   
   //マップの作製
-  const N = questions.length;  // ←spot数　//
+  const N = questions.length;  
   const spots = Array.from({ length: N }, (_, i) => ({
       id: i + 1,
       name: `スポット${i + 1}`,
@@ -77,24 +135,6 @@ function initGoalPage({distanceMeters, questions,answers})
   
   // 画面タップで閉じる
   overlayEl.addEventListener("click", hideSpotPopup);
-}
-
-//ドキュメントが読み込まれたときに実行する関数
-document.addEventListener("DOMContentLoaded",()=>{
-
-  //シェアボタンにシェアイベントを追加
-  const shareBtn = document.getElementById("shareBtn");
-  shareBtn?.addEventListener("click", async () => {
-    await snsShare(0, "かかった時間は未実装", 0);
-  });
-
-  //ゴールページの作成
-  initGoalPage({
-    minutes: 0,
-    distanceMeters: 0,
-    questions: response.questions,
-    answers: response.answers
-  });
 
   //エリアの設定
   const area=response.area;

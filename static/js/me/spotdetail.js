@@ -3,7 +3,8 @@ import { mapInitialize } from "../common/map/mapInitialize.js";
 import { menuInitialize } from "../common/menu.js";
 import {post} from "../common/serverRequest.js"
 import PhotoGallery from "../components/photo-gallery.js";
-import ToitabiFooter from ".../components/toitabi-footer.js";
+import SpotDescriptionCard from "../components/spot-description-card.js";
+import ToitabiFooter from "../components/toitabi-footer.js";
 
 
 
@@ -18,7 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
     components:{
-      'photo-gallery':PhotoGallery
+      'photo-gallery':PhotoGallery,
+      'spot-description-card':SpotDescriptionCard
     }
   }).mount('#spot-detail-screen');
 
@@ -56,29 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  //説明文の設定
-  const descriptionElement=document.getElementsByClassName('description')[0];
-  descriptionElement.textContent=spot.description;
-
-  //タグの設定
-  const tagContainer=document.getElementsByClassName('tag-field')[0];
-
-  spot.tags.forEach(tag=>{
-    const tagElement=document.createElement('p');
-    tagElement.classList.add('tag');
-    tagElement.textContent='#' + tag.name;
-    tagContainer.appendChild(tagElement);
-  });
-
   //場所を示すマップとマーカーの設定
   const mapElement=document.getElementById('map');
   const map=mapInitialize(mapElement);
   map.setView([spot.latitude, spot.longitude], 15);
   L.marker([spot.latitude, spot.longitude],{icon:mapIcons.postedSpotIcon}).addTo(map);
-
-  //投稿者の設定
-  const authorElement=document.querySelector('.author-field');
-  authorElement.textContent=spot.author||'問人知らず';
 
   menuInitialize();
 });

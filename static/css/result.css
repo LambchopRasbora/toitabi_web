@@ -91,6 +91,34 @@ main {
   height:100%;
 }
 
+
+.spot-card{
+    display: flex;
+    flex-direction: row;
+
+    gap: 10px;
+
+    width: 100%;
+
+    margin-top: 10px;
+}
+
+.spot-main-img{
+    height: 100px;
+    
+}
+.description{
+    margin-top: 0px;
+    white-space: pre-wrap;
+    text-align: left;
+}
+
+.tag-text{
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+
 /* =============================
    画面全体の白い半透明オーバーレイ
 ============================= */
