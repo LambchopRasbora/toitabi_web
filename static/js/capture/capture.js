@@ -3,6 +3,7 @@ import {menuInitialize} from '../common/menu.js';
 import { mapIcons } from "../common/map/mapicons.js";
 import { resizeImage } from '../common/imageResize.js';
 import { mapInitialize } from '../common/map/mapInitialize.js';
+import ToitabiFooter from '../components/toitabi-footer.js';
 
 //filesは先に4の配列にしておくnullの場所にファイルを当てはめていく
 let files = [null,null,null,null];
@@ -139,6 +140,12 @@ async function postSpot(captionEl,isHiddenCheckbox)
     }
   }
   
+  //isHiddenの値を取得
+  let isHidden=false;
+  if(isHiddenCheckbox)
+  {
+    isHidden=isHiddenCheckbox.checked;
+  }
 
   //スポットのフォーム作成
   let params={
@@ -147,7 +154,7 @@ async function postSpot(captionEl,isHiddenCheckbox)
     "description":captionEl.value,
     "images":presignedURLData.images.map(img=>img.publicAccessUri),
     "tags":tags,
-    "hidden":isHiddenCheckbox.checked
+    "hidden":isHidden
   }
   //画像のアップロード完了まで待つ
   const responses= await Promise.all(promises);
@@ -159,7 +166,7 @@ async function postSpot(captionEl,isHiddenCheckbox)
   }
 
   //ポストを行う
-  post('./confirm',params,);
+  post('./confirm',params,()=>{showError("投稿に失敗しました。もう一度時間をおいてやり直してください。");});
 }
 
 //初期化管理(ページのすべてが読み込まれた後に実行)
@@ -196,7 +203,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   const previewGrid = document.getElementById('previewGrid');
   const captionEl  = document.getElementById('caption');
   const hiddenEl=document.getElementById('isHiddenCheckbox');
-  const submitBtn  = document.getElementById('submitBtn');
   const retakeBtn  = document.getElementById('retakeBtn');
 
 
@@ -251,7 +257,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     setcurrentForcusImgId(currentForucusImgId,previewGrid);
     
     fileInput.value = '';
-    submitBtn.disabled = (files.length < 1);
   });
 
   // 位置情報取得
@@ -297,16 +302,40 @@ document.addEventListener('DOMContentLoaded',()=>{
     } 
   });
 
-
+  const {createApp}=Vue;
+  createApp({
+    data(){
+      return {
+        leftContents:[{
+          caption:"ホームへ戻る",
+          class:"home-btn",
+          icon:"/asset/images/icon/icon_home.png",
+          onClick: ()=>{location.href='/';}
+        }],
+        rightContents:[{
+          caption:"投稿する!",
+          class:"post-btn",
+          icon:"/asset/images/icon/icon_post.png",
+          onClick: ()=>{
+            if(files.size()<1)
+            {
+              alert("画像が登録されていません!!");
+              return;
+            }
+            postSpot(captionEl,hiddenEl);
+          }
+        }]
+      }
+    },
+    components:{
+      'toitabi-footer':ToitabiFooter
+    }
+  }).mount('#footer');
+  
 
   // 撮り直しボタンの設定
   retakeBtn.addEventListener('click', () => {resetImages(fileInput, previewGrid, formArea, submitBtn);});
 
-  // 投稿ボタンの設定
-  submitBtn.addEventListener('click', async () => 
-  {
-    await postSpot(captionEl, hiddenEl);
-  });
   //メニューの初期化
   menuInitialize();
 });

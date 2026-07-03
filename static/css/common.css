@@ -14,7 +14,7 @@
   --card-radius:26px;
   --button-radius:24px;
   --header-h: 100px;  /* ヘッダー高さ */
-  --footer-h: 120px; /* フッター高さ */
+  --footer-h: 130px; /* フッター高さ */
   --radius: 14px;
   --button-font-size:12px;
 }
@@ -44,7 +44,7 @@ body{
 /*黒い枠線のついたカード*/
 .c-card
 {
-  border: #000 2px solid;
+  border: #000 3px solid;
   border-radius: 10px;
   padding: 10px;
   margin: 10px 0;
@@ -83,6 +83,7 @@ body{
   margin-top: 5px;
   line-height:1.6;
   font-size: var(--button-font-size);
+  white-space: pre-wrap;
 }
 #menu-btn
 {
@@ -169,7 +170,7 @@ main{
   z-index: 10;
   top:var(--header-h); bottom:var(--footer-h);
   overflow-y:auto; -webkit-overflow-scrolling:touch;
-  padding: clamp(14px,4vw,18px) clamp(12px,3vw,16px) clamp(20px,5vw,24px);
+  padding: 20px 10px 20px;
 }
 .content .container{
   margin: 0 auto;
@@ -182,31 +183,46 @@ footer.app-footer{
   position: fixed;
   width: var(--screen-width);
   z-index: 20;
-  bottom: 10px;
+  bottom: 0px;
   height:var(--footer-h); 
-  display:grid; 
-  place-items:center;
-  padding: 5px clamp(5px, 3vw, 20px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
 }
+
 .bottom-actions{
-  margin-top:auto;
+  width: 90%;
+  height: 90%;
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap: clamp(12px,5vw,20px);
+  gap: 15px;
   align-items: center;
 }
+
+.footer-button-container{
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+  gap: 5px;
+  min-height: 0px;
+  overflow: hidden;
+}
+
 .action-btn{
   background:var(--bg);
-  border:3px solid #000;
-  border-radius:var(--button-radius);
   /* 高さはフッター変数の一定割合を目安に clamp() で制限 */
-  height: calc(var(--footer-h) * 0.8);
-  padding: clamp(12px,4vw,16px) clamp(10px,4vw,14px) clamp(16px,5vw,22px);
+  flex: 1;
+  min-height: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-height: 0px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:clamp(8px,3vw,10px);
+  gap:clamp(3px,5%,10px);
+  padding: clamp(3px, 2%, 10px);
   font-weight:600;
 }
 .action-btn .caption{
@@ -215,7 +231,10 @@ footer.app-footer{
 }
 
 .icon-img{
-  width: clamp(30px,10vw,42px); 
+  max-width: 60px;
+  height: 100%;
+  min-height: 0px;
+  object-fit: contain;
 }
 
 /* ========= ボタン押下時アクション ========= */

@@ -3,15 +3,20 @@ import {menuInitialize} from "../common/menu.js";
 import { post } from "../common/serverRequest.js";
 import { snsShare } from "../common/snsShare.js";
 import { mapInitialize,locateInitialize, polygonInitialize } from "../common/map/mapInitialize.js";
+import PhotoGallery from "../components/photo-gallery.js";
+import SpotDescriptionCard from "../components/spot-description-card.js";
+import ToitabiFooter from "../components/toitabi-footer.js";
 
 let map;
 let bounds;
 
-function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
+function initGoalPage({minutes,score,distanceMeters,userLatLng, spotLatLng }) {
   // 数値表示
   const km = distanceMeters >= 1000? (distanceMeters / 1000).toFixed(1) + " km": Math.round(distanceMeters) + " m";
   
   document.getElementById("distValue").textContent = km;
+  console.log(minutes);
+  document.getElementById("timeValue").textContent = minutes + "分";
   document.getElementById("scoreValue").textContent = score;
 
   // 地図
@@ -31,6 +36,7 @@ function initGoalPage({score,distanceMeters,userLatLng, spotLatLng }) {
   // ざっくり距離（地図上）を表示（任意）
   const meters = map.distance(userLatLng, spotLatLng);
   line.bindTooltip(`誤差 約 ${meters < 1000 ? Math.round(meters) + "m" : (meters/1000).toFixed(2) + "km"}`, { sticky: true });
+
 }
 
 function showMessage()
@@ -66,52 +72,66 @@ function onclickNext()
   post(postURL,params);
 }
 
-function initSpotField(spotFieldElement, spot)
-{
-  // プレビュー画像とメイン画像の要素を取得
-  const previewimageElements = spotFieldElement.querySelectorAll('.preview-image');
-  const mainImageElement = spotFieldElement.querySelector('.main-image');
-
-  //フォーカス変更をそれぞれのサブ画像に設定
-  previewimageElements.forEach((el, index) => {
-    el.addEventListener('click', () => setCurrentImgId(index, previewimageElements, mainImageElement));
-    el.src=spot.images[index] || '/asset/images/default/NoImage.jpg';
-  });
-
-  setCurrentImgId(0, previewimageElements, mainImageElement);
-
-  //説明文の設定
-  const descriptionElement=spotFieldElement.querySelector('.description');
-  descriptionElement.textContent=spot.description?? '';
-
-  //タグの設定
-  const tagContainer=spotFieldElement.querySelector('.tag-field');
-
-  spot.tags.forEach(tag=>{
-    const tagElement=document.createElement('p');
-    tagElement.classList.add('tag');
-    tagElement.textContent='#' + tag.name;
-    tagContainer.appendChild(tagElement);
-  });
-}
-
-let currentImgId=0;
-
-function setCurrentImgId(id, previewimageElements, mainImageElement) 
-{
-  currentImgId = id;
-  previewimageElements.forEach((el, index) => {
-    el.classList.toggle('focused', index === currentImgId);
-  });
-  mainImageElement.src = previewimageElements[currentImgId].src;
-}
 
 document.addEventListener("DOMContentLoaded",()=>{
 
+  const score=response.answerDto.point??0;
+  const distanceMeters=response.answerDto.distance_meter??999;
+  const km = distanceMeters >= 1000? (distanceMeters / 1000).toFixed(1) + " km": Math.round(distanceMeters) + " m";
+
+  const durationMinutes=response.answerDto.durationMinutes;
+
+  const {createApp}=Vue;
+  createApp({
+    data(){
+      return {
+        spotPhotos:response.spotDto.images,
+        spottags:response.spotDto.tags,
+      }
+    },
+    components:{
+      'photo-gallery':PhotoGallery,
+      'spot-description-card':SpotDescriptionCard
+    }
+  }).mount('#scrollArea');
+
+  createApp({
+    data(){
+      return {
+        leftContents:[
+          {
+            caption:"SNSシェア",
+            class:"sns-btn",
+            icon:"/asset/images/icon/icon_share.png",
+            onClick:()=>{
+              console.log("snsShareStart");
+              snsShare(score,"???",km);
+            }
+          },
+          {
+            caption:"ホームへ戻る",
+            class:"home-btn",
+            icon:"/asset/images/icon/icon_home.png",
+            onClick:()=>{location.href='/';}
+          }],
+        rightContents:[
+          {
+            caption:"次へ",
+            class:"next-btn",
+            icon:"/asset/images/icon/icon_visit.png",
+            onClick:()=>{onclickNext();}
+          }]
+      }
+    },
+    components:{
+      'toitabi-footer':ToitabiFooter
+    }
+  }).mount('#footer');
+  
     initGoalPage({
-      minutes: 32,                     
-      distanceMeters: response.answerDto.distance_meter??999,           
-      score: response.answerDto.point??0,
+      minutes: durationMinutes,                     
+      distanceMeters: distanceMeters,           
+      score: score,
       userLatLng: [response.answerDto.answerLat??34, response.answerDto.answerLng??135], 
       spotLatLng: [response.spotDto.latitude??34, response.spotDto.longitude??135] 
     });
@@ -120,7 +140,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(response)
     {
       shareBtn?.addEventListener("click", async () => {
-        await snsShare(response.answerDto.point, "かかった時間は未実装", response.answerDto.distance_meter);
+        await snsShare(response.answerDto.point, durationMinutes, response.answerDto.distance_meter);
       });
     }
     
@@ -132,7 +152,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     const falseoverlay=document.getElementById("false-overlay");
     const focusoverlay=obtainedChara?getoverlay:falseoverlay;
     
-    console.log(obtainedChara);
     if(obtainedChara)
     {
       falseoverlay.classList.add("hidden");
@@ -159,13 +178,24 @@ document.addEventListener("DOMContentLoaded",()=>{
           showMain();
       });
 
-    //Spotのセット
-    const spotElement=document.getElementById('spot-info-section');  
-    initSpotField(spotElement,response.spotDto);
 
     //Areaのmapを設定
     const area=response.area;
     if(area)polygonInitialize(area.area,map);
+
+    //通常表示部にキャラ情報を表示
+    const detailCharacterContainer=document.getElementsByClassName("detail-character-field")[0];
+    console.log(detailCharacterContainer);
+    if(obtainedChara)
+    {
+      detailCharacterContainer.querySelector(".detail-character-img").src=obtainedChara?.lowImageUri?? "/asset/images/default/NoImage.jpg";
+      detailCharacterContainer.querySelector(".detail-character-name").textContent=obtainedChara?.name?? "キャラクターなし";
+      detailCharacterContainer.querySelector(".detail-character-text").textContent=obtainedChara?.description?? "今回のスポットではキャラクターをゲットできませんでした。";
+    }
+    else
+    {
+      detailCharacterContainer.remove();
+    }
     
     //次の問題へボタンのイベントリスナーを設定
     const next_btn=document.getElementsByClassName("next-btn")[0];

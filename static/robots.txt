@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+
+Disallow: /error/
+
+# サイトマップの絶対URL
+Sitemap: https://toitabi.com/sitemap.xml

@@ -187,24 +187,20 @@
     
     <!-- Footer -->
     <footer class="app-footer">
-      <!-- Bottom actions -->
-      <div class="bottom-actions">
-        <!--設定画面へ遷移するボタン-->
-        <button class="action-btn menu-btn" type="button" onclick= "location.href='/'" >
-          <!--ボタンのラベル-->
-          <div class ="caption">ホームへ戻る</div>
-          <!--メニューアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{asset/images/icon/icon_home.png}"/>
-        </button>
-
-        <!--投稿画面へ遷移-->
-        <button class="action-btn" type="button" onclick= "location.href='/spotpost/capture'" >
-          <!--ボタンのラベル-->
-          <div class="caption">トイスポットを投稿</div>
-          <!--投稿用アイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-        </button>
-      </div> 
+      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
+        <div class ="footer-button-container">
+          <button class="action-btn menu-btn c-card" type="button" onclick=""> 
+            <div class ="caption">メニュー</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
+          </button>
+        </div>
+        <div class ="footer-button-container">
+          <button class="action-btn home-btn  c-card" type="button" onclick="location.href='/'">
+            <div class="caption">ホームへ戻る</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          </button>
+        </div>
+      </div>
     </footer>
 </body>
 </html>

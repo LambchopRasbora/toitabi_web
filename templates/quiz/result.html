@@ -40,15 +40,17 @@
 
   <!--全画面共通CSS-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel ="stylesheet" href="../../static/asset/css/common/spotcomponent.css" th:href="@{/css/common/spotcomponent.css}">
   <!--リザルト画面専用CSS-->
   <link rel="stylesheet" href="../../static/css/result.css" th:href="@{/css/result.css}">
 
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
   <!--Thymeleafの値をJS内に埋め込む-->
   <script th:inline="javascript">
-    let response =/*[[${response}]]*/
+   let response =/*[[${response}]]*/
   </script>
 
   <!--画面全体のレイアウト用ラッパー-->
@@ -97,10 +99,28 @@
       <!--Leafletが描画する地図DOM-->
       <div id="result-map"></div>
 
-    <!-- ★ 画面全体オーバーレイ（半透明白） -->
+    </div>
+
+    <section id="spot-cards" class="c-card">
+      <div v-for="spot in spots" :key="spot.spotId">
+        <spot-review-card
+          :description="spot.description||'説明なし'"
+          :author="spot.author||'問人知らず'"
+          :tags="spot.tags||'[]'"
+          :image="spot.images[0]||'/asset/images/default/NoImage.jpg'"
+        >
+        </spot-review-card>
+      </div>
+    </section>
+
+    <section id="chara-area" class="c-card">
+      
+    </section>
+
+    <!--  画面全体オーバーレイ（半透明白） -->
     <div id="overlay" class="overlay hidden"></div>
 
-    <!-- ★ 画面全体のポップアップ -->
+    <!--  画面全体のポップアップ -->
     <div id="spot-popup" class="spot-popup hidden">
       <!--ポップアップの中身-->
       <div class="spot-popup-inner">
@@ -116,23 +136,13 @@
     </div>
     </main>
 
-    <!-- 固定フッター -->
-    <footer class="app-footer">
-    <!-- Bottom actions -->
-    <div class="bottom-actions">
-      <!--SNS共有ボタン-->
-      <button class="action-btn" type="button" id="shareBtn">
-        <div class ="caption">SNSでシェア </div>
-        <img class = "icon-img" src = "../../static/asset/images/shareicon.png" th:src="@{/asset/images/menulogo.png}"/>
-      </button>
-
-      <!--ホーム画面へ戻る-->
-      <button class="action-btn" type="button" onclick="location.href='/'">
-        <div class="caption">ホームに戻る</div>
-        <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-      </button>
+    <div id="footer">
+      <toitabi-footer :ratio="'1fr 2fr'"
+        :leftcontents="leftContents"
+        :rightcontents="rightContents">
+      </toitabi-footer> 
     </div>
-    </footer>
+    
   </div>
   
   <!--リザルト画面専用ロジック）-->

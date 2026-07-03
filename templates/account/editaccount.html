@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <!-- CSRF -->
+      <meta name="_csrf" th:content="${_csrf.token}" />
+      <meta name="_csrf_parameter" th:content="${_csrf.parameterName}" />
+      <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+      <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+      <link rel ="stylesheet" href ="../../static/css/account/login.css" th:href= "@{/css/account/login.css}">
+      <title>アカウント情報変更</title>
+      <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
+  </head>
+
+  <body>
+    <div class="screen">
+      <div th:replace="~{common/layout :: header-nav('アカウント情報変更')}"></div>
+      <script th:inline ="javascript">
+        const error= /*[[${error}]]*/;
+      </script>
+      <main>
+        <h3>アカウント情報変更</h3>
+        <form th:action="@{/editaccount}" th:object="${form}" method="post" class="login-form c-card" >
+            <div class="form-group">
+                <label>ユーザー名</label>
+                <input type="text" name="username" th:field="*{username}" th:value="${user.username}" required>
+                <p class ="error-text" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" autocomplete="name"></p>
+            </div>
+            <div class="form-group">
+                <label>メールアドレス</label>
+                <input type="email" name="mail" th:field="*{mail}" required autocomplete="username" th:value="${user.mail}">
+                <p>メールアドレスを変更した際はメールの再認証が必要になります</p>
+                <p class="error-text" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></p>
+            </div>
+            <div class="form-group">
+                <label>パスワード</label>
+                <input type="password" name="password" th:field="*{password}" required autocomplete="password" th:value="${passward}">
+                <p class ="error-text" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+            </div>
+            <button type="submit" class="c-card">登録</button>
+        </form>
+        <p id="error-message">
+
+        </p>
+      </main>
+    </div>
+    <script type="module" src="../../static/js/account/editaccount.js" th:src="@{/js/account/editaccount.js}"></script>
+  </body>
+    </html>

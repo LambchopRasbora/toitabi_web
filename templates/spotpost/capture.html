@@ -1,18 +1,38 @@
 <!doctype html>
 <html lang="ja">
 <head>
+  <meta charset="utf-8" />
 
-  <th:block th:replace="~{common/layout :: head-common}"></th:block>
-
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
+  
   <title>トイタビ – トイスポット投稿</title>
   <meta name="description" content="街の隠れた名所へ出かけるお散歩クイズサイト クイズを投稿してみよう!!">
-  <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
-
+  <!--全ページ共通のCSS-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
-  <link rel="stylesheet" href="../../static/css/capture.css" th:href="@{/css/capture.css}">
+  <!--ローディング画面用CSS-->
+  <link rel="stylesheet" href="../../static/css/loading.css" th:href="@{/css/loading.css}">
 
-  <script type="module" src="../../static/js/capture/capture.js" th:src="@{/js/capture/capture.js}"></script>
+  <!--LeafletのCDNに 事前接続 して読み込みを高速化-->
+  <link rel="preconnect" href="https://unpkg.com" />
+  <!--プレイ中（問題画面）専用のCSS-->
+  <link rel="stylesheet" href="../../static/css/capture.css" th:href="@{/css/game/capture.css}">
+  <!-- Leaflet CSS / JS（CDN）, 地図表示用CSS-->
+  <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <!--LeafletのJavaScript本体-->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- LeafletLocate CSS / JS（CDN）, 現在地ボタンのCSS-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
+  <!--現在地取得用JS-->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
+  
+  <script src="https://unpkg.com/leaflet-semicircle"></script>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
   <div class="screen">
@@ -23,7 +43,7 @@
       <div class="container">
         <button class="camera-btn" id="shootBtn" type="button" aria-label="カメラを起動">
           <p>画像を選択する<br>(人の顔などのプライバシーに注意してください)</p>
-          <img src="../../static/asset/images/cameraicon.png" th:src="@{/asset/images/cameraicon.png}" alt="" class="camera-icon">
+          <img src="../../static/asset/images/icon/icon_camera.png" th:src="@{/asset/images/icon/icon_camera.png}" alt="" class="camera-icon">
         </button>
         
         <!-- 実際の入力要素（4枚まで） -->
@@ -75,7 +95,7 @@
               </div>
             </div>
 
-            <div class = "c-card">
+            <div class = "c-card hidden-field" sec:authorize="isAuthenticated()">
               <input type="checkbox" id="isHiddenCheckbox"/>
               <label for="isHiddenCheckbox">このスポットを非公開にする</label>
             </div>
@@ -91,23 +111,21 @@
         </section>
       </div>
     </main>
-    <!-- Bottom actions -->
-    <footer class="app-footer">
-      <div class="bottom-actions">
-        <button class="action-btn menu-btn"  type="button" >
-          <div class ="caption">メニュー </div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
-        </button>
-        <button class="action-btn" type="button" onclick="location.href='/'">
-          <div class="caption">ホームに戻る</div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
-      </div>
-    </footer>
+
+    <!-- Footer -->
+    <div id="footer">
+      <toitabi-footer :ratio="'1fr 2fr'"
+      :leftcontents="leftContents"
+      :rightcontents="rightContents">
+      </toitabi-footer>
+    </div>
+
+    
     <!-- ローディングオーバーレイ -->
     <div id="loadingOverlay">
       <div class="spinner"></div>
     </div>
   </div>
 </body>
+<script type="module" src="../../static/js/capture/capture.js" th:src="@{/js/capture/capture.js}"></script>
 </html>

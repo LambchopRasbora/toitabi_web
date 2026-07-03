@@ -1,48 +1,3 @@
-
-//データとともにURLへPOST、画面遷移まで行う
-export function postJsonAndmove(url,data)
-{
-    fetch(url,{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify(data)
-    })
-    .then(res=>{
-        if(res.redirected)window.location.href=res.url;
-        else return res.text();
-    })
-    .then(html=>{
-        if(!html)return;
-        document.open();
-        document.writeln(html);
-        document.close();
-    })
-    .catch(e=>{
-        console.log(e);
-    })
-}
-
-export function postForm(url,formdata)
-{
-    fetch(url, {
-    method: "POST",
-    body: formdata,
-    redirect: "follow"  // 自動 GET
-    })
-    .then(res => {
-        return res.json();
-    })
-    .then(data => {
-        if(data.redirected){
-            window.location.href=data.redirectUrl;
-            return;
-        }
-        console.log("URL is undefined");
-    });
-}
-
 //Getリクエストを行うパラメータを含んだURLを返却する
 export function GetparamURL(url,dto)
 {
@@ -60,7 +15,7 @@ export function GetListparamURL(url,list)
     return `${url}?${param.toString()}`;
 }
 
-export async function post(path, params, method='post') 
+export async function post(path, params, errorCallback=(err)=>{alert("送信に失敗しました",err);}, method='post') 
 {
   var formData = new FormData();
   
@@ -94,23 +49,43 @@ export async function post(path, params, method='post')
 
   formData.append(csrfParam, csrfToken);
 
-  //送信
-  const response= await fetch(path,{
-    method: method.toUpperCase(),
-    body:formData
-  });
+  try{
+    //送信
+    const response= await fetch(path,{
+      method: method.toUpperCase(),
+      body:formData
+    });
 
-  //遷移処理
-  if (response.redirected) {
-    // サーバーがリダイレクトした場合
-    window.location.href = response.url;
-  } else if (response.ok) {
-    // 正常終了（リダイレクトなし）
-    window.location.href = "/success";
-  } else {
-    // エラー
-    alert("送信に失敗しました");
+    //遷移処理
+    if (response.redirected) {
+      // サーバーがリダイレクトした場合
+      window.location.href = response.url;
+    } else if (response.ok) {
+      // 正常終了（リダイレクトなし）
+      window.location.href = "/success";
+    } else {
+      // エラー
+      console.error("POSTリクエスト送信失敗",response.statusText)
+      errorCallback();
+    }
   }
+  catch(err)
+  {
+      console.error("POSTリクエスト送信失敗",err)
+      errorCallback(err);
+  }
+}
+
+export async function postApi(path, params, method='post')
+{
+  const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+  const headerName = document.querySelector('meta[name="_csrf_header"]').getAttribute('content'); 
+
+  return await fetch(path, {
+      method: method.toUpperCase(),
+      headers: { "Content-Type": "application/json" ,[headerName]:token},
+      body: JSON.stringify(params)
+    });
 }
 
 export async function fetchPresignedURL(imagedescriptions)

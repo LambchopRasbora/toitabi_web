@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <th:block th:replace="~{common/layout :: head-common}"></th:block>
   <title>エラーページ</title>
 </head>
 
 
 <body>
-  <div th:text="'timestamp: ' + ${timestamp}"></div>
-  <div th:text="'status: ' + ${status}"></div>
-  <div th:text="'error: ' + ${error}"></div>
-  <div th:text="'exception: ' + ${exception}"></div>
-  <div th:text="'message: ' + ${message}"></div>
-  <div th:text="'errors: ' + ${errors}"></div>
-  <div th:text="'trace: ' + ${trace}"></div>
-  <div th:text="'path: ' + ${path}"></div>
-  <div>エラーページです</div>
-  <a href='/'>ホームへ戻る</a>
+  <!-- Header-->
+  <div th:replace="~{common/layout :: header-nav('エラーページ')}"></div>
+
+  <div>
+    <h1>エラーが発生しました。</h1>
+    <div th:text="'timestamp: ' + ${timestamp}"></div>
+    <div th:text="'status: ' + ${status}"></div>
+    <div th:text="'error: ' + ${error}"></div>
+    <div th:text="'exception: ' + ${exception}"></div>
+    <div th:text="'message: ' + ${message}"></div>
+    <div th:text="'errors: ' + ${errors}"></div>
+    <div th:text="'trace: ' + ${trace}"></div>
+    <div th:text="'path: ' + ${path}"></div>
+    <a href='/'>ホームへ戻る</a>
+  </div>
+
+  <footer class="app-footer">
+      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
+        <div class ="footer-button-container">
+          <button class="action-btn menu-btn c-card" type="button" onclick=""> 
+            <div class ="caption">メニュー</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
+          </button>
+        </div>
+        <div class ="footer-button-container">
+          <button class="action-btn home-btn  c-card" type="button" onclick="location.href='/'">
+            <div class="caption">ホームへ戻る</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          </button>
+        </div>
+      </div>
+    </footer>
 </body>
 </html>

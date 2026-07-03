@@ -10,7 +10,9 @@
 
   <link rel ="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
   
-  <title>トイタビ – プレイ中</title>
+  <title>トイタビ – 単独スポット問題</title>
+  <meta name="description" content="街の隠れた名所へ出かけるお散歩クイズサイト、トイタビ。
+  お散歩、解答してキャラクターをゲットしよう!">
   <!--全ページ共通のCSS-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <!--ローディング画面用CSS-->
@@ -34,40 +36,32 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
-<!--Thymeleafの値をJS内で使えるようにする-->
-    <!--サーバーから渡された response をJS変数に代入-->
-    <script th:inline="javascript">
-      let response =/*[[${response}]]*/
-    </script>
 <!--ページ本体開始 背景色をCSS変数 --ink に設定-->
-<body style="background-color:var(--ink);" >
+<body style="background-color:var(--ink);">
   <!--画面全体のレイアウト管理用-->
   <div class="screen">
-     
+    <!--Thymeleafの値をJS内で使えるようにする-->
+    <!--サーバーから渡された response をJS変数に代入-->
+    <script th:inline="javascript">
+      let spot =/*[[${spot}]]*/
+    </script> 
 
     <!-- Header -->
     <div th:replace="~{common/layout :: header-nav('トイスポットを探せ')}"></div>
 
     <!-- 中央スクロール領域 -->
-    <main class="content" >
-      <div id="spot-info">
-        <photo-gallery :photos="spotPhotos"></photo-gallery>
+    <main class="content" id="scrollArea">
+      
+      <photo-gallery :photos="spotPhotos"></photo-gallery>
+      
+      <spot-description-card 
+      description="説明なし" th:descritpion="${spot.description}"
+       author="問人知らず" th:author="${spot.author}" 
+       :tags="spottags">
+      </spot-description-card>
 
-        <spot-description-card
-        description="説明なし" th:description="${response.spotDto.description}"
-        author="問人知らず" th:author="${response.spotDto.author}" 
-        :tags="spottags">
-        </spot-description-card>
-
-      </div>
-      <section id="hint-section" class="hint-section c-card">
-        <!--ヒント表示エリア-->
-        <button id="hint-btn" class="capsule-btn">
-          <p>ヒントの取得</p>
-        </button>
-      </section>
       <!-- 現在地マップ -->
-      <section id="mapSection" class="map-wrap c-card" v-pre>
+      <section id="mapSection" class="map-wrap c-card">
         <!--Leafletが地図を描画するDOM-->
         <div id="map"></div>
         <!--注意書き-->
@@ -84,12 +78,23 @@
     </main>
 
     <!--footer-->
-    <div id="footer">
-      <toitabi-footer :ratio="'1fr 2fr'"
-        :leftcontents="leftContents"
-        :rightcontents="rightContents">
-      </toitabi-footer> 
-    </div>
+    <!-- 固定フッター -->
+    <footer class="app-footer">
+      <div class="bottom-actions" style="grid-template-columns:1fr 2fr;">
+        <div class ="footer-button-container">
+          <button class="action-btn home-btn c-card" type="button" onclick="location.href='/spotpost/capture'"> 
+            <div class ="caption">スポットの投稿</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
+          </button>
+        </div>
+        <div class ="footer-button-container">
+          <button class="action-btn next-btn  c-card" type="button" onclick="location.href='/'">
+            <div class="caption">ホームへ戻る</div>
+            <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
+          </button>
+        </div>
+      </div>
+    </footer>
   </div>
 
   <!-- ローディングオーバーレイ -->
@@ -99,6 +104,6 @@
   </div>
 
   <!-- Question制御用スクリプト -->
-  <script type="module" src="../../static/js/quiz/question.js" th:src="@{/js/quiz/question.js}"></script>
+  <script type="module" src="../../static/js/index/spot.js" th:src="@{/js/index/spot.js}"></script>
 </body>
 </html>

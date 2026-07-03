@@ -18,6 +18,10 @@
 
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <link rel="stylesheet" href="../../static/css/postsuccess.css" th:href="@{/css/postsuccess.css}">
+  <link rel ="stylesheet" href="../../static/css/common/spotcomponent.css" th:href="@{/css/common/spotcomponent.css}">
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 
   <script type="module" src="../../static/js/me/spotdetail.js" th:src="@{/js/me/spotdetail.js}"></script>
 </head>
@@ -30,20 +34,15 @@
     <div th:replace="~{common/layout :: header-nav('スポット詳細')}"></div>
 
     <main class="content">
-      <div class="content-field c-card">
-        <img class="main-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-        <div class="preview-grid">
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-        </div>
-      </div>
-      <div class="content-field hint-field c-card">
-        <p>説明文</p>
-        <span class="description">説明文が表示されます。</span>
-        <p>タグ</p>
-        <div class="tag-field"></div>
+      <div id="spot-detail-screen">
+        <photo-gallery :photos="spotPhotos"></photo-gallery>
+
+        <spot-description-card 
+        description="説明なし" th:description="${spot.description}"
+        author="問人知らず" th:author="${spot.author}" 
+        :tags="spottags">
+        </spot-description-card>
+
       </div>
       <div class ="content-field c-card">
         <div id="map" class="map"></div>
@@ -58,20 +57,14 @@
       </div>
     </main>
 
-    <!-- Bottom actions -->
-    <footer class="app-footer">
-      <div class="bottom-actions">
-        <button class="action-btn"  type="button" onclick="location.href='/me/spotindex'">
-          <div class ="caption">一覧に戻る </div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-        </button>
 
-        <button class="action-btn" type="button" onclick="location.href='/'">
-          <div class="caption">ホームに戻る</div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
-      </div>
-    </footer>
+    <!-- 固定フッター -->
+    <div id="footer">
+      <toitabi-footer :ratio="'1fr 1fr'"
+        :leftcontents="leftContents"
+        :rightcontents="rightContents">
+      </toitabi-footer> 
+    <div>
   </div>
 </body>
 </html>

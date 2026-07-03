@@ -1,4 +1,4 @@
-d<!doctype html>
+<!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
@@ -15,8 +15,10 @@ d<!doctype html>
   <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <!--LeafletのJavaScript本体-->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/common/spotcomponent.css" th:href="@{/css/common/spotcomponent.css}">
   <link rel="stylesheet" href="../../static/css/postsuccess.css" th:href="@{/css/postsuccess.css}">
 
   <script type="module" src="../../static/js/capture/postsuccess.js" th:src="@{/js/capture/postsuccess.js}"></script>
@@ -24,55 +26,35 @@ d<!doctype html>
 
 <body>
   <script th:inline="javascript">
-    
     const spot =/*[[${spot}]]*/{};
-
   </script>
   <div class ="screen">
     <!-- Header -->
     <div th:replace="~{common/layout :: header-nav('投稿完了!')}"></div>
 
-    <main class="content">
+    <main class="content" id="spot-detail-screen">
       <h3>トイスポットの投稿完了</h3>
-      <div class="content-field c-card">
-        <img class="main-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-        <div class="preview-grid">
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-        </div>
-      </div>
+      
+      <photo-gallery :photos="spotPhotos"></photo-gallery>
 
-      <div class ="content-field">
-        <div class="author-field"></div>
-      </div>
-
-      <div class="content-field hint-field c-card">
-        <p>説明文</p>
-        <span class="description">説明文が表示されます。</span>
-        <p>タグ</p>
-        <div class="tag-field"></div>
-      </div>
+      <spot-description-card 
+       description="説明なし" th:description="${spot.description}"
+       author="問人知らず" th:author="${spot.author}" 
+       :tags="spottags">
+      </spot-description-card>
 
       <div class ="content-field c-card">
         <div id="map" class="map"></div>
       </div>
     </main>
 
-    <!-- Bottom actions -->
-    <footer class="app-footer">
-      <div class="bottom-actions">
-        <button class="action-btn"  type="button" onclick="location.href='/spotpost/capture'">
-          <div class ="caption">続けて投稿 </div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_post.png" th:src="@{/asset/images/icon/icon_post.png}"/>
-        </button>
-        <button class="action-btn" type="button" onclick="location.href='/'">
-          <div class="caption">ホームに戻る</div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
-      </div>
-    </footer>
+    <!-- Footer -->
+     <div id="footer">
+      <toitabi-footer :ratio="'1fr 1fr'"
+      :leftcontents="leftContents"
+      :rightcontents="rightContents">
+      </toitabi-footer>
+     </div>
   </div>
 </body>
 </html>

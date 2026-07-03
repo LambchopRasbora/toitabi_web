@@ -1,6 +1,6 @@
 export const mapIcons = {
     userConfirmIcon: L.icon({
-    iconUrl: "/asset/images/icon/guess.png",
+    iconUrl: "/asset/images/icon/icon_visit.png",
     iconSize: [40, 40],
     iconAnchor: [20, 40]
   }),

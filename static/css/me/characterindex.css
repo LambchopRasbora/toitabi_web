@@ -1,15 +1,26 @@
 
 .character-container
 {
-    position: relative;
     border: 4px solid #000000;
     overflow-x: auto;
     overflow-y: hidden;
     
+    height: 400px;
 }
+
+.character-stage
+{
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    height: 400px;
+}
+
 .character-back
 {
-    height: 400px;
+    height: 100%;
+    
+    display: block;
 }
 .chara-button{
     position: absolute;
@@ -17,7 +28,7 @@
     border: none;
 }
 .chara-img{
-    width: 100%;
+    height: 100%;
 }
 
 

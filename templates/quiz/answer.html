@@ -26,7 +26,8 @@
   />
 
   <!--共通CSSを読み込む-->
-  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}"/>
+  <link rek ="stylesheet" href="../../static/css/common/spotcomponent.css" th:href="@{/css/common/spotcomponent.css}">
   <!--ゴール画面専用のCSSを読み込む-->
   <link rel="stylesheet" href="../../static/css/game/goal.css" th:href="@{/css/game/goal.css}">
   <!--Leafletの JavaScript本体 をCDNから読み込む-->
@@ -40,6 +41,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
   <!--現在地取得・追跡を行う LeafletプラグインのJS を読み込む-->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
@@ -47,10 +50,7 @@
   <!--サーバー側の response オブジェクトをJavaScriptの response 変数として受け取る-->
   <script th:inline="javascript">
     let response =/*[[${response}]]*/; 
-    
-    
-    //let response ={"session_id":"732f3717-0a13-4dab-bb72-4ec5543d9fad","answer_id":3,"answerDto":{"answerLat":34.995287302385655,"answerLng":135.7583492775325,"distance_meter":27,"point":91,"skip":false},"obtainedChara":{"charaId":7,"name":"\u4FE1\u53F7\u6A5F\u30D6\u30E9\u30B6\u30FC\u30BA\uFF08\u9752\uFF09","description":"\u9032\u3093\u3067\u3082\u3044\u3044\u3088\u3068\u5E83\u3044\u5EA6\u91CF\u3067\u901A\u884C\u4EBA\u3092\u901A\u3059\u4E09\u5144\u5F1F\u3067\u4E00\u756A\u306E\u4EBA\u6C17\u8005","lowImageUri":"https:\/\/chara.toitabi.net\/256-07.png","highImageUri":"https:\/\/chara.toitabi.net\/1080-07.png"},"spotDto":{"spotId":28,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":0,"images":["https:\/\/localtestspot.toitabi.net\/134a2125-9d20.jpg","https:\/\/localtestspot.toitabi.net\/640ad15d-715c.jpg","https:\/\/localtestspot.toitabi.net\/cbb4df7e-9814.jpg","https:\/\/localtestspot.toitabi.net\/41ef996e-a006.jpg"],"tags":[],"description":"","latitude":34.995303516318394,"longitude":135.75805033980902},"getCharaDto":null,"finish":true,"onlyView":true}; 
-    
+  
    </script>
   <!--外部 JavaScript の読み込み-->
   <!--回答データの処理や結果表示用JS-->
@@ -113,46 +113,31 @@
       </section>
 
       <section id ="spot-info-section">
-        <div class="content-field image-field c-card">
-          <img class="main-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          <div class="preview-grid">
-            <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-            <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-            <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-            <img class="preview-image" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}"/>
-          </div>
-        </div>
+       <photo-gallery :photos="spotPhotos"></photo-gallery>
 
-        <div class="content-field hint-field c-card">
-          <h3>説明文</h3>
-          <span class="description">説明文が表示されます。</span>
-          <h3>タグ</h3>
-          <div class="tag-field"></div>
-        </div>
+       <spot-description-card 
+      description="説明なし" th:descritpion="${response.spotDto.description}"
+       author="問人知らず" th:author="${response.spotDto.author}" 
+       :tags="spottags">
+      </spot-description-card>
+      </section>
+
+      <section class="content-field detail-character-field c-card">
+        <h3>ゲットしたキャラクター</h3>
+        <img class ="detail-character-img" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}" alt="キャラクター画像">
+        <h3 class="detail-character-name">キャラクターの名前</h3>
+        <p class="detail-character-text">キャラクターの説明</p>
       </section>
     </main>
 
     <!-- 固定フッター -->
-    <footer class="app-footer">
-      <!--ボタンを横並びにする領域-->
-      <div class="bottom-actions">
-        <!--次のスポットへボタン-->
-        <button class="action-btn next-btn" type="button" onclick=""> 
-          <!--ボタンのテキスト-->
-          <div class ="caption">次のスポットへ </div>
-          <!--次へ進むアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/nextspoticon.png" th:src="@{/asset/images/nextspoticon.png}"/>
-        </button>
-        
-        <!--ホームに戻るボタン-->
-        <button class="action-btn home-btn" type="button" onclick="location.href='/'"> 
-          <!--ボタンのテキスト-->
-          <div class="caption">ホームに戻る</div>
-          <!--ホームアイコン-->
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
-      </div>
-    </footer>
+    <!--footer-->
+    <div id="footer">
+      <toitabi-footer :ratio="'1fr 2fr'"
+        :leftcontents="leftContents"
+        :rightcontents="rightContents">
+      </toitabi-footer> 
+    </div>
   </div>
   
   <div class="screen">
@@ -182,7 +167,7 @@
         <h1 class="character-title">キャラクターゲット失敗</h1>
       </div>
       <div class ="character-area-container c-card">
-        <img class ="false-img" src="../../static/asset/images/default/NoImage.jpg" th:src="@{/asset/images/default/NoImage.jpg}" alt="キャラクター画像">
+        <img class ="false-img" src="../../static/asset/images/default/NoCharacter.jpg" th:src="@{/asset/images/default/NoCharacter.jpg}" alt="キャラクター画像">
       </div>
       <div class = "message-area-container c-card">
         <h2 class="message-title">キャラクターゲット失敗</h2>

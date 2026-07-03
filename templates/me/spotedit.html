@@ -15,6 +15,7 @@
   <link  rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <!--LeafletのJavaScript本体-->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
   <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
@@ -38,10 +39,8 @@
           <p>画像を選択する<br>(人の顔などのプライバシーに注意してください)</p>
           <img src="../../static/asset/images/cameraicon.png" th:src="@{/asset/images/cameraicon.png}" alt="" class="camera-icon">
         </button>
-      
-        
-      <!-- 実際の入力要素（4枚まで） -->
-      <input id="fileInput" type="file" accept="image/*" multiple hidden />
+        <!-- 実際の入力要素（4枚まで） -->
+        <input id="fileInput" type="file" accept="image/*" multiple hidden />
 
       <!-- フォームエリア-->
       <section id="formArea" class="form-area is-hidden">
@@ -98,20 +97,13 @@
       </div>
     </main>
 
-    <!-- Bottom actions -->
-    <footer class="app-footer">
-      <div class="bottom-actions">
-        <button class="action-btn menu-btn"  type="button" >
-          <div class ="caption">メニュー </div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_menu.png" th:src="@{/asset/images/icon/icon_menu.png}"/>
-        </button>
-
-        <button class="action-btn" type="button" onclick="location.href='/'">
-          <div class="caption">ホームに戻る</div>
-          <img class = "icon-img" src = "../../static/asset/images/icon/icon_home.png" th:src="@{/asset/images/icon/icon_home.png}"/>
-        </button>
-      </div>
-    </footer>
+    <!--footer-->
+    <div id="footer">
+      <toitabi-footer :ratio="'1fr 1fr'"
+        :leftcontents="leftContents"
+        :rightcontents="rightContents">
+      </toitabi-footer> 
+    </div>
     
     <!-- ローディングオーバーレイ -->
     <div id="loadingOverlay">
