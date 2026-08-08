@@ -92,6 +92,21 @@
     </div>
   </div>
 
+  <div id="locationChoice" class="hidden">
+    <location-picker-map
+    ref="locationPicker" 
+    :width="100%" 
+    :height="100vh"
+    :lat="34.985"
+    :lng="135.758"
+    :zoom="14"
+    :iconUri="/asset/images/icon/icon_guess.png"
+    >
+    </location-picker-map>
+    <button id="choiceSend">
+      確定
+    </button>
+  </div>
   <!-- ローディングオーバーレイ -->
   <div id="loadingOverlay">
     <!--回転アニメーション-->

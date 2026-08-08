@@ -6,6 +6,7 @@ import { mapIcons } from "../common/map/mapicons.js";
 import SpotDescriptionCard from "../components/spot-description-card.js";
 import PhotoGallery from "../components/photo-gallery.js";
 import ToitabiFooter from "../components/toitabi-footer.js";
+import LocationPickerMap from "../components/locationPickerMap.js";
 
 // —— 現在地マップ（Leaflet） —— //
 //マップオブジェクトの作成
@@ -137,6 +138,12 @@ function postQuestion(isskip)
   }
 }
 
+function showLocationChoice()
+{
+  const locationChoiceEl=document.getElementById("locationChoice");
+  locationChoiceEl.classList.toggle("hidden");
+}
+
 //ドキュメントが読み込まれた際のイベント
 document.addEventListener('DOMContentLoaded',()=>{
 
@@ -153,6 +160,31 @@ document.addEventListener('DOMContentLoaded',()=>{
       'photo-gallery':PhotoGallery
     }
   }).mount('#spot-info');
+
+  const locationChoice = createApp({
+    data(){
+      return {
+      
+      }
+    },
+    components:{
+      'location-picker-map': LocationPickerMap
+    },
+    methods:{
+      postQuestionWithChoicedLocation()
+      {
+        const loc= this.$ref.locationPicker.getRegisterdPoint();
+         const params={
+        "session_id":response.session_id,
+        "answerDto.answerLat": loc.lat,
+        "answerDto.answerLng": loc.lng,
+        "answerDto.isSkip": isskip,
+        "answerDto.point": 0
+      }
+      post("./answerSave",params);
+      }
+    }
+  }).mount('#locationChoice');
 
   createApp({
     data(){
