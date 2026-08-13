@@ -125,6 +125,7 @@ function postQuestion(isskip)
       console.log("現在地取得失敗",err);
       // ロード画面を削除
       document.getElementById("loadingOverlay").style.display = "none";
+      showLocationChoice();
     };
   // ロード画面を表示
   document.getElementById("loadingOverlay").style.display = "flex";

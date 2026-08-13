@@ -37,7 +37,11 @@
 <!--Thymeleafの値をJS内で使えるようにする-->
     <!--サーバーから渡された response をJS変数に代入-->
     <script th:inline="javascript">
-      let response =/*[[${response}]]*/
+    //  let response = /*[[${response}]]*/
+
+      
+      let response ={"session_id":"b31fd815-44c4-4a79-a430-d804cb046864","question_number":1,"spotDto":{"spotId":46,"author":null,"authorId":0,"hidden":false,"images":["https:\/\/spot.toitabi.net\/afb07e97-62d8.jpg","https:\/\/spot.toitabi.net\/69f3d876-1443.jpg","https:\/\/spot.toitabi.net\/8c5ae90a-d66c.jpg","https:\/\/spot.toitabi.net\/4ebf958e-5125.jpg"],"tags":[],"description":"\u3072\u3063\u305D\u308A\u3068\u4F47\u3080\u751F\u7523\u7DD1\u5730\u5730\u533A","latitude":34.970171407562106,"longitude":135.70050207611206,"createdAt":"2026-04-12T01:44:31+09:00","updatedAT":"2026-04-12T01:44:31+09:00"},"startedDateTime":null,"area":{"areaId":2,"areaname":"\u6D1B\u897F\u53E3\u30A8\u30EA\u30A2","description":"\u6D1B\u897F\u53E3\u99C5\u30FC\u30C8\u30FC\u30C8\u3072\u308D\u3070\u30FC\u6842","thumbnailUri":"https:\/\/img.toitabi.net\/42e0eaee-1e61.png","area":{"type":"Polygon","coordinates":[[[135.7032967,34.9765288],[135.6997347,34.9765991],[135.6997186,34.9755712],[135.7001237,34.9755712],[135.7000392,34.9685269],[135.7032739,34.9685042],[135.7032967,34.9765288]]]},"createdAt":"2026-04-09T15:58:54","updatedAt":"2026-04-12T11:45:54"}}
+    
     </script>
 <!--ページ本体開始 背景色をCSS変数 --ink に設定-->
 <body style="background-color:var(--ink);" >
@@ -92,15 +96,15 @@
     </div>
   </div>
 
-  <div id="locationChoice" class="hidden">
+  <div id="locationChoice" class="popup c-card hidden">
     <location-picker-map
     ref="locationPicker" 
-    :width="100%" 
-    :height="100vh"
+    width="100%" 
+    height="400px"
     :lat="34.985"
     :lng="135.758"
     :zoom="14"
-    :iconUri="/asset/images/icon/icon_guess.png"
+    iconUri="/asset/images/icon/icon_guess.png"
     >
     </location-picker-map>
     <button id="choiceSend">
