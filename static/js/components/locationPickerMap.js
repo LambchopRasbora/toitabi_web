@@ -22,7 +22,7 @@ const LocationPickerMap={
     },
     
     methods:{
-        getRegisterdPoints(){
+        getRegisterdPoint(){
             console.log(this.registerdPoint);
             return this.registerdPoint;
         },

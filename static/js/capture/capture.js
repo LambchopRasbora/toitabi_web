@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           class:"post-btn",
           icon:"/asset/images/icon/icon_post.png",
           onClick: ()=>{
-            if(files.size()<1)
+            if(files.length<1)
             {
               alert("画像が登録されていません!!");
               return;
