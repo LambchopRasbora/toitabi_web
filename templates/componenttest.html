@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <link rel="icon" href="../../static/asset/favicon.ico" th:href="@{/asset/favicon.ico}">
+  
+  <title>トイタビ – プレイ中</title>
+  <!--全ページ共通のCSS-->
+  <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <!--ローディング画面用CSS-->
+  <link rel="stylesheet" href="../../static/css/loading.css" th:href="@{/css/loading.css}">
+
+  <!--LeafletのCDNに 事前接続 して読み込みを高速化-->
+  <link rel="preconnect" href="https://unpkg.com" />
+  <!--プレイ中（問題画面）専用のCSS-->
+  <link rel="stylesheet" href="../../static/css/game/question.css" th:href="@{/css/game/question.css}">
+  <!-- Leaflet CSS / JS（CDN）, 地図表示用CSS-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <!--LeafletのJavaScript本体-->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- LeafletLocate CSS / JS（CDN）, 現在地ボタンのCSS-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.css">
+  <!--現在地取得用JS-->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
+  
+  <script src="https://unpkg.com/leaflet-semicircle"></script>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <!-- 外部JavaScriptファイルの読み込み -->
+  <script type="module" th:src="@{/js/componenttest.js}" src="../../static/js/componenttest.js"></script>
+</head>
+<body>
+
+<div id="app">
+  <div class="test-controls" style="padding: 10px; background: #f0f0f0;">
+    <button type="button" @click="fetchPoints">マーカーリストを取得 (ref経由)</button>
+    <button type="button" @click="sendPointsToBackend">バックエンドへ送信 (CSRF対応)</button>
+    
+    <div>
+      <strong>取得結果:</strong>
+      <pre>{{ JSON.stringify(fetchedPoints, null, 2) }}</pre>
+    </div>
+  </div>
+
+  <location-picker-map 
+    ref="locationPicker" 
+    width="100%" 
+    height="100vh"
+    :lat="35.681236"
+    :lng="139.767125"
+    :zoom="14">
+  </location-picker-map>
+</div>
+
+</body>
+</html>

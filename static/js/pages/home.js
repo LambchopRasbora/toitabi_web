@@ -65,39 +65,6 @@ function quizCotinue({session_id})
   post("/game/quizResume",params,errorCallback);
 }
 
-//テーマカードを作成する関数
-function createThemeCard(theme)
-{
-  const fragment=themecardtemplate.content.cloneNode(true);
-  fragment.querySelector(".theme-card").addEventListener('click',()=>{quizStartWithTheme({id: theme.themeId,number: 3})});
-  fragment.querySelector(".theme-label").textContent=theme.name;
-  return fragment;
-}
-
-async function togglethemeList(areaId,container)
-{
-  if(container.dataset.loaded==="true")
-  {
-    container.classList.toggle("open");
-    return;
-  }
-  if(themeCache.has(areaId)) return;
-
-  const res= await fetch(`/api/theme/findbyareaid?areaId=${areaId}`);
-  if(!res.ok)throw new Error('Failed to fetch themes');
-  
-  const data=await res.json();
-  themeCache.set(areaId,data);
-  
-  for(const theme of data)
-  {
-    const themeCard=createThemeCard(theme);
-    container.appendChild(themeCard);
-  }
-  container.dataset.loaded="true";
-  container.classList.add("open");
-  return;
-}
 //ダイアログの初期化設定
 function initializeDialog(dialog,map)
 {
@@ -108,7 +75,6 @@ function initializeDialog(dialog,map)
     map.setView([latestLocation.coords.latitude,latestLocation.coords.longitude],17);
     map.invalidateSize();
   }
-  
 }
 
 //初期化設定
@@ -117,7 +83,7 @@ document.addEventListener('DOMContentLoaded',()=>
   const {createApp}=Vue;
   createApp({
     data(){
-      const rawdatas=typeof data !== 'undefined' ? data.areas : [];
+      const rawdatas=(typeof data !== 'undefined' & typeof data.areas!=='undefined') ? data.areas : [];
       const preparedAreas=rawdatas.map(area=>({
         ...area,
         isOpen:false,
@@ -127,9 +93,10 @@ document.addEventListener('DOMContentLoaded',()=>
       return {
         areas: preparedAreas,
         leftContents:[{
-          caption:"メニュー",
-          class:"menu-btn",
-          icon:"/asset/images/icon/icon_menu.png",
+          caption:"トイスポット一覧",
+          class:"spot-index-btn",
+          icon:"/asset/images/icon/icon_library.png",
+          onClick: ()=>{location.href='/me/spotindex';}
         }],
         rightContents:[{
           caption:"トイスポット投稿",
@@ -173,7 +140,7 @@ document.addEventListener('DOMContentLoaded',()=>
 
   const continue_btn=document.getElementById('continue-btn');
   //保存されているlocalsessionがあれば途中からを表示
-  if(continue_btn)
+  if(continue_btn & typeof Cookies!=='undefined')
   {
     const localsession=Cookies.get('session_id');
     if(localsession)

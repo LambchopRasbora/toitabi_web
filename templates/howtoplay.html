@@ -14,17 +14,16 @@
   <title>トイタビ – 遊び方</title>
   <!--CSSファイルを読み込む-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
+  <link rel="stylesheet" href="../../static/css/howtoplay.css" th:href="@{/css/howtoplay.css}">
 </head>
-
-<script type="module" th:inline="javascript">
-  import { menuInitialize } from /*[[@{/js/common/menu.js}]]*/ '../../static/js/common/menu.js';
-
-  document.addEventListener('DOMContentLoaded', () => {
-    menuInitialize();
-  });
-</script>
-
 <body>
+  <script type="module" th:inline="javascript">
+    import { menuInitialize } from /*[[@{/js/common/menu.js}]]*/ '../../static/js/common/menu.js';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      menuInitialize();
+    });
+  </script>
   <!--CSSレイアウト制御用の画面全体を囲うコンテナ-->
   <div class="screen">
     <!-- Header -->
@@ -34,26 +33,26 @@
     <main class ="content">
         <h1>遊び方</h1>
         <h3>1, エリアを選ぼう</h3>
-        <img src="../../static/asset/images/howtoplay/エリア選択.png" th:src="/asset/images/howtoplay/エリア選択.png"/>
+        <img class="description-picture" src="../../static/asset/images/howtoplay/areachoice.png" th:src="@{/asset/images/howtoplay/areachoice.png}"/>
         <p>遊びたいエリアを選ぼう!エリアがない場合は自分で作ることも可能!!</p>
         <h3>2, トイスポットを探そう</h3>
-        <img src="../../static/asset/images/howtoplay/クイズ.png" th:src="@{/asset/images/howtoplay/クイズ.png}"/>
+        <img class="description-picture" src="../../static/asset/images/howtoplay/quiz.png" th:src="@{/asset/images/howtoplay/quiz.png}"/>
         <p>4枚の写真と文章をもとにその場所を探して歩き回ろう!</p>
-        <img src=""/>
+        <img class="description-picture" src="../../static/asset/images/howtoplay/hint.png" th:src="@{/asset/images/howtoplay/hint.png}"/>
         <p>わからない場合はヒントを取得することも可能!!</P>
         <h3>3, キャラクターゲット</h3>
-        <img src=""/>
+        <img class="description-picture" src="../../static/asset/images/howtoplay/charaget.png" th:src="@{/asset/images/howtoplay/charaget.png}"/>
         <p>トイスポットにたどり着き「トイスポットを確定」ボタンを押すとキャラクターをゲット</p>
-        <img src="../../static/asset/images/howtoplay/スコア.png" th:src="@{/asset/images/howtoplay/スコア.png}">
+        <img class="description-picture" src="../../static/asset/images/howtoplay/score.png" th:src="@{/asset/images/howtoplay/score.png}">
         <p>答え合わせ画面ではスポットの情報と距離、得点を確認</p>
 
         <h1>投稿方法</h1>
-        <h3>ホーム画面から「トイスポット投稿」をタップ</h3>
-        <img src="../../static/asset/images/howtoplay/スポット投稿.png" th:src="@{/asset/images/howtoplay/スポット投稿.png}"/>
-        <h3>写真1~4枚、説明文、投稿者、タグを設定してトイスポットを投稿!</h3>
-        <img src="../../static/asset/images/howtoplay/スポット一覧.png" th:src="@{/asset/images/howtoplay/スポット一覧.png}"/>
+        <h3>1,ホーム画面から「トイスポット投稿」をタップ</h3>
+        <img class="description-picture" src="../../static/asset/images/howtoplay/home.png" th:src="@{/asset/images/howtoplay/home.png}"/>
+        <h3>2,写真1~4枚、説明文、投稿者、タグを設定してトイスポットを投稿!</h3>
+        <img class="description-picture" src="../../static/asset/images/howtoplay/spotpost.png" th:src="@{/asset/images/howtoplay/spotpost.png}"/>
+        <img class="description-picture" src="../../static/asset/images/howtoplay/spotindex.png" th:src="@{/asset/images/howtoplay/spotindex.png}"/>
         <p>投稿したスポットはトイスポット一覧から見られます</p>
-
     </main>
     
     <!-- Footer -->
@@ -77,5 +76,6 @@
         </button>
       </div> 
     </footer>
+  </div>
 </body>
 </html>

@@ -6,6 +6,7 @@ import { mapIcons } from "../common/map/mapicons.js";
 import SpotDescriptionCard from "../components/spot-description-card.js";
 import PhotoGallery from "../components/photo-gallery.js";
 import ToitabiFooter from "../components/toitabi-footer.js";
+import LocationPickerMap from "../components/locationPickerMap.js";
 
 // —— 現在地マップ（Leaflet） —— //
 //マップオブジェクトの作成
@@ -14,7 +15,6 @@ const map = mapInitialize(mapElement);
 
 //位置情報初期設定
 const lc=locateInitialize(map);
-
 const fetchTime=5000;
 
 navigator.geolocation.getCurrentPosition(
@@ -27,6 +27,8 @@ navigator.geolocation.getCurrentPosition(
   },
   { enableHighAccuracy:false, timeout:20000, maximumAge:fetchTime}
 );
+
+let locationChoice=null;
 
 const currentSpot=response.spotDto;
 
@@ -47,10 +49,19 @@ const watchId= navigator.geolocation.watchPosition(
   { enableHighAccuracy:true, timeout:10000, maximumAge:fetchTime});
 
 //latestLocationを用いてサーバーからヒントを返してもらう関数
-function getHint()
+async function getHint()
 {
-  const askedLat=latestLocation.coords.latitude;
-  const askedLng=latestLocation.coords.longitude;
+  let loc=null;
+  if(Date.now()-lastsent<fetchTime)
+  {
+    loc={ lat:latestLocation.coords.latitude,lng:latestLocation.coords.longitude};
+  }
+  else{
+    loc=await locationChoice.getLocationByMapAsync();
+  }
+
+  const askedLat=loc.lat;
+  const askedLng=loc.lng;
 
   const params={
     session_id:response.session_id,
@@ -60,22 +71,22 @@ function getHint()
     longitude: askedLng
   };
 
-  postApi('/api/hints/dirdis',params)
-  .then((res)=>{
-    return res.json();
-    })
-  .then((json)=>{
+  try{
+    const res= await postApi('/api/hints/dirdis',params)
+    const json=await res.json();
+
     const width=45;
     const randomDistanceWidth=500;
 
     const randomdis=Math.random()*randomDistanceWidth+json.distance;
+    console.log(randomdis);
     const randomdir=Math.random()*width-width*0.5+json.direction;
 
     createHintMarker(map,askedLat,askedLng,randomdir,width,randomdis);
-  })
-  .catch((err)=>{
+  }
+  catch(err){
     console.error("ヒントの取得に失敗しました", err);
-  });
+  }
 }
 
 function createHintMarker(map,lat,lng,dir,width,rad)
@@ -120,10 +131,22 @@ function postQuestion(isskip)
     };
   // 位置情報の取得に失敗したときのコールバック
   const errorCallback=(err) => {
-      alert("現在地の取得に失敗しました");
       console.log("現在地取得失敗",err);
       // ロード画面を削除
       document.getElementById("loadingOverlay").style.display = "none";
+      if(locationChoice)
+      {
+        locationChoice.init((loc)=>{
+          const params={
+            "session_id":response.session_id,
+            "answerDto.answerLat": loc.lat,
+            "answerDto.answerLng": loc.lng,
+            "answerDto.isSkip": isskip,
+            "answerDto.point": 0
+          }
+          post("./answerSave",params);
+        });
+      }
     };
   // ロード画面を表示
   document.getElementById("loadingOverlay").style.display = "flex";
@@ -132,8 +155,7 @@ function postQuestion(isskip)
   if(Date.now()-lastsent<fetchTime) postCallback(latestLocation);
   else 
   {
-      console.log(lastsent);
-      navigator.geolocation.getCurrentPosition(postCallback,errorCallback, { enableHighAccuracy:true, timeout:20000, maximumAge:fetchTime });
+    navigator.geolocation.getCurrentPosition(postCallback,errorCallback, { enableHighAccuracy:true, timeout:20000, maximumAge:fetchTime });
   }
 }
 
@@ -153,6 +175,59 @@ document.addEventListener('DOMContentLoaded',()=>{
       'photo-gallery':PhotoGallery
     }
   }).mount('#spot-info');
+
+  locationChoice = createApp({
+    data(){
+      return {
+        // モーダルやコンポーネントの表示状態制御が必要な場合に使用
+      isVisible: false,
+      // 確定時に呼び出すコールバック関数を保持
+      onConfirmCallback: null
+      }
+    },
+    components:{
+      'location-picker-map': LocationPickerMap
+    },
+    methods:{
+
+      getLocationByMapAsync()
+      {
+        return new Promise((resolve)=>{
+          this.init(resolve);
+        })
+      },
+      /**
+       * 初期化メソッド
+       * @param {Function} onConfirm - 確定時に実行する関数 (引数: {lat: number, lng: number})
+       */
+      init(onConfirm) 
+      {
+        this.onConfirmCallback = onConfirm;
+        this.isVisible = true;
+      },
+      /**
+       * 確定処理
+       * 地図コンポーネントから座標を取得し、登録されたコールバックを実行する
+       */
+      confirm() {
+        const locationPicker = this.$refs.locationPicker;
+        const loc = locationPicker.getRegisterdPoint(); 
+
+        if (typeof this.onConfirmCallback === 'function') {
+          this.onConfirmCallback(loc);
+        }
+        this.onConfirmCallback=null;
+        this.isVisible = false;
+      },
+      cancel()
+      {
+        this.onConfirmCallback=null;
+        this.isVisible = false;
+      }
+    },mounted(){
+        console.log(this.isVisible);
+    }
+  }).mount('#locationChoice');
 
   createApp({
     data(){
