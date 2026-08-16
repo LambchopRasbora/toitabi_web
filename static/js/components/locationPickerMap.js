@@ -20,7 +20,6 @@ const LocationPickerMap={
             marker:null
         };
     },
-    
     methods:{
         getRegiterdPoints(){
             console.log(this.registerdPoint);
@@ -40,7 +39,6 @@ const LocationPickerMap={
                     iconAnchor: [20, 40]
                 });
             }
-
         },
         onMapClick(e){
             const latlng=e.latlng;
