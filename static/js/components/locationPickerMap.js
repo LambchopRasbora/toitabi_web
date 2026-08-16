@@ -21,20 +21,28 @@ const LocationPickerMap={
         };
     },
     methods:{
-        getRegiterdPoints(){
+        getRegisterdPoint(){
             console.log(this.registerdPoint);
             return this.registerdPoint;
         },
-        initMap(){
+        checkImageExists(url) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+            img.src = url;
+        });
+        },
+        async initMap(){
             this.map = L.map(this.$refs.mapElement).setView([this.lat, this.lng], this.zoom);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(this.map);
             this.map.on('click',this.onMapClick);
-            if(iconUri)
+            if(this.iconUri && await this.checkImageExists(this.iconUri))
             {
                 this.icon=L.icon({
-                    iconUri:this.iconUri,
+                    iconUrl:this.iconUri,
                     iconSize: [40, 40],
                     iconAnchor: [20, 40]
                 });
@@ -61,7 +69,7 @@ const LocationPickerMap={
                 this.marker.setLatLng([this.registerdPoint.lat,this.registerdPoint.lng]);
             }
             else{
-                if(icon)
+                if(this.icon)
                 {
                     this.marker = L.marker(data.latlng,{icon:this.icon}).addTo(this.map);
                 }
@@ -71,7 +79,7 @@ const LocationPickerMap={
             }
             
         },
-        RegisterPoint(lat,lng)
+        registerPoint(lat,lng)
         {
             this.onPointRegistered({latlng:{lat:lat,lng:lng}});
         },

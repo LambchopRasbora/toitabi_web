@@ -37,7 +37,8 @@
 <!--Thymeleafの値をJS内で使えるようにする-->
     <!--サーバーから渡された response をJS変数に代入-->
     <script th:inline="javascript">
-      let response =/*[[${response}]]*/
+      let response = /*[[${response}]]*/
+
     </script>
 <!--ページ本体開始 背景色をCSS変数 --ink に設定-->
 <body style="background-color:var(--ink);" >
@@ -92,20 +93,25 @@
     </div>
   </div>
 
-  <div id="locationChoice" class="hidden">
-    <location-picker-map
-    ref="locationPicker" 
-    :width="100%" 
-    :height="100vh"
-    :lat="34.985"
-    :lng="135.758"
-    :zoom="14"
-    :iconUri="/asset/images/icon/icon_guess.png"
-    >
-    </location-picker-map>
-    <button id="choiceSend">
-      確定
-    </button>
+  <div id="locationChoice">
+    <div  v-if="isVisible" style="background:#fff" class="popup c-card">
+      <h3 style="color:#000">
+        現在地の取得に失敗したため今いる位置を地図上から選んでください
+      </h3>
+      <location-picker-map
+      ref="locationPicker" 
+      width="100%" 
+      height="400px"
+      :lat="34.985"
+      :lng="135.758"
+      :zoom="14"
+      iconUri="/asset/images/icon/icon_guess.png"
+      >
+      </location-picker-map>
+      <button id="choiceSend" @click="confirm">
+        確定
+      </button>
+    </div>
   </div>
   <!-- ローディングオーバーレイ -->
   <div id="loadingOverlay">

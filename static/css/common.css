@@ -286,3 +286,16 @@ footer.app-footer{
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/*ポップアップ*/
+.popup{
+  position: fixed;
+  top: 20px;
+  width:var(--screen-width) ;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+.hidden{
+  display: none;
+}
