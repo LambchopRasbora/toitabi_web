@@ -4,6 +4,8 @@ import { menuInitialize } from "../common/menu.js";
 import SpotReviewCard from "../components/spot_review_card.js";
 import ToitabiFooter from "../components/toitabi-footer.js"
 
+
+
 function putSpotButton(spotId)
 {
     location.href='/me/spotdetail?spotId=' + spotId;
@@ -32,17 +34,46 @@ function initSpotMarker(map,spot)
     return marker;
 }
 
+function updateMapMarkers(map,markerMap,filteredSpots) {
+  // 表示対象の spotId の Set を作成（O(1) ルックアップ用）
+  const visibleSpotIds = new Set(filteredSpots.map(s => s.spotId));
+  const activeLatLngs=[]; 
+
+  markerMap.forEach((marker, spotId) => {
+      if (visibleSpotIds.has(spotId)) {
+          if (!map.hasLayer(marker)) {
+              map.addLayer(marker);
+          }
+          activeLatLngs.push(marker.getLatLng());
+      } else {
+        if (map.hasLayer(marker)) {
+            map.removeLayer(marker);
+        }
+      }
+  });
+
+  if(activeLatLngs.length>1)
+  {
+    const bounds=L.latLngBounds(activeLatLngs);
+    map.fitBounds(bounds,{ padding: [50, 50] });
+  }
+  else if(activeLatLngs.length==1)
+  {
+    map.setView(activeLatLngs[0], 15);
+  }
+}
 
 document.addEventListener('DOMContentLoaded',()=>
 {
     const mapContainer = document.getElementById('map');
     const map=mapInitialize(mapContainer);
-
+    const markerMap=new Map();
     
     if(spots.length>=0)
     {
       spots.forEach(spot => {
-            initSpotMarker(map,spot); 
+            const marker= initSpotMarker(map,spot); 
+            markerMap.set(spot.spotId,marker);
         });
     }
 
@@ -51,11 +82,33 @@ document.addEventListener('DOMContentLoaded',()=>
     createApp({
         data(){
           return {
-            spots:spots
+            spots:spots,
+            searchQuery:''
+          }
+        },
+        computed:{
+          filterdSpots(){
+            const query= this.searchQuery.trim().toLowerCase();
+            if(!query)return this.spots;
+
+            return this.spots.filter(spot=>{
+              const matchDesc=spot.description && spot.description.toLowerCase().includes(query);
+
+              const matchTags = spot.tags && spot.tags.some(tag => tag.name && tag.name.toLowerCase().includes(query));
+
+              return matchDesc||matchTags;
+            })
           }
         },
         methods:{
             putSpotButton
+        },
+        watch:{
+          filterdSpots:{
+            handler(newSpots){
+              updateMapMarkers(map,markerMap,newSpots);
+            }
+          }
         },
         components:{
           'spot-review-card':SpotReviewCard
