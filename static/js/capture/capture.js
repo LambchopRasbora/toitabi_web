@@ -78,7 +78,6 @@ async function postSpot(captionEl,isHiddenCheckbox)
   //filesからnull/undefinedを除外してFileオブジェクトだけにする
   files=files.filter(f=>f instanceof File);
 
-  const fd = new FormData();
   if(files.length<1){
     alert('画像が選択されていません!!');
     return;
@@ -88,6 +87,9 @@ async function postSpot(captionEl,isHiddenCheckbox)
     alert('トイスポットの位置が選択されていません!!');
     return;
   }
+
+  const fd = new FormData();
+  
   // ロード画面を表示
   document.getElementById("loadingOverlay").style.display = "flex";
   
