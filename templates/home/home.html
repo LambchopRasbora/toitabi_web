@@ -18,6 +18,11 @@
 
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
 
+<!-- Google Fonts の読み込み -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=M+PLUS+1+Code:wght@100..700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
@@ -29,12 +34,16 @@
   <!--CSSレイアウト制御用の画面全体を囲うコンテナ-->
   <div id="home-screen" class="screen">
     <!-- Header-->
-    <div th:replace="~{common/layout :: header-nav('トイタビに出かけよう!\nホーム画面')}"></div>
+    <div th:replace="~{common/layout :: header-nav('トイタビ\nホーム画面')}"></div>
 
     <!-- Main Content -->
     <main class ="content">
+      <div>
+        <h3></h3>
+      </div>
       <!--エリア選択UI用の領域-->
       <div class="buttonareas">
+        <h2 class="field-title">お散歩クイズへはこちらから</h2>
         <!--continueボタン-->
         <button id="continue-btn" class="continue-btn area-card">
           <!--アイコンを丸く囲う-->
@@ -69,21 +78,48 @@
         </div>
       </div>
       <div class= "description-field field c-card">
+        <h2 class="field-title">トイタビについて</h2>
         <p class ="app-description">
           このWEBサイトは街の隠れた名所へ出かけるお散歩クイズサイト<br>
           出題されるクイズはユーザーが投稿したもの!!<br>
           地元民ならではの場所が見つかるかも？
         </p>
+        <img style="width:30%" src="../../static/asset/images/character/256/256-01.png" th:src="@{/asset/images/character/256/256-01.png}">
+        <p class="app-description">
+          クイズにクリアするとキャラクターをゲット!!<br>
+          ゲットしたキャラクターで町をにぎやかにしていこう
+        </p>
+        <a class="capsule-btn page-link" href="/howtoplay">遊び方はこちらから</a>
       </div>
-      <div style="padding=10px">
-        <a class="capsule-btn" href="/signup">
-          アカウント登録
+      <div class= "description-field field c-card">
+        <h2 class="field-title">お散歩スポットのメモにも!</h2>
+        <p class ="app-description">
+          投稿したスポットはスポット一覧から確認できます<br>
+          お散歩スポットのメモにも使えます
+        </p>
+        <a class="capsule-btn page-link" href="/spotpost/capture">
+          スポット投稿はこちらから
         </a>
-        <a class="capsule-btn" href="/spotpost/capture">
-          スポット投稿
+        <p class ="app-description">
+          投稿したスポットを確認するにはアカウント登録が必要です
+        </p>
+        <a class="capsule-btn page-link" href="/signup">
+          アカウント登録はこちらから
         </a>
-        <a class="capsule-btn" href="/howtoplay">遊び方</a>
       </div>
+      <div class= "description-field field c-card">
+        <h2 class="field-title">作成者について</h2>
+        <p class ="app-description">
+          学生団体であるそぞろが作成しています
+
+        </p>
+        <a class="capsule-btn page-link" href="https://sozoro708.wixsite.com/home">
+          団体の紹介はこちら(別ページへ)
+        </a>
+      </div>
+      <p class="app-description">
+        ©そぞろ 2026
+      </p>
     </main>
     
     <!--自分でエリアを作成するときのダイアログ-->
