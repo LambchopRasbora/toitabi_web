@@ -21,6 +21,11 @@
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.85.1/dist/L.Control.Locate.min.js"></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
+  <!-- Google Fonts の読み込み -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=M+PLUS+1+Code:wght@100..700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
 	<link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}" />
   
   <link rel="stylesheet" href="../../static/css/me/spotindex.css" th:href="@{/css/me/spotindex.css}" />
@@ -32,7 +37,6 @@
   
   <script th:inline="javascript">
     const spots = /*[[${spots}]]*/ [];
-
     
     //const spots = [{"spotId":60,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/7f0b2bc0-71ff.jpg","https:\/\/spot.toitabi.net\/454fab55-1ff2.jpg","https:\/\/spot.toitabi.net\/e03ae9e5-521c.jpg","https:\/\/spot.toitabi.net\/c7ac7bb2-766d.jpg"],"tags":[{"tagId":9,"name":"\u53F2\u8DE1"},{"tagId":16,"name":"\u89B3\u5149\u5730"}],"description":"\u3075\u308B\u30FC\u3044\u85E9\u5B66\u6821\r\n\u8D64\u3044\u74E6\u304C\u65B0\u7DD1\u306B\u3088\u304F\u6620\u3048\u308B\r\n\u4E00\u6BB5\u4E0B\u304C\u3063\u3066\u3044\u308B\u3068\u3053\u308D\u306F\u7530\u3093\u307C\u3068\u304B\u3060\u3063\u305F\u306E\u304B\u306A\uFF1F","latitude":34.7959767,"longitude":134.2203704},{"spotId":61,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/f38d210b-a9e2.jpg","https:\/\/spot.toitabi.net\/27051089-1e4a.jpg","https:\/\/spot.toitabi.net\/c633428b-c2ab.jpg","https:\/\/spot.toitabi.net\/ce658eb7-d0c4.jpg"],"tags":[{"tagId":21,"name":"\u99D0\u8ECA\u5834"},{"tagId":16,"name":"\u89B3\u5149\u5730"}],"description":"\u307B\u3093\u307E\u306B\u99D0\u8ECA\u5834\u304B\uFF1F","latitude":34.6178231,"longitude":134.1683186},{"spotId":62,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/2d30c4f8-fa75.jpg","https:\/\/spot.toitabi.net\/acd5d801-d1ed.jpg","https:\/\/spot.toitabi.net\/389b7999-6e28.jpg","https:\/\/spot.toitabi.net\/e00993f7-e7b4.jpg"],"tags":[{"tagId":22,"name":"\u6D77"},{"tagId":16,"name":"\u89B3\u5149\u5730"},{"tagId":3,"name":"\u4F55\u6C17\u306A\u3044\u666F\u8272"}],"description":"\u8239\u304C\u6EC5\u3093\u3067\u3044\u308B","latitude":34.6163105,"longitude":134.1706517},{"spotId":63,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/11ff0eab-2b28.jpg","https:\/\/spot.toitabi.net\/e4733793-ac14.jpg","https:\/\/spot.toitabi.net\/b26480c3-edfd.jpg","https:\/\/spot.toitabi.net\/7a5d30c6-fb60.jpg"],"tags":[{"tagId":9,"name":"\u53F2\u8DE1"},{"tagId":23,"name":"\u5EC3\u589F"},{"tagId":16,"name":"\u89B3\u5149\u5730"}],"description":"3\u4E09\u968E\u5EFA\u3066?\uFF01","latitude":34.6167477,"longitude":134.1716709},{"spotId":64,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/7153f4bf-e77b.jpg","https:\/\/spot.toitabi.net\/8058e1dc-6790.jpg","https:\/\/spot.toitabi.net\/4a18c05b-371b.jpg","https:\/\/spot.toitabi.net\/cee7dc0d-6401.jpg"],"tags":[{"tagId":16,"name":"\u89B3\u5149\u5730"},{"tagId":24,"name":"\u5C55\u671B\u53F0"}],"description":"\u795E\u793E\u306E\u8FD1\u304F\u306E\u5C55\u671B\u53F0\r\n\u3088\u3046\u6D77\u304C\u898B\u3048\u308B","latitude":34.62076,"longitude":134.1725786},{"spotId":65,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/8a1c2b7a-e851.jpg","https:\/\/spot.toitabi.net\/73075dd6-6fbb.jpg","https:\/\/spot.toitabi.net\/28215501-082a.jpg","https:\/\/spot.toitabi.net\/cd2a7b74-316c.jpg"],"tags":[{"tagId":9,"name":"\u53F2\u8DE1"},{"tagId":16,"name":"\u89B3\u5149\u5730"}],"description":"\u4E95\u6238","latitude":34.6153423,"longitude":134.1670704},{"spotId":66,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/aa7eee26-7694.jpg","https:\/\/spot.toitabi.net\/1f06149d-d0e6.jpg","https:\/\/spot.toitabi.net\/14780be9-0406.jpg","https:\/\/spot.toitabi.net\/4616c784-9f32.jpg"],"tags":[{"tagId":16,"name":"\u89B3\u5149\u5730"},{"tagId":3,"name":"\u4F55\u6C17\u306A\u3044\u666F\u8272"},{"tagId":25,"name":"\u6C34\u8FBA"}],"description":"\u5927\u962A\u3068\u3044\u3048\u3070\u2026\u306D","latitude":34.6691709,"longitude":135.5004702},{"spotId":67,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/0e732abf-6184.jpg","https:\/\/spot.toitabi.net\/aff79e5f-da49.jpg","https:\/\/spot.toitabi.net\/1630c530-b95a.jpg","https:\/\/spot.toitabi.net\/93432b52-5074.jpg"],"tags":[{"tagId":26,"name":"\u30B9\u30DD\u30FC\u30C4"},{"tagId":3,"name":"\u4F55\u6C17\u306A\u3044\u666F\u8272"}],"description":"\u904B\u52D5\u7CFB\u306F\u4F55\u3067\u3082\u3042\u3093\u306E\u3042\u308A\u304C\u305F\u3044","latitude":34.9922283,"longitude":135.7145783},{"spotId":68,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/6d8e00ad-504f.jpg","https:\/\/spot.toitabi.net\/13ad39bc-94b2.jpg","https:\/\/spot.toitabi.net\/492c3d72-584b.jpg","https:\/\/spot.toitabi.net\/03be10cc-a803.jpg"],"tags":[{"tagId":3,"name":"\u4F55\u6C17\u306A\u3044\u666F\u8272"}],"description":"\u65E5\u5DEE\u3057\u304C\u304D\u3064\u3044\uFF01\r\n\u64C1\u58C1\u306E\u4E0A\u306B\u7ACB\u3063\u3066\u308B\u5BB6\u304C\u591A\u3044","latitude":34.7307145,"longitude":135.2911538},{"spotId":69,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/a4985abc-6255.jpg","https:\/\/spot.toitabi.net\/95581211-c7f2.jpg","https:\/\/spot.toitabi.net\/3f62329d-36a3.jpg","https:\/\/spot.toitabi.net\/a8c97e11-8a3c.jpg"],"tags":[{"tagId":27,"name":"\u30C8\u30F3\u30CD\u30EB"},{"tagId":28,"name":"\u6C34"},{"tagId":3,"name":"\u4F55\u6C17\u306A\u3044\u666F\u8272"}],"description":"\u8B0E\u30C8\u30F3\u30CD\u30EB\r\n\u6697\u6E20\u304B\u306A","latitude":34.7303324,"longitude":135.2873692},{"spotId":70,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/e2cc0936-4536.jpg","https:\/\/spot.toitabi.net\/aa9a5b20-8433.jpg","https:\/\/spot.toitabi.net\/3d4bd367-3e41.jpg","https:\/\/spot.toitabi.net\/6728560a-2403.jpg"],"tags":[{"tagId":16,"name":"\u89B3\u5149\u5730"}],"description":"\u4E16\u754C\u306E\u6C34\u8FBA\u304B\u3089","latitude":13.7457673,"longitude":100.4904103},{"spotId":71,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":true,"images":["https:\/\/spot.toitabi.net\/25382097-aea7.jpg","https:\/\/spot.toitabi.net\/3260b056-8465.jpg","https:\/\/spot.toitabi.net\/657abc73-a52b.jpg"],"tags":[{"tagId":3,"name":"\u4F55\u6C17\u306A\u3044\u666F\u8272"}],"description":"\u6697\u5CE0\u3078\u884C\u304F\u9053","latitude":34.6700843,"longitude":135.5754128},{"spotId":72,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/b42f18b9-2301.jpg","https:\/\/spot.toitabi.net\/ab837a36-b2f8.jpg","https:\/\/spot.toitabi.net\/fb4af102-643f.jpg"],"tags":[{"tagId":3,"name":"\u4F55\u6C17\u306A\u3044\u666F\u8272"},{"tagId":29,"name":"\u30B7\u30E7\u30C3\u30D7"}],"description":"\u91CE\u83DC\u306E\u76F4\u58F2\uFF1F\r\n\u3053\u3093\u306A\u3068\u3053\u308D\u306B\u3042\u308B\u3093\u3084","latitude":34.6770654,"longitude":135.574869},{"spotId":73,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/cb9700be-b902.jpg","https:\/\/spot.toitabi.net\/a808c118-95bd.jpg","https:\/\/spot.toitabi.net\/17f41ef3-bfee.jpg","https:\/\/spot.toitabi.net\/2cb88bb4-c99e.jpg"],"tags":[{"tagId":30,"name":"\u4EAC\u90FD\u30BF\u30EF\u30FC"},{"tagId":16,"name":"\u89B3\u5149\u5730"},{"tagId":3,"name":"\u4F55\u6C17\u306A\u3044\u666F\u8272"}],"description":"\u4EAC\u90FD\u30BF\u30EF\u30FC\u304C\u898B\u3048\u308B\u5834\u6240","latitude":34.996377550159664,"longitude":135.75958975864512},{"spotId":74,"author":"\u554F\u4EBA\u77E5\u3089\u305A","authorId":48,"hidden":false,"images":["https:\/\/spot.toitabi.net\/f27dc313-e325.jpg","https:\/\/spot.toitabi.net\/1a5e195e-bab8.jpg","https:\/\/spot.toitabi.net\/22ef52e6-1066.jpg","https:\/\/spot.toitabi.net\/3fc2f8aa-c48f.jpg"],"tags":[{"tagId":3,"name":"\u4F55\u6C17\u306A\u3044\u666F\u8272"},{"tagId":25,"name":"\u6C34\u8FBA"}],"description":"\u9D28\u5DDD\u306E\u6A4B\u306E\u305F\u3082\u3068\r\n\u3042\u307E\u308A\u4EBA\u304C\u3044\u306A\u3044\u7A74\u5834\u30B9\u30DD\u30C3\u30C8","latitude":34.99879434614875,"longitude":135.76953864442848}];
   
@@ -44,7 +48,15 @@
       <div id="map" class ="map" title="Map" ></div>
     </div>
     <div  id="spot-detail-container"  class ="c-card">
-      <div v-for="spot in spots" :key="spot.spotId">
+      <div class="search-container" style="margin-bottom: 1rem;">
+      <input 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="説明文やタグで検索..." 
+        style="width: 100%; padding: 0.5rem; box-sizing: border-box;"
+      />
+    </div>
+      <div v-for="spot in filterdSpots" :key="spot.spotId">
         <button class="spot-btn" @click="putSpotButton(spot.spotId)">
         <spot-review-card
           :description="spot.description||'説明なし'"
@@ -56,15 +68,6 @@
       </button>
       </div>
     </div>
-    <template id="spot-detail-template">
-      <button class="spot-card">
-        <img class ="spot-main-img" src="../../static/asset/images/default/NoImage.jpg"/>
-        <div class= "content-card">
-          <p class= "description">説明文</p>
-          <p class= "tag">タグ</p>
-        </div>
-      </button>
-    </template>
   </main>
   
   <!-- 固定フッター -->

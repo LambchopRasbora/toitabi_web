@@ -12,7 +12,8 @@
   
   <title>トイタビ – 単独スポット問題</title>
   <meta name="description" content="街の隠れた名所へ出かけるお散歩クイズサイト、トイタビ。
-  お散歩、解答してキャラクターをゲットしよう!">
+  お散歩、解答してキャラクターをゲットしよう!"
+  th:content="${pageDescription} ?: '説明なし'">
   <!--全ページ共通のCSS-->
   <link rel="stylesheet" href="../../static/css/common.css" th:href="@{/css/common.css}">
   <!--ローディング画面用CSS-->

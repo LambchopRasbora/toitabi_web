@@ -1,3 +1,6 @@
+h1{
+    font-family: "Press Start 2P", "DotGothic16", "M PLUS 1 Code", system-ui, monospace;
+}
 
 #map
 {
@@ -81,6 +84,10 @@
     margin-top: 0px;
     white-space: pre-wrap;
     text-align: left;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; 
+    overflow: hidden;
 }
 
 .tag-text{
