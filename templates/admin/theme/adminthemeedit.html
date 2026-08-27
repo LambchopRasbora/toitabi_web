@@ -26,11 +26,6 @@
             </div>
 
             <div class="form-group">
-                <label for="authorId">Author ID *</label>
-                <input type="number" id="authorId" th:field="*{authorId}" readonly class="readonly" />
-            </div>
-
-            <div class="form-group">
                 <label for="name">Theme Name *</label>
                 <input type="text" id="name" th:field="*{name}" required />
                 <input type="hidden" id="nameChangedHidden" th:field="*{nameChanged}" value="false" />
