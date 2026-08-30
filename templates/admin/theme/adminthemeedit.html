@@ -28,13 +28,11 @@
             <div class="form-group">
                 <label for="name">Theme Name *</label>
                 <input type="text" id="name" th:field="*{name}" required />
-                <input type="hidden" id="nameChangedHidden" th:field="*{nameChanged}" value="false" />
             </div>
 
             <div class="form-group">
                 <label for="desc">Description</label>
                 <textarea id="desc" th:field="*{description}"></textarea>
-                <input type="hidden" id="descriptionChangedHidden" th:field="*{descriptionChanged}" value="false" />
             </div>
 
             <div class="form-group">

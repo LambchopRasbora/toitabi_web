@@ -1,3 +1,6 @@
+
+let initialData={};
+
 // Function to copy area form values to request form and submit
 const submitForm = function(thumbFile,kmlFile) {
     const firstForm = document.getElementById('areaForm');
@@ -18,18 +21,18 @@ const submitForm = function(thumbFile,kmlFile) {
 
     const areanameInput = firstForm.querySelector('input[name="areaname"]');
     const descriptionInput = firstForm.querySelector('textarea[name="description"]');
-    const areanameChangedInput = document.getElementById('areanameChangedHidden');
-    const descriptionChangedInput = document.getElementById('descriptionChangedHidden');
+    const isAreaNameChanged=initialData.name!==areanameInput.value;
+    const isDescChanged=initialData.desc!==descriptionInput.value;
     const thumbnailChangedInput = document.getElementById('thumbCheckbox');
     const kmlChangedInput = document.getElementById('kmlCheckbox');
 
     let formData = new FormData(requestForm);
 
     formData.append('areaId', areaIdInput.value);
-    formData.append('areanameChanged', areanameChangedInput ? areanameChangedInput.value : 'false');
-    formData.append('areaname', areanameInput ? areanameInput.value : '');
-    formData.append('descriptionChanged', descriptionChangedInput ? descriptionChangedInput.value : 'false');
-    formData.append('description', descriptionInput ? descriptionInput.value : '');
+    formData.append('areanameChanged', isAreaNameChanged);
+    formData.append('areaname', isAreaNameChanged ? areanameInput.value : '');
+    formData.append('descriptionChanged', isDescChanged);
+    formData.append('description', isDescChanged ? descriptionInput.value : '');
     formData.append('thumbnailChanged', thumbnailChangedInput ? thumbnailChangedInput.checked : false);
     if( thumbnailChangedInput && thumbnailChangedInput.checked &&thumbFile && thumbFile.files && thumbFile.files.length > 0)
     {
@@ -78,30 +81,16 @@ const deleteForm = function()
 document.addEventListener('DOMContentLoaded', function(){
     const nameInput = document.getElementById('name');
     const descInput = document.getElementById('desc');
-    const nameChanged = document.getElementById('areanameChangedHidden');
-    const descChanged = document.getElementById('descriptionChangedHidden');
     const thumbCheckbox = document.getElementById('thumbCheckbox');
     const thumbFile = document.getElementById('thumbnailfile');
     const kmlCheckbox = document.getElementById('kmlCheckbox');
     const kmlFile = document.getElementById('kmlfile');
 
-    const initial = {
+    initialData = {
         name: nameInput ? nameInput.value : '',
         desc: descInput ? descInput.value : ''
     };
 
-    //変更の検知処理追加
-    if (nameInput && nameChanged) {
-        nameInput.addEventListener('input', function(){
-            nameChanged.value = (nameInput.value !== initial.name) ? 'true' : 'false';
-        });
-    }
-
-    if (descInput && descChanged) {
-        descInput.addEventListener('input', function(){
-            descChanged.value = (descInput.value !== initial.desc) ? 'true' : 'false';
-        });
-    }
 
     function updateThumbVisibility(){
         if (!thumbFile || !thumbCheckbox) return;

@@ -1,4 +1,4 @@
-
+let initialData={};
 
 function submitForm()
 {
@@ -16,10 +16,28 @@ function submitForm()
         console.error("themeIdが送信されていません");
         return;
     }
+    const nameInput=document.getElementById('name');
+    const descInput=document.getElementById('desc');
+    const isEnabledCheckbox=document.getElementById('enabled');
+    const isHiddenCheckbox=document.getElementById('hidden');
+
+    const nameChanged=initialData.name!==nameInput.value;
+    const descriptionChanged=initialData.desc!==descInput.value;
+    const enabledChanged=initialData.enabled!==isEnabledCheckbox.checked;
+    const hiddenChanged=initialData.hidden!==isHiddenCheckbox.checked;
 
     let formData=new FormData(requestForm);
 
-    formData.append('themeId',themeIdInput);
+    formData.append('themeId',themeIdInput.value);
+    formData.append('nameChanged',nameChanged);
+    formData.append('name',nameChanged?nameInput.value:'');
+    formData.append('descriptionChanged',descriptionChanged);
+    formData.append('description',descriptionChanged?descInput.value:'');
+    formData.append('enabledChanged',enabledChanged);
+    formData.append('enabled',enabledChanged?isEnabledCheckbox.checked:false);
+    formData.append('hiddenChanged',hiddenChanged);
+    formData.append('hidden',hiddenChanged?isHiddenCheckbox.checked:false);
+
 
     fetch(requestForm.action,{
         method:'POST',
@@ -64,6 +82,19 @@ function deleteForm(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
+
+    const nameInput=document.getElementById('name');
+    const descInput=document.getElementById('desc');
+    const isEnabledCheckbox=document.getElementById('enabled');
+    const isHiddenCheckbox=document.getElementById('hidden');
+
+    initialData={
+        name:nameInput?nameInput.value:'',
+        desc:descInput?descInput.value:'',
+        enabled:isEnabledCheckbox?isEnabledCheckbox.checked:false,
+        hidden:isHiddenCheckbox?isHiddenCheckbox.checked:false,
+        themeRules:[]
+    }
 
     //submit,deleteのボタンにイベントを付与
     const submitBtn = document.getElementById('submitBtn');
