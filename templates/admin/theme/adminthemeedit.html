@@ -2,99 +2,103 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
+    <!--CSRFトークン本体を metaタグ として埋め込む-->
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <!--CSRFトークンを送信するときに使う HTTPヘッダー名 を埋め込む-->
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+  <!--CSRFトークンを送信するときの パラメータ名 を埋め込む-->
+  <meta name="_csrf_parameter" th:content="${_csrf.parameterName}">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <title>Edit Theme</title>
-    <link rel="stylesheet" th:href="@{/css/common.css}" />
-    <link rel="stylesheet" th:href="@{/css/admin/common.css}" />
+    <link rel="stylesheet" href="/static/css/admin/common.css" th:href="@{/css/admin/common.css}">
+    <link rel="stylesheet" href="/static/css/admin/themepost.css" th:href="@{/css/admin/themepost.css}">
 </head>
 <body>
+<script th:inline="javascript">
+    
+    window.__THEME_DATA__ = /*[[${theme}]]*/ {};
+    window.__TAG_DATA__ = /*[[${tags}]]*/ {};
+
+</script>
 <div class="container">
     <h1>Edit Theme</h1>
 
-    <div th:if="${theme == null}">Theme not found.</div>
+    <div id="edit-form">
+        <div th:if="${theme == null}">Theme not found.</div>
 
-    <div th:if="${theme != null}">
-        <form  id="themeForm" th:action="@{/admin/adminthemeedit}" th:object="${theme}" method="post">
-            <!-- Hidden ID for submission -->
-            <div class="form-group">
-                <label for="id">Theme ID</label>
-                <input type="text" id="id" th:field="*{themeId}" readonly class="readonly" />
-            </div>
-
-            <div class="form-group">
-                <label for="areaId">Area ID *</label>
-                <input type="number" id="areaId" th:field="*{areaId}" readonly class="readonly" />
-            </div>
-
-            <div class="form-group">
-                <label for="name">Theme Name *</label>
-                <input type="text" id="name" th:field="*{name}" required />
-            </div>
-
-            <div class="form-group">
-                <label for="desc">Description</label>
-                <textarea id="desc" th:field="*{description}"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="thumb">Thumbnail URI</label>
-                <input type="checkbox" id="thumbCheckbox" th:field="*{thumbnailChanged}" />
-                <img th:if="*{thumbnailUri != null}" th:src="*{thumbnailUri}" alt="Thumbnail" class="thumbnail-preview" />
-                <input type="file" id="thumbnailfile" name="thumbnailfile" accept="image/*" th:field="*{thumbnailfile}">
-            </div>
-
-            <div class="form-group">
-                <label for="enabled">Enabled</label>
-                <input type="checkbox" id="enabled" th:field="*{enabled}" />
-            </div>
-
-            <div class="form-group">
-                <label for="hidden">Hidden</label>
-                <input type="checkbox" id="hidden" th:field="*{hidden}" />
-            </div>
-
-            <fieldset>
-                <legend>Rules</legend>
-                <div th:if="${theme.rules != null and !#lists.isEmpty(theme.rules)}">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Rule ID</th>
-                                <th>Rule Type</th>
-                                <th>Rule Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="rule, stat : ${theme.rules}">
-                                <td th:text="${rule.thmeruleId}">thmeruleId</td>
-                                <td th:text="${rule.ruleType}">ruleType</td>
-                                <td th:text="${rule.ruleValue}">ruleValue</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div th:if="${theme != null}">
+            <form  id="themeForm"  @submit.prevent="submitEdit" enctype="multipart/form-data">
+                <!-- Hidden ID for submission -->
+                <div class="form-group">
+                    <label for="id">themeId</label>
+                    <span type="text" id="id" th:field="${theme.themeId}">{{form.themeId}}</span>
                 </div>
-                <div th:if="${theme.rules == null or #lists.isEmpty(theme.rules)}">No rules</div>
-            </fieldset>
 
-            <div class="info-row">
-                <span><strong>Created</strong></span>
-                <span th:text="${theme.createdAt}">createdAt</span>
-            </div>
-            <div class="info-row">
-                <span><strong>Updated</strong></span>
-                <span th:text="${theme.updatedAt}">updatedAt</span>
-            </div>
-        </form>
-        <form id="requestform" th:action="@{/admin/adminthemeedit}" th:object="${request}" method="post">
-        </form>
-        <form id ="deleteform" th:action="@{/admin/adminthemedelete}" th:object="${deleteRequest}" method="post">
-        </form>
-        <div class="actions">
-                <button type="button" id="submitBtn">保存</button>
-                <button type="button" id="deleteBtn">削除</button>
-                <a href="javascript:history.back()">戻る</a>
-            </div>
+                <div class="form-group">
+                    <label for="areaId">Area ID</label>
+                    <span type="number" id="areaId" th:field="${theme.areaId}" >{{form.areaId}}</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="name">Theme Name *</label>
+                    <input type="text" id="name" v-model="form.name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="desc">Description</label>
+                    <textarea id="desc" v-model="form.description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Thumbnail画像</label>
+                    <span>サムネイル画像変更ならばチェック</span>
+                    <input type="checkbox" id="thumbCheckbox" v-model="form.thumbnailChanged" />
+                    <img :src="previewThumbnailURL" alt="Thumbnail" class="thumbnail-preview" />
+                    <input type="file" id="thumbnailfile" v-if="form.thumbnailChanged" @change="handleFileUpload" accept="image/*" >
+                </div>
+
+                <div class="form-group">
+                    <label for="enabled">Enabled</label>
+                    <input type="checkbox" id="enabled" v-model="form.enabled" />
+                </div>
+
+                <div class="form-group">
+                    <label for="hidden">Hidden</label>
+                    <input type="checkbox" id="hidden" v-model="form.hidden" />
+                </div>
+
+                 <div class="form-group">
+                    <label>ルール</label>
+                    <div class="rule-section" id="rulesContainer">
+                    <theme-rule-editor
+                        v-for="(rule,index) in rules"
+                        :key="index"
+                        v-model="rules[index]"
+                        :index="index"
+                        @remove="removeRuleItem(index)">
+                        </theme-rule-editor>
+                    </div>
+                    <button type="button" class="add-rule-btn" @click="addRuleItem">ルールを追加</button>
+                </div>
+
+                <div class="info-row">
+                    <span><strong>Created</strong></span>
+                    <span th:text="${theme.createdAt}">createdAt</span>
+                </div>
+                <div class="info-row">
+                    <span><strong>Updated</strong></span>
+                    <span th:text="${theme.updatedAt}">updatedAt</span>
+                </div>
+                <div class="actions">
+                    <button type="submit" id="submitBtn">保存</button>
+                    <button type="button" id="deleteBtn" @click="submitDelete">削除</button>
+                    <a href="javascript:history.back()">戻る</a>
+                 </div> 
+            </form>
+           
+        </div>
     </div>
 </div>
-<script th:src="@{/js/admin/adminthemeedit.js}"></script>
+<script type="module" src="/static/js/admin/adminthemeedit.js" th:src="@{/js/admin/adminthemeedit.js}"></script>
 </body>
 </html>

@@ -1,108 +1,181 @@
-let initialData={};
+import { postFormdata } from "../common/serverRequest.js";
+import ThemeRuleEditor from "../components/theme/themeruleeditor.js";
 
-function submitForm()
+const initialData=window.__THEME_DATA__ ||{};
+
+const tags=window.__TAG_DATA__||{};
+
+async function submitForm(initialData,initailRules,form,rules)
 {
-    const themeForm=document.getElementById('themeForm');
-    const requestForm = document.getElementById('requestform');
-
-    if(!requestForm||!themeForm){
-        console.error("themeFormかrequestFormが存在しません");
-        return;
-    }
-
     //themeIdは必須
-    const themeIdInput=themeForm.querySelector('input[name="themeId"]');
-    if(!themeIdInput){
+    const themeId=form.themeId;
+    if(!themeId){
         console.error("themeIdが送信されていません");
         return;
     }
-    const nameInput=document.getElementById('name');
-    const descInput=document.getElementById('desc');
-    const isEnabledCheckbox=document.getElementById('enabled');
-    const isHiddenCheckbox=document.getElementById('hidden');
+    const name=form.name;
+    const desc=form.description;
+    const isEnabled=form.enabled;
+    const isHidden=form.hidden;
 
-    const nameChanged=initialData.name!==nameInput.value;
-    const descriptionChanged=initialData.desc!==descInput.value;
-    const enabledChanged=initialData.enabled!==isEnabledCheckbox.checked;
-    const hiddenChanged=initialData.hidden!==isHiddenCheckbox.checked;
+    const nameChanged=initialData.name!==name;
+    const descriptionChanged=initialData.desc!==desc;
+    const enabledChanged=initialData.enabled!==isEnabled;
+    const hiddenChanged=initialData.hidden!==isHidden;
+    const thumbnailChanged=form.isthumbnailChanged;
 
-    let formData=new FormData(requestForm);
+    let formData=new FormData();
 
-    formData.append('themeId',themeIdInput.value);
+    formData.append('themeId',themeId);
     formData.append('nameChanged',nameChanged);
-    formData.append('name',nameChanged?nameInput.value:'');
+    formData.append('name',nameChanged?name:'');
     formData.append('descriptionChanged',descriptionChanged);
-    formData.append('description',descriptionChanged?descInput.value:'');
+    formData.append('thumbnailChanged',thumbnailChanged)
+    formData.append('description',descriptionChanged?desc:'');
     formData.append('enabledChanged',enabledChanged);
-    formData.append('enabled',enabledChanged?isEnabledCheckbox.checked:false);
+    formData.append('enabled',enabledChanged?isEnabled:false);
     formData.append('hiddenChanged',hiddenChanged);
-    formData.append('hidden',hiddenChanged?isHiddenCheckbox.checked:false);
+    formData.append('hidden',hiddenChanged?isHidden:false);
 
+    if(thumbnailChanged&&form.thumbnailFile)
+    {
+        formData.append('thumbnailFile',form.thumbnailFile);
+    }
 
-    fetch(requestForm.action,{
-        method:'POST',
-        body:formData,
-        redirect:'follow'
-    }).then(response => {
-        if (response.ok) {
-            window.location.href = response.url;
-        }}).catch(error => {
-        console.error('Error submitting form:', error);
-    });
+    const ruleChanged=initailRules!==rules;
+    console.log(ruleChanged);
+    formData.append('rulesChanged',ruleChanged);
+    if(ruleChanged)
+    {
+        let rulesData = [];
+        rules.forEach((ruleItem) => {
+            const ruleType = ruleItem.ruleType;
+            if (ruleType && ruleType !== '') {
+                if (ruleType === 'NONE' || ruleType === 'ALL') {
+                    rulesData.push({
+                        themeId:ruleItem.themeId||null,
+                        themeruleId:ruleItem.themeruleId||null,
+                        ruleType: ruleType,
+                        ruleValue: '[]'
+                    });
+                } 
+                else {
+                    const values = ruleItem.ruleValue;
+                    if (values.length > 0) {
+                        rulesData.push({
+                            themeId:ruleItem.themeId||null,
+                            themeruleId:ruleItem.themeruleId||null,
+                            ruleType: ruleType,
+                            ruleValue: JSON.stringify(values)
+                        });
+                    }
+                }
+            }
+        });
+        formData.append('rules',JSON.stringify(rulesData));
+    }
+    else{
+        formData.append('rules',null);
+    }
+    
+
+    await postFormdata("/admin/adminthemeedit",formData)
 }
 
-function deleteForm(){
-    const themeForm=document.getElementById('themeForm');
-    const deleteForm = document.getElementById('deleteform');
-
-    if(!requestForm||!themeForm){
-        console.error("themeFormかdeleteFormが存在しません");
-        return;
-    }
-
+async function deleteForm(themeId){
     //themeIdは必須
-    const themeIdInput=themeForm.querySelector('input[name="themeId"]');
-    if(!themeIdInput){
+    if(!themeId){
         console.error("themeIdが送信されていません");
         return;
     }
-    let formData=new FormData(requestForm);
-    formData.append('themeId',themeIdInput);
-
-    fetch(deleteForm.action,{
-        method:'POST',
-        body:formData,
-        redirect:'follow'
-    }).then(response => {
-        if (response.ok) {
-            window.location.href = response.url;
-        }}).catch(error => {
-        console.error('Error submitting form:', error);
-    });
+    let formData=new FormData();
+    formData.append('themeId',themeId);
+    await postFormdata("/admin/adminthemedelete",formData);
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
 
-    const nameInput=document.getElementById('name');
-    const descInput=document.getElementById('desc');
-    const isEnabledCheckbox=document.getElementById('enabled');
-    const isHiddenCheckbox=document.getElementById('hidden');
+    const {createApp,ref,reactive}=Vue;
 
-    initialData={
-        name:nameInput?nameInput.value:'',
-        desc:descInput?descInput.value:'',
-        enabled:isEnabledCheckbox?isEnabledCheckbox.checked:false,
-        hidden:isHiddenCheckbox?isHiddenCheckbox.checked:false,
-        themeRules:[]
-    }
+    createApp({
+        components:{
+            ThemeRuleEditor
+        },
+        setup(){
 
-    //submit,deleteのボタンにイベントを付与
-    const submitBtn = document.getElementById('submitBtn');
-    if (submitBtn) {
-        submitBtn.addEventListener('click', submitForm);
-    }
-    const deleteBtn = document.getElementById('deleteBtn');
-    if (deleteBtn) {
-        deleteBtn.addEventListener('click', deleteForm);
-    }
+            const form=reactive({
+                themeId:initialData.themeId||0,
+                areaId:initialData.areaId||0,
+                name:initialData.name||'',
+                description:initialData.description||'',
+                thumbnailFile:null,
+                isthumbnailChanged:false,
+                enabled:initialData.enabled||true,
+                hidden:initialData.hidden||false,
+            });
+
+            console.log(form.themeId);
+            const previewThumbnailURL=ref(initialData.thumbnailUri||null);
+
+            let initialRules=null;
+
+            if(initialData.rules){
+                initialRules=initialData.rules.map((rule,index)=>{
+                    let parsed=[];
+                    try{
+                        parsed=JSON.parse(rule.ruleValue);
+                        if(rule.ruleType==='TAG_MATCH')
+                        {
+                            const tagNames=parsed.map((id)=>{
+                                return tags.find((t)=>{return t.tagId===id}).name;
+                            });
+                            return {...rule,ruleValue:tagNames};
+                        }
+                    }
+                    catch(e){
+                        console.error(e);
+                    }
+                    return {...rule,ruleValue:parsed};
+                });
+            }
+
+            const rules=ref(initialRules||[{ruleType:'',ruleValue:[]}]);
+
+            const addRuleItem=()=>{
+                rules.value.push({ruleType:'',ruleValue:[]});
+            }
+            const removeRuleItem=(index)=>{
+                rules.value.splice(index,1);
+            }
+
+            const handleFileUpload=(event)=>{
+                form.thumbnailFile=event.target.files[0]||null;
+                if(!form.thumbnailFile)return;
+                previewThumbnailURL.value=URL.createObjectURL(form.thumbnailFile);
+                console.log(previewThumbnailURL.value);
+            };
+
+            const submitEdit=()=>{
+                submitForm(initialData,initialRules,form,rules.value);
+            };
+
+
+            const submitDelete=()=>{
+                deleteForm();
+            };
+
+            console.log("vue loaded");
+            return {
+                form,
+                rules,
+                addRuleItem,
+                removeRuleItem,
+                handleFileUpload,
+                submitEdit,
+                submitDelete,
+                previewThumbnailURL
+            }
+        }
+
+    }).mount('#edit-form');
 });

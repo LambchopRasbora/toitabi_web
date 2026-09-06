@@ -42,6 +42,10 @@ export async function post(path, params, errorCallback=(err)=>{alert("送信に�
       formData.append(key, value);
     }
   }
+  await postFormdata(path,formData,errorCallback,method);
+}
+
+export async function postFormdata(path,formData, errorCallback=(err)=>{alert("送信に失敗しました",err);}, method='post'){
 
   // ===== CSRF 追加 =====
   const csrfToken = document.querySelector('meta[name="_csrf"]').content;
@@ -51,6 +55,7 @@ export async function post(path, params, errorCallback=(err)=>{alert("送信に�
 
   try{
     //送信
+    console.log(method);
     const response= await fetch(path,{
       method: method.toUpperCase(),
       body:formData
