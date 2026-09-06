@@ -1,201 +1,94 @@
-let ruleCount = 1;
 
-// Initialize the first rule's value fields and load areas data
-document.addEventListener('DOMContentLoaded', function() {
-    updateRuleValueFields(0);
-});
+import { postFormdata } from "../common/serverRequest.js";
+import ThemeRuleEditor from "../components/theme/themeruleeditor.js";
 
-function updateRuleValueFields(ruleIndex) {
-    const ruleTypeSelect = document.querySelector(`#ruletype-${ruleIndex}`);
-    const ruleValuesContainer = document.querySelector(`#rulevalues-${ruleIndex}`);
-    const ruleValueContainerDiv = document.querySelector(`#rulevalues-container-${ruleIndex}`);
-    const selectedType = ruleTypeSelect.value;
-    
-    // Clear existing fields
-    ruleValuesContainer.innerHTML = '';
-    
-    // Hide the entire container if NONE or ALL
-    if (selectedType === 'NONE' || selectedType === 'ALL' || selectedType === '') {
-        ruleValueContainerDiv.classList.add('hidden');
-    } else {
-        ruleValueContainerDiv.classList.remove('hidden');
-        
-        // Add first input field based on type
-        if (selectedType === 'ID_MATCH') {
-            addRuleValue(ruleIndex, 'number');
-        } else if (selectedType === 'TAG_MATCH') {
-            addRuleValue(ruleIndex, 'text');
-        }
+
+async function submitForm(form,rules)
+{
+     const formData=new FormData();
+    formData.append('areaId', form.areaId);
+    formData.append('name', form.name);
+    formData.append('description', form.description);
+    formData.append('enabled',form.enabled);
+    formData.append('hidden',form.hidden);
+
+    const thumbnailInput =form.thumbnailfile;
+    if (thumbnailInput ) {
+        formData.append('thumbnailfile', thumbnailInput);
     }
-}
 
-function addRuleValue(ruleIndex, inputType = null) {
-    const ruleTypeSelect = document.querySelector(`#ruletype-${ruleIndex}`);
-    const selectedType = ruleTypeSelect.value;
-    
-    if (selectedType === 'NONE' || selectedType === 'ALL' || selectedType === '') {
-        alert('ルールタイプを選択してください');
-        return;
-    }
-    
-    const ruleValuesContainer = document.querySelector(`#rulevalues-${ruleIndex}`);
-    
-    // Determine input type
-    let type = inputType;
-    if (!type) {
-        type = selectedType === 'ID_MATCH' ? 'number' : 'text';
-    }
-    
-    // Count existing inputs
-    const valueIndex = ruleValuesContainer.children.length;
-    
-    const inputWrapper = document.createElement('div');
-    inputWrapper.className = 'rule-value-input';
-    inputWrapper.dataset.valueIndex = valueIndex;
-    
-    const input = document.createElement('input');
-    input.type = type;
-    input.name = `rulevalues-${ruleIndex}-${valueIndex}`;
-    input.className = `rule-value-${ruleIndex}`;
-    input.required = true;
-    
-    if (type === 'number') {
-        input.min = '0';
-        input.placeholder = '数値を入力';
-    } else {
-        input.placeholder = '文字列を入力';
-    }
-    
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'remove-value-btn';
-    removeBtn.textContent = '削除';
-    removeBtn.onclick = function() {
-        inputWrapper.remove();
-    };
-    
-    inputWrapper.appendChild(input);
-    inputWrapper.appendChild(removeBtn);
-    ruleValuesContainer.appendChild(inputWrapper);
-}
+    let rulesData = [];
 
-function addRuleItem() {
-    const rulesContainer = document.getElementById('rulesContainer');
-    
-    const newRuleItem = document.createElement('div');
-    newRuleItem.className = 'rule-item';
-    newRuleItem.dataset.ruleIndex = ruleCount;
-    
-    newRuleItem.innerHTML = `
-        <div data-rule-section="fullwidth">
-            <label for="ruletype-${ruleCount}">ルールタイプ</label>
-            <select id="ruletype-${ruleCount}" class="ruletype-select" data-rule-index="${ruleCount}" onchange="updateRuleValueFields(${ruleCount})" required>
-                <option value="">選択してください</option>
-                <option value="NONE">NONE</option>
-                <option value="ALL">ALL</option>
-                <option value="TAG_MATCH">TAG_MATCH</option>
-                <option value="ID_MATCH">ID_MATCH</option>
-            </select>
-        </div>
-        <div data-rule-section="fullwidth" id="rulevalues-container-${ruleCount}">
-            <label>ルール値</label>
-            <div id="rulevalues-${ruleCount}" class="rule-values-container">
-                <!-- Values will be added here dynamically -->
-            </div>
-            <button type="button" class="add-value-btn" onclick="addRuleValue(${ruleCount})">値を追加</button>
-        </div>
-        <div class="rule-action-buttons">
-            <button type="button" class="remove-rule-btn" onclick="removeRuleItem(${ruleCount})">ルールを削除</button>
-        </div>
-    `;
-    
-    rulesContainer.appendChild(newRuleItem);
-    ruleCount++;
-}
-
-function removeRuleItem(index) {
-    const ruleItem = document.querySelector(`[data-rule-index="${index}"]`);
-    if (ruleItem) {
-        ruleItem.remove();
-    }
-}
-
-// Handle checkbox values for POST submission
-document.querySelector('form').addEventListener('submit', function(e) {
-    const enabledCheckbox = document.getElementById('enabled');
-    const hiddenCheckbox = document.getElementById('hidden');
-    
-    // Process rules and convert to JSON format
-    const ruleItems = document.querySelectorAll('.rule-item');
-    const rulesData = [];
-    
-    ruleItems.forEach((ruleItem) => {
-        const ruleIndex = ruleItem.dataset.ruleIndex;
-        const ruleTypeSelect = document.querySelector(`#ruletype-${ruleIndex}`);
-        const ruleType = ruleTypeSelect.value;
-        
+    rules.forEach((ruleItem) => {
+        const ruleType = ruleItem.ruleType;
         if (ruleType && ruleType !== '') {
             if (ruleType === 'NONE' || ruleType === 'ALL') {
-                // No values needed
                 rulesData.push({
-                    type: ruleType,
-                    values: []
+                    ruleType: ruleType,
+                    ruleValue: '[]'
                 });
-            } else {
-                // Collect values
-                const valueInputs = ruleItem.querySelectorAll(`.rule-value-${ruleIndex}`);
-                const values = [];
-                
-                valueInputs.forEach((input) => {
-                    if (input.value) {
-                        if (ruleType === 'ID_MATCH') {
-                            values.push(parseInt(input.value));
-                        } else if (ruleType === 'TAG_MATCH') {
-                            values.push(input.value);
-                        }
-                    }
-                });
-                
+            } 
+            else {
+                const values = ruleItem.ruleValue;
                 if (values.length > 0) {
                     rulesData.push({
-                        type: ruleType,
-                        values: values
+                        ruleType: ruleType,
+                        ruleValue: JSON.stringify(values)
                     });
                 }
             }
         }
     });
-    
-    // Create hidden inputs for rules
-    rulesData.forEach((rule, index) => {
-        const ruleTypeInput = document.createElement('input');
-        ruleTypeInput.type = 'hidden';
-        ruleTypeInput.name = 'ruletypes';
-        ruleTypeInput.value = rule.type;
-        this.appendChild(ruleTypeInput);
-        
-        const ruleValueInput = document.createElement('input');
-        ruleValueInput.type = 'hidden';
-        ruleValueInput.name = 'rulevalues';
-        ruleValueInput.value = JSON.stringify(rule.values);
-        this.appendChild(ruleValueInput);
-    });
-    console.log(rulesData);
-    
-    // Create hidden inputs for checkboxes
-    if (!enabledCheckbox.checked) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'enabled';
-        input.value = 'false';
-        this.appendChild(input);
-    }
-    
-    if (!hiddenCheckbox.checked) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'hidden';
-        input.value = 'false';
-        this.appendChild(input);
-    }
+    formData.append('rules',JSON.stringify(rulesData));
+
+    await postFormdata('/admin/adminthemepost',formData);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const {createApp,ref,reactive}=Vue;
+
+    createApp({
+        setup(){
+            const formData=reactive({
+                areaId:'',
+                name:'',
+                description:'',
+                thumbnailfile:null,
+                enabled:true,
+                hidden:false
+            });
+
+            const rules=ref([
+                {ruleType:'',ruleValue:[]}
+            ]);
+            const addRuleItem=()=>{
+                rules.value.push({ruleType:'',ruleValue:[]});
+            }
+            const removeRuleItem=(index)=>{
+                rules.value.splice(index,1);
+            }
+
+            const handleFileUpload=(event)=>{
+                formData.thumbnailfile=event.target.files[0]||null;
+            };
+
+            const submit=()=>{
+                submitForm(formData,rules.value)
+            };
+
+            return {
+                formData,
+                rules,
+                addRuleItem,
+                removeRuleItem,
+                handleFileUpload,
+                submit
+            }
+        },
+        components:{
+            ThemeRuleEditor
+        }
+    }).mount('#post-form')
+
 });
